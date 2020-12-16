@@ -4,6 +4,7 @@ module webfx.website.application {
 
     // Direct dependencies modules
     requires javafx.graphics;
+    requires webfx.platform.client.windowlocation;
 
     // Exported packages
     exports dev.webfx.website.application;

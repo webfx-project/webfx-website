@@ -17,6 +17,12 @@
             <version>${lib.openjfx.version}</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <artifactId>webfx-platform-client-windowlocation</artifactId>
+            <groupId>${webfx.groupId}</groupId>
+            <version>${webfx.version}</version>
+        </dependency>
     
     </dependencies>
 
