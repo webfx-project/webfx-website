@@ -45,31 +45,6 @@ jobs:
             #gluon-desktop-arch-token:      'x86_64-linux'                       # build 5)
             #gluon-desktop-artifact-suffix: 'Linux-x64-native-runnable'          # build 5)
 
-          - os-config: 2 # Generates build 6) - Could be in os-config 1 but moved it a separate config to speed up (parallel run)
-            os: ubuntu-latest
-            gluon-android-arch-token:      'aarch64-android'                    # build 6)
-            gluon-android-artifact-suffix: 'Android-aarch64-native-package.apk' # build 6)
-
-          - os-config: 3 # Generates builds 7) 8) 9) & 10)
-            os: windows-latest
-            fatjar-artifact-suffix:        'Windows-x64-runnable.jar'           # build 7)
-            jvm-exe-artifact-suffix:       'Windows-x64-jvm-installer.exe'      # build 8)
-            jvm-msi-artifact-suffix:       'Windows-x64-jvm-installer.msi'      # build 9)
-            gluon-desktop-arch-token:      'x86_64-windows'                     # build 10)
-            gluon-desktop-artifact-suffix: 'Windows-x64-native-runnable.exe'    # build 10)
-            msi-desktop-artifact-suffix:   'Windows-x64-jvm-installer.msi'      # build 9)
-
-          - os-config: 4 # Generates builds 11) 12) 13) 14) & 15)
-            os: macos-latest
-            fatjar-artifact-suffix:        'MacOS-x64.jar'                      # build 11)
-            jvm-dmg-artifact-suffix:       'MacOS-x64-jvm.dmg'                  # build 12)
-            jvm-pkg-artifact-suffix:       'MacOS-x64-jvm.pkg'                  # build 13)
-            gluon-desktop-arch-token:      'x86_64-darwin'                      # build 14)
-            gluon-desktop-Artifact-suffix: 'MacOS-x64-native-runnable'          # build 14)
-            # Note: the iOS build needs the Apple certificate in secrets (the steps will be skipped otherwise)
-            gluon-ios-arch-token:          'arm64-ios'                          # build 15)
-            gluon-ios-artifact-suffix:     'iOS-arm64-native.ipa'               # build 15)
-
     env:
       app-name:  ${{ matrix.app.name }}
       app-repo-dir:              .
