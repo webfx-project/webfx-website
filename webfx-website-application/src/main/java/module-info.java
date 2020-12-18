@@ -3,7 +3,10 @@
 module webfx.website.application {
 
     // Direct dependencies modules
+    requires java.base;
+    requires javafx.base;
     requires javafx.graphics;
+    requires webfx.extras.webtext.controls;
     requires webfx.platform.client.windowlocation;
 
     // Exported packages

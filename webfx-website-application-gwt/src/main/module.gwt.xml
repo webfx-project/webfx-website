@@ -8,7 +8,9 @@
 
     <!-- Listing transitive dependencies modules -->
     <!--===========================< webfx-kit-javafxbase-emul >============================-->
+    <!-- used by webfx-kit-javafxcontrols-emul (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
+    <!-- used by webfx-extras-webtext-controls (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-peers (SOURCE) -->
     <source path="com/sun/javafx"/>
     <source path="com/sun/javafx/binding"/>
@@ -22,10 +24,20 @@
     <source path="javafx/collections/transformation"/>
     <source path="javafx/event"/>
     <source path="javafx/util"/>
+    <!--=========================< webfx-kit-javafxcontrols-emul >==========================-->
+    <!-- used by webfx-extras-webtext-controls (SOURCE) -->
+    <!-- used by webfx-kit-javafxcontrols-registry-gwt (SOURCE) -->
+    <source path="com/sun/javafx/scene/control"/>
+    <source path="com/sun/javafx/scene/control/behavior"/>
+    <source path="com/sun/javafx/scene/control/skin"/>
+    <source path="javafx/scene/control"/>
+    <source path="javafx/scene/control/skin"/>
+    <resource path="images/checkbox"/>
+    <public includes="images/checkbox/" path=""/>
     <!--=========================< webfx-kit-javafxgraphics-emul >==========================-->
+    <!-- used by webfx-kit-javafxcontrols-emul (SOURCE) -->
     <!-- used by webfx-kit-gwt (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-peers (SOURCE) -->
-    <!-- used by webfx-website-application (SOURCE) -->
     <source path="com/sun/javafx/application"/>
     <source path="com/sun/javafx/cursor"/>
     <source path="com/sun/javafx/geom"/>
@@ -80,6 +92,7 @@
     <!-- used by webfx-platform-gwt-windowlocation-impl (SOURCE) -->
     <inherits name="com.google.gwt.user.User"/>
     <!--===================================< java-base >====================================-->
+    <!-- used by webfx-kit-javafxbase-emul (SOURCE) -->
     <!-- used by webfx-platform-gwt-emul-javabase (SOURCE) -->
     <!-- used by webfx-platform-shared-shutdown (SOURCE) -->
     <!-- used by webfx-platform-shared-util (SOURCE) -->
@@ -94,11 +107,33 @@
     <!-- used by webfx-kit-javafxgraphics-peers-base (SOURCE) -->
     <!--=============================< jsinterop-annotations >==============================-->
     <!-- used by webfx-platform-gwt-windowlocation-impl (SOURCE) -->
+    <!--=========================< webfx-extras-webtext-controls >==========================-->
+    <!-- used by webfx-extras-webtext-controls-peers-gwt (SOURCE) -->
+    <!-- used by webfx-website-application (SOURCE) -->
+    <source path="dev/webfx/extras/webtext/controls"/>
+    <!--====================< webfx-extras-webtext-controls-peers-base >====================-->
+    <!-- used by webfx-extras-webtext-controls-peers-gwt (SOURCE) -->
+    <source path="dev/webfx/extras/webtext/controls/peers/base"/>
+    <!--====================< webfx-extras-webtext-controls-peers-gwt >=====================-->
+    <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
+    <source path="dev/webfx/extras/webtext/controls/peers/gwt/html"/>
+    <source path="dev/webfx/extras/webtext/controls/registry"/>
     <!--=================================< webfx-kit-gwt >==================================-->
     <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
     <!-- used by webfx-website-application-gwt (EMULATION) -->
     <source path="dev/webfx/kit/launcher/spi/gwt"/>
     <source path="dev/webfx/kit/mapper/spi/gwt"/>
+    <!--======================< webfx-kit-javafxcontrols-peers-base >=======================-->
+    <!-- used by webfx-extras-webtext-controls-peers-base (SOURCE) -->
+    <!-- used by webfx-kit-javafxcontrols-peers-gwt (SOURCE) -->
+    <source path="dev/webfx/kit/mapper/peers/javafxcontrols/base"/>
+    <!--=======================< webfx-kit-javafxcontrols-peers-gwt >=======================-->
+    <!-- used by webfx-extras-webtext-controls-peers-gwt (SOURCE) -->
+    <!-- used by webfx-kit-javafxcontrols-registry-gwt (SOURCE) -->
+    <source path="dev/webfx/kit/mapper/peers/javafxcontrols/gwt/html"/>
+    <!--=====================< webfx-kit-javafxcontrols-registry-gwt >======================-->
+    <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
+    <source path="dev/webfx/kit/registry/javafxcontrols"/>
     <!--=========================< webfx-kit-javafxgraphics-peers >=========================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-registry-gwt (SOURCE) -->
@@ -108,7 +143,9 @@
     <!-- used by webfx-kit-javafxgraphics-peers-gwt (SOURCE) -->
     <source path="dev/webfx/kit/mapper/peers/javafxgraphics/base"/>
     <!--=======================< webfx-kit-javafxgraphics-peers-gwt >=======================-->
+    <!-- used by webfx-extras-webtext-controls-peers-gwt (SOURCE) -->
     <!-- used by webfx-kit-gwt (SOURCE) -->
+    <!-- used by webfx-kit-javafxcontrols-registry-gwt (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-registry-gwt (SOURCE) -->
     <source path="dev/webfx/kit/mapper/peers/javafxgraphics/gwt/html"/>
     <source path="dev/webfx/kit/mapper/peers/javafxgraphics/gwt/html/layoutmeasurable"/>
