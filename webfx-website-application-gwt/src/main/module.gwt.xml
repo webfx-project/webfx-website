@@ -86,10 +86,8 @@
     <!-- used by webfx-kit-javafxgraphics-peers-gwt (SOURCE) -->
     <!-- used by webfx-platform-gwt-appcontainer-impl (SOURCE) -->
     <!-- used by webfx-platform-gwt-emul-javabase (SOURCE) -->
-    <!-- used by webfx-platform-gwt-json-impl (SOURCE) -->
     <!-- used by webfx-platform-gwt-resource-impl (SOURCE) -->
     <!-- used by webfx-platform-gwt-uischeduler-impl (SOURCE) -->
-    <!-- used by webfx-platform-gwt-windowlocation-impl (SOURCE) -->
     <inherits name="com.google.gwt.user.User"/>
     <!--===================================< java-base >====================================-->
     <!-- used by webfx-kit-javafxbase-emul (SOURCE) -->
@@ -105,8 +103,6 @@
     <inherits name="org.gwtproject.nio.GwtNioSupport"/>
     <!--==================================< javafx-base >===================================-->
     <!-- used by webfx-kit-javafxgraphics-peers-base (SOURCE) -->
-    <!--=============================< jsinterop-annotations >==============================-->
-    <!-- used by webfx-platform-gwt-windowlocation-impl (SOURCE) -->
     <!--=========================< webfx-extras-webtext-controls >==========================-->
     <!-- used by webfx-extras-webtext-controls-peers-gwt (SOURCE) -->
     <!-- used by webfx-website-application (SOURCE) -->
@@ -164,27 +160,15 @@
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <source path="dev/webfx/kit/util/properties"/>
     <source path="dev/webfx/kit/util/properties/conversion"/>
-    <!--============================< webfx-lib-javacupruntime >============================-->
-    <!-- used by webfx-platform-shared-json (SOURCE) -->
-    <source path="java_cup/runtime"/>
     <!--=======================< webfx-platform-client-uischeduler >========================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <!-- used by webfx-platform-gwt-uischeduler-impl (SOURCE) -->
     <source path="dev/webfx/platform/client/services/uischeduler"/>
     <source path="dev/webfx/platform/client/services/uischeduler/spi"/>
     <source path="dev/webfx/platform/client/services/uischeduler/spi/impl"/>
-    <!--======================< webfx-platform-client-windowlocation >======================-->
-    <!-- used by webfx-platform-gwt-windowlocation-impl (SOURCE) -->
-    <!-- used by webfx-website-application (SOURCE) -->
-    <source path="dev/webfx/platform/client/services/windowlocation"/>
-    <source path="dev/webfx/platform/client/services/windowlocation/spi"/>
-    <source path="dev/webfx/platform/client/services/windowlocation/spi/impl"/>
     <!--======================< webfx-platform-gwt-appcontainer-impl >======================-->
     <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
     <source path="dev/webfx/platform/gwt/services/appcontainer/spi/impl"/>
-    <!--==========================< webfx-platform-gwt-json-impl >==========================-->
-    <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
-    <source path="dev/webfx/platform/gwt/services/json/spi/impl"/>
     <!--==========================< webfx-platform-gwt-log-impl >===========================-->
     <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
     <source path="dev/webfx/platform/gwt/services/log/spi/impl"/>
@@ -197,10 +181,6 @@
     <!--======================< webfx-platform-gwt-uischeduler-impl >=======================-->
     <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
     <source path="dev/webfx/platform/gwt/services/uischeduler/spi/impl"/>
-    <!--=====================< webfx-platform-gwt-windowlocation-impl >=====================-->
-    <!-- used by webfx-website-application-gwt (IMPLICIT_PROVIDER) -->
-    <source path="dev/webfx/platform/gwt/services/windowlocation/spi/impl"/>
-    <source path="dev/webfx/platform/gwt/services/windowlocation/spi/impl/jsinterop"/>
     <!--=======================< webfx-platform-shared-appcontainer >=======================-->
     <!-- used by webfx-kit-launcher (SOURCE) -->
     <!-- used by webfx-platform-gwt-appcontainer-impl (SOURCE) -->
@@ -208,15 +188,6 @@
     <source path="dev/webfx/platform/shared/services/appcontainer"/>
     <source path="dev/webfx/platform/shared/services/appcontainer/spi"/>
     <source path="dev/webfx/platform/shared/services/appcontainer/spi/impl"/>
-    <!--===========================< webfx-platform-shared-json >===========================-->
-    <!-- used by webfx-platform-client-windowlocation (SOURCE) -->
-    <!-- used by webfx-platform-gwt-json-impl (SOURCE) -->
-    <source path="dev/webfx/platform/shared/services/json"/>
-    <source path="dev/webfx/platform/shared/services/json/parser"/>
-    <source path="dev/webfx/platform/shared/services/json/parser/javacup"/>
-    <source path="dev/webfx/platform/shared/services/json/parser/jflex"/>
-    <source path="dev/webfx/platform/shared/services/json/spi"/>
-    <source path="dev/webfx/platform/shared/services/json/spi/impl/listmap"/>
     <!--===========================< webfx-platform-shared-log >============================-->
     <!-- used by webfx-kit-launcher (SOURCE) -->
     <!-- used by webfx-platform-gwt-log-impl (SOURCE) -->
@@ -243,9 +214,7 @@
     <!--===========================< webfx-platform-shared-util >===========================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-peers (SOURCE) -->
-    <!-- used by webfx-platform-client-windowlocation (SOURCE) -->
     <!-- used by webfx-platform-shared-appcontainer (SOURCE) -->
-    <!-- used by webfx-platform-shared-json (SOURCE) -->
     <!-- used by webfx-platform-shared-log (SOURCE) -->
     <!-- used by webfx-platform-shared-resource (SOURCE) -->
     <!-- used by webfx-platform-shared-shutdown (SOURCE) -->

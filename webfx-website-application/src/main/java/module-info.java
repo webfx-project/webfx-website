@@ -7,7 +7,6 @@ module webfx.website.application {
     requires javafx.base;
     requires javafx.graphics;
     requires webfx.extras.webtext.controls;
-    requires webfx.platform.client.windowlocation;
 
     // Exported packages
     exports dev.webfx.website.application;

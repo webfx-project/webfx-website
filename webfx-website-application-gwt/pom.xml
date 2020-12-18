@@ -147,21 +147,7 @@
         </dependency>
         
         <dependency>
-            <artifactId>webfx-lib-javacupruntime</artifactId>
-            <groupId>${webfx.groupId}</groupId>
-            <version>${webfx.version}</version>
-            <classifier>sources</classifier>
-        </dependency>
-        
-        <dependency>
             <artifactId>webfx-platform-client-uischeduler</artifactId>
-            <groupId>${webfx.groupId}</groupId>
-            <version>${webfx.version}</version>
-            <classifier>sources</classifier>
-        </dependency>
-        
-        <dependency>
-            <artifactId>webfx-platform-client-windowlocation</artifactId>
             <groupId>${webfx.groupId}</groupId>
             <version>${webfx.version}</version>
             <classifier>sources</classifier>
@@ -179,13 +165,6 @@
             <groupId>${webfx.groupId}</groupId>
             <version>${webfx.version}</version>
             <classifier>shaded-sources</classifier>
-        </dependency>
-        
-        <dependency>
-            <artifactId>webfx-platform-gwt-json-impl</artifactId>
-            <groupId>${webfx.groupId}</groupId>
-            <version>${webfx.version}</version>
-            <classifier>sources</classifier>
         </dependency>
         
         <dependency>
@@ -217,21 +196,7 @@
         </dependency>
         
         <dependency>
-            <artifactId>webfx-platform-gwt-windowlocation-impl</artifactId>
-            <groupId>${webfx.groupId}</groupId>
-            <version>${webfx.version}</version>
-            <classifier>sources</classifier>
-        </dependency>
-        
-        <dependency>
             <artifactId>webfx-platform-shared-appcontainer</artifactId>
-            <groupId>${webfx.groupId}</groupId>
-            <version>${webfx.version}</version>
-            <classifier>sources</classifier>
-        </dependency>
-        
-        <dependency>
-            <artifactId>webfx-platform-shared-json</artifactId>
             <groupId>${webfx.groupId}</groupId>
             <version>${webfx.version}</version>
             <classifier>sources</classifier>
