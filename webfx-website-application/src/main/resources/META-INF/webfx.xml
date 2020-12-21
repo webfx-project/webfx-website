@@ -1,5 +1,17 @@
 <module>
 
+    <dependencies>
+
+        <source-modules>
+            <module>webfx-kit-javafxcontrols-emul</module>
+        </source-modules>
+
+    </dependencies>
+
+    <resource-packages>
+        <package>dev.webfx.website.application.cards</package>
+    </resource-packages>
+
     <providers>
         <provider spi="javafx.application.Application">dev.webfx.website.application.WebsiteApplication</provider>
     </providers>

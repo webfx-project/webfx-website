@@ -5,11 +5,18 @@ module webfx.website.application {
     // Direct dependencies modules
     requires java.base;
     requires javafx.base;
+    requires javafx.controls;
     requires javafx.graphics;
     requires webfx.extras.webtext.controls;
+    requires webfx.lib.enzo;
+    requires webfx.platform.shared.resource;
 
     // Exported packages
     exports dev.webfx.website.application;
+    exports dev.webfx.website.application.cards;
+
+    // Resources packages
+    opens dev.webfx.website.application.cards;
 
     // Provided services
     provides javafx.application.Application with dev.webfx.website.application.WebsiteApplication;

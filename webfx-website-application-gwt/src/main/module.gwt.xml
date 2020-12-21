@@ -10,7 +10,6 @@
     <!--===========================< webfx-kit-javafxbase-emul >============================-->
     <!-- used by webfx-kit-javafxcontrols-emul (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
-    <!-- used by webfx-extras-webtext-controls (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-peers (SOURCE) -->
     <source path="com/sun/javafx"/>
     <source path="com/sun/javafx/binding"/>
@@ -132,6 +131,7 @@
     <source path="dev/webfx/kit/registry/javafxcontrols"/>
     <!--=========================< webfx-kit-javafxgraphics-peers >=========================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
+    <!-- used by webfx-extras-webtext-controls (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-registry-gwt (SOURCE) -->
     <source path="dev/webfx/kit/mapper/peers/javafxgraphics"/>
     <source path="dev/webfx/kit/mapper/peers/javafxgraphics/markers"/>
@@ -160,6 +160,14 @@
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <source path="dev/webfx/kit/util/properties"/>
     <source path="dev/webfx/kit/util/properties/conversion"/>
+    <!--=================================< webfx-lib-enzo >=================================-->
+    <!-- used by webfx-website-application (SOURCE) -->
+    <source path="eu/hansolo/enzo/clock"/>
+    <source path="eu/hansolo/enzo/clock/skin"/>
+    <source path="eu/hansolo/enzo/flippanel"/>
+    <source path="eu/hansolo/enzo/fonts"/>
+    <resource path="eu/hansolo/enzo/clock"/>
+    <public includes="eu/hansolo/enzo/clock/" path=""/>
     <!--=======================< webfx-platform-client-uischeduler >========================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <!-- used by webfx-platform-gwt-uischeduler-impl (SOURCE) -->
@@ -198,6 +206,7 @@
     <!--=========================< webfx-platform-shared-resource >=========================-->
     <!-- used by webfx-kit-javafxgraphics-peers-gwt (SOURCE) -->
     <!-- used by webfx-platform-gwt-resource-impl (SOURCE) -->
+    <!-- used by webfx-website-application (SOURCE) -->
     <source path="dev/webfx/platform/shared/services/resource"/>
     <source path="dev/webfx/platform/shared/services/resource/spi"/>
     <!--========================< webfx-platform-shared-scheduler >=========================-->
@@ -229,6 +238,9 @@
     <!--===========================< webfx-website-application >============================-->
     <!-- used by webfx-website-application-gwt (APPLICATION) -->
     <source path="dev/webfx/website/application"/>
+    <source path="dev/webfx/website/application/cards"/>
+    <resource path="dev/webfx/website/application/cards"/>
+    <public includes="dev/webfx/website/application/cards/" path=""/>
 
     <source path="mongoose/client/services/bus/conf/gwt"/>
     <source path="mongoose/shared/domainmodel/gwt"/>
