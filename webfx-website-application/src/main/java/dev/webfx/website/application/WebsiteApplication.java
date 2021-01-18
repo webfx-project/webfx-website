@@ -23,7 +23,6 @@ public class WebsiteApplication extends Application {
 
     private final Text webFxText = createWebFxSvgText(100);
     private final Text subtitle = createTranspilerSvgText(25);
-
     private AnimationTimer gradientAnimationTimer;
     private Timeline dashOffsetTimeline;
 
@@ -53,7 +52,7 @@ public class WebsiteApplication extends Application {
         rootPane.setBackground(null);
 
         Scene scene = new Scene(rootPane, 800, 600, backgroundGradient);
-        stage.setTitle("WebFX");
+        stage.setTitle(webFxText.getText() + " - " + subtitle.getText());
         stage.setScene(scene);
         stage.show();
     }
@@ -64,7 +63,7 @@ public class WebsiteApplication extends Application {
         gradientAnimationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                webFxText.setFill(createGithubGradient(now / (2 * Math.PI * 100_000_000)));
+                webFxText.setFill(createAngleGithubGradient(now / (2 * Math.PI * 100_000_000)));
             }
         };
         gradientAnimationTimer.start();

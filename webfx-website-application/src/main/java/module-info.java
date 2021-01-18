@@ -10,6 +10,7 @@ module webfx.website.application {
     requires webfx.extras.webtext.controls;
     requires webfx.lib.enzo;
     requires webfx.platform.shared.resource;
+    requires webfx.platform.client.uischeduler;
 
     // Exported packages
     exports dev.webfx.website.application;

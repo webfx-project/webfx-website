@@ -15,15 +15,21 @@ import java.util.function.IntFunction;
 /**
  * @author Bruno Salmon
  */
-public final class CardTransition {
+final class CardTransition {
 
     private long durationMillis = 1000;
     private final List<KeyValue> keyValues = new ArrayList<>();
     private final List<Runnable> onFinisheds = new ArrayList<>();
     private Timeline timeline;
+    private boolean stopping;
+    private boolean applyFinalValuesOnStop;
 
     public void setDurationMillis(long durationMillis) {
         this.durationMillis = durationMillis;
+    }
+
+    public void setApplyFinalValuesOnStop(boolean applyFinalValuesOnStop) {
+        this.applyFinalValuesOnStop = applyFinalValuesOnStop;
     }
 
     void addKeyValue(KeyValue... keyValues) {
@@ -35,9 +41,8 @@ public final class CardTransition {
     }
 
     void run(boolean animate) {
-        if (!animate) {
-            for (KeyValue kv : keyValues)
-                ((WritableValue<Object>) kv.getTarget()).setValue(kv.getEndValue());
+        if (!animate || stopping) {
+            applyFinalValues();
             runOnFinisheds();
         } else {
             timeline = new Timeline(new KeyFrame(new Duration(durationMillis), toArray(keyValues, KeyValue[]::new)));
@@ -46,14 +51,29 @@ public final class CardTransition {
         }
     }
 
+    private void applyFinalValues() {
+        for (KeyValue kv : keyValues)
+            ((WritableValue<Object>) kv.getTarget()).setValue(kv.getEndValue());
+    }
+
     void stop() {
-        if (timeline != null)
-            timeline.stop();
+        if (!stopping) {
+            stopping = true;
+            if (timeline != null)
+                timeline.stop();
+            if (applyFinalValuesOnStop)
+                applyFinalValues();
+            runOnFinisheds();
+            stopping = false;
+        }
     }
 
     private void runOnFinisheds() {
         keyValues.clear();
-        for (Runnable onFinished : onFinisheds)
+        ArrayList<Runnable> copy = new ArrayList<>(onFinisheds);
+        onFinisheds.clear();
+        timeline = null;
+        for (Runnable onFinished : copy)
             onFinished.run();
     }
 

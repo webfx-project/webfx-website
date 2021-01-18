@@ -3,9 +3,12 @@ package dev.webfx.website.application.cards;
 import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.platform.shared.services.resource.ResourceService;
 import dev.webfx.website.application.SvgLogoPaths;
+import dev.webfx.website.application.WebSiteShared;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.geometry.Bounds;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -21,7 +24,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 public final class FullyCrossPlatformCard extends Card {
 
     private Pane[] platformsNodes;
-    private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle, javaPane;
+    private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle, fxPane;
     private ImageView jdkImageView, gluonImageView;
     private SvgText webFxText;
     private FlipPanel flipPanel;
@@ -31,7 +34,7 @@ public final class FullyCrossPlatformCard extends Card {
     }
 
     @Override
-    protected Node createIllustrationNode() {
+    Node createIllustrationNode() {
         platformsNodes = new Pane[] {
                 html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 0),
                 raspberryPiCircle = createSVGCircle(SvgLogoPaths.getRaspberryPiLogoPath(), raspberryPiColor, 0, 0),
@@ -40,27 +43,35 @@ public final class FullyCrossPlatformCard extends Card {
                 windowsCircle     = createSVGCircle(SvgLogoPaths.getWindowsLogoPath(), windowsColor, -4, 0),
                 macOSCircle       = createSVGCircle(SvgLogoPaths.getApplePath(), appleColor, 0, -3),
                 linuxCircle       = createSVGCircle(SvgLogoPaths.getLinuxLogoPath(), Color.BLACK, 2, -1),
-                javaPane          = createSVGCircle(SvgLogoPaths.getJavaLogoPath(), Color.WHITE, 0, 0)
+                fxPane            = createSVGCircle(SvgLogoPaths.getFxWordPath(), fxColor, 0, 0)
         };
-        platformsPane = new Pane(platformsNodes);
         double cr = 64 * 1.4 / 2, osr = 2.5 * cr;
+        platformsPane = new Pane(platformsNodes);
         int n = platformsNodes.length - 1;
         for (int i = 0; i < n; i++) {
             double angle = 2 * Math.PI * i / n - Math.PI / 2;
             platformsNodes[i].relocate(osr + osr * Math.cos(angle), osr + osr * Math.sin(angle));
         }
-        javaPane.relocate(osr, osr);
-        platformsPane.setMaxSize(2 * (osr + cr), 2 * (osr + cr));
+        fxPane.relocate(osr, osr);
         jdkImageView   = new ImageView(ResourceService.toUrl("JDK.png", getClass()));
         jdkImageView.setEffect(dropShadow);
         gluonImageView = new ImageView(ResourceService.toUrl("Gluon.png", getClass()));
         gluonImageView.setEffect(dropShadow);
         webFxText = createWebFxSvgText(50);
-        webFxText.setFill(createGithubGradient(Math.PI));
+        webFxText.setFill(createAngleGithubGradient(Math.PI));
         flipPanel = new FlipPanel();
         flipPanel.flipToBack();
-        flipPanel.setTranslateY(osr);
-        return new StackPane(platformsPane, flipPanel);
+        ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
+        ScalePane flipPanelScalePane = new ScalePane(flipPanel);
+        return new Pane(platformScalePane, flipPanelScalePane) {
+            @Override
+            protected void layoutChildren() {
+                double w = getWidth(), h = getHeight();
+                layoutInArea(platformScalePane, 0, 0, w, h,0, HPos.CENTER, VPos.CENTER);
+                double sh = platformScalePane.getHeight(), fh = Math.min(90, 0.3 * sh);
+                layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh,0, HPos.CENTER, VPos.CENTER);
+            }
+        };
     }
 
     private static Pane createSVGCircle(String svgPath, Paint fill, double dx, double dy) {
@@ -77,30 +88,31 @@ public final class FullyCrossPlatformCard extends Card {
             double h = b.getHeight() * 1.4;
             pane.setMinSize(h, h);
             pane.setMaxSize(h, h);
-            if (fill != null && fill != Color.WHITE)
-                pane.setBackground(new Background(new BackgroundFill(circleGradient, new CornerRadii(h / 2), null)));
+            if (fill != null && fill != fxColor) {
+                CornerRadii radii = new CornerRadii(h / 2);
+                WebSiteShared.setBackground(pane, circleGradient, radii);
+                pane.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID, radii, BorderStroke.THICK)));
+            }
         });
-        if (fill != null && fill != Color.WHITE)
-            pane.setEffect(dropShadow);
         return pane;
     }
 
     @Override
-    protected String subTitle(int step) {
+    String caption(int step) {
         switch (step) {
-            case 1: return "Your back-end and front-end will also run on desktops, mobiles & embed.";
-            case 2: return "The standard JDK toolchain will generate desktop executables of your applications with an optimized JVM and the JavaFX runtime (OpenJFX).";
-            case 3: return "The Gluon toolchain will use GraalVM to generate native executables of your applications";
-            case 4: return "including for mobiles (Android & iOS).";
-            case 5: return "Gluon also provides a JavaFX runtime for embed (Raspberry Pi)";
+            case 1: return "Your back-end and front-end will also run on desktops, mobiles & embeds.";
+            case 2: return "The standard JDK toolchain will generate desktop executables of your application with an optimized JVM.";
+            case 3: return "The Gluon toolchain will invoke GraalVM to generate native executables of your application";
+            case 4: return "including for Android & iOS.";
+            case 5: return "Gluon also makes your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
             case 6: return "And WebFX is here to add the Web platform to this collection.";
-            case 7: return "7 platforms from a single source code base! (check-out the demos for a Github workflow example)";
+            case 7: return "7 platforms from a single code base! (check-out the demos for a Github workflow example)";
             default: return null;
         }
     }
 
     @Override
-    protected void prepareCardTransition(int step, CardTransition cardTransition) {
+    void prepareCardTransition(int step, CardTransition cardTransition) {
         super.prepareCardTransition(step, cardTransition);
         double angle = (step == 1 ? 0 : step <= 3 ? 2 : step == 4 ? 4.5 : step == 5 ? 6 : 7) * 360 / 7;
         cardTransition.addKeyValue(new KeyValue(platformsPane.rotateProperty(), angle));
