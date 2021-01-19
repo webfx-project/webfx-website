@@ -18,6 +18,8 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.SVGPath;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Rotate;
 
@@ -26,23 +28,23 @@ import javafx.scene.transform.Rotate;
  */
 public abstract class Card extends Pane {
 
-    private final static Border cardBorder = new Border(new BorderStroke(Color.grayRgb(255, 0.5), BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
-    private double cardWidth, maxTitleHeight, maxHtmlHeight;
+    private final static Border CARD_BORDER = new Border(new BorderStroke(Color.grayRgb(255, 0.5), BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
+    private static double cardWidth, cardHeight, maxTitleHeight, maxHtmlHeight;
 
     protected final Node illustrationNode;
     protected final Text titleText;
-    protected final HtmlText htmlText1 = new HtmlText(), htmlText2 = new HtmlText();
+    protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
     protected boolean useHiddenTitleSpaceForIllustration = true, smoothIllustrationMove = true;
     private CardTransition cardTransition;
 
     Card(String title) {
-        setBorder(cardBorder);
+        setBorder(CARD_BORDER);
         titleText = WebSiteShared.setUpText(new Text(title + " \u2192"), 30, true, true, false, true);
         illustrationNode = createIllustrationNode();
-        htmlText1.setMouseTransparent(true);
-        htmlText2.setMouseTransparent(true);
-        getChildren().setAll(illustrationNode, titleText, htmlText1, htmlText2);
+        captionText1.setMouseTransparent(true);
+        captionText2.setMouseTransparent(true);
+        getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
         setCursor(Cursor.HAND);
         transitionToNextStep();
         setOnMouseClicked(e -> transitionToNextStep());
@@ -72,29 +74,34 @@ public abstract class Card extends Pane {
 
     void prepareCardTransition(int step, CardTransition cardTransition) {
         cardTransition.addKeyValue(new KeyValue(titleText.opacityProperty(), step == 1 ? 1 : 0));
-        boolean enteringTextIs1 = htmlText2.getTranslateX() == 0;
-        HtmlText enteringText = enteringTextIs1 ? htmlText1 : htmlText2;
-        HtmlText leavingText  = enteringTextIs1 ? htmlText2 : htmlText1;
+        boolean enteringTextIs1 = captionText2.getTranslateX() == 0;
+        HtmlText enteringCaptionText = enteringTextIs1 ? captionText1 : captionText2;
+        HtmlText leavingCaptionText  = enteringTextIs1 ? captionText2 : captionText1;
         String caption = caption(step);
-        WebSiteShared.setHtmlText(enteringText, caption == null ? null : caption + (step > 1 && caption(step + 1) != null ? " \u2192" : ""));
+        WebSiteShared.setHtmlText(enteringCaptionText, caption == null ? null : caption + (step > 1 && caption(step + 1) != null ? " \u2192" : ""));
         double width = getWidth();
-        enteringText.setTranslateX(width);
+        enteringCaptionText.setTranslateX(width);
         cardTransition.addKeyValue(
-                new KeyValue(enteringText.translateXProperty(), 0, Interpolator.EASE_OUT),
-                new KeyValue(leavingText.translateXProperty(), -width, Interpolator.EASE_OUT)
+                new KeyValue(enteringCaptionText.translateXProperty(), 0, Interpolator.EASE_OUT),
+                new KeyValue(leavingCaptionText.translateXProperty(), -width, Interpolator.EASE_OUT)
         );
-        enteringText.setVisible(true);
-        cardTransition.addOnFinished(() -> leavingText.setVisible(false));
+        enteringCaptionText.setVisible(true);
+        cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
     }
 
     abstract String caption(int step);
 
     @Override
     protected void layoutChildren() {
-        double w = getWidth() - 20, h = getHeight();
-        if (w != cardWidth) {
+        double w = getWidth(), h = getHeight(), hgap = w * 0.02;
+        w -= 2 * hgap;
+        if (w != cardWidth || h != cardHeight) {
             maxTitleHeight = maxHtmlHeight = 0;
+            Font titleFont = Font.font("Arial", FontWeight.BOLD, w * 0.07);
+            Font captionFont = Font.font("Arial", FontWeight.NORMAL, Math.sqrt(w * h) * 0.035);
+            WebSiteShared.htmlTextFont = captionFont;
             for (Card card : WebSiteShared.cards) {
+                card.titleText.setFont(titleFont);
                 maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
                 String longestCaption = "";
                 for (int step = 1; card.caption(step) != null; step++) {
@@ -102,30 +109,34 @@ public abstract class Card extends Pane {
                     if (caption.length() > longestCaption.length())
                         longestCaption = caption;
                 }
-                HtmlText htmlText = card.htmlText1.getTranslateX() == 0 ? card.htmlText2 : card.htmlText1;
+                card.captionText1.setFont(captionFont);
+                card.captionText2.setFont(captionFont);
+                HtmlText htmlText = card.captionText1.getTranslateX() == 0 ? card.captionText2 : card.captionText1;
                 String displayedText = htmlText.getText();
                 WebSiteShared.setHtmlText(htmlText, longestCaption);
                 maxHtmlHeight = Math.max(htmlText.prefHeight(w), maxHtmlHeight);
                 htmlText.setText(displayedText);
             }
             cardWidth = w;
+            cardHeight = h;
         }
         double ny = h;
         double nh = maxHtmlHeight;
-        ny -= nh + 10;
-        htmlText1.setMaxHeight(htmlText1.prefHeight(w));
-        layoutInArea(htmlText1, 10, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
-        htmlText2.setMaxHeight(htmlText2.prefHeight(w));
-        layoutInArea(htmlText2, 10, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+        double vGap = h * 0.02;
+        ny -= nh + vGap;
+        captionText1.setMaxHeight(captionText1.prefHeight(w));
+        layoutInArea(captionText1, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+        captionText2.setMaxHeight(captionText2.prefHeight(w));
+        layoutInArea(captionText2, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
         nh = maxTitleHeight;
-        ny -= nh + 10;
-        layoutInArea(titleText, 10, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
+        ny -= nh + vGap;
+        layoutInArea(titleText, hgap, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
         double titleOpacity = titleText.getOpacity();
         if (useHiddenTitleSpaceForIllustration && titleOpacity < 1)
-            ny += (nh + 10) * (smoothIllustrationMove ? 1 - titleOpacity : 1); // Smoothing the transition with opacity
-        nh = ny - 30;
-        ny = 10;
-        layoutInArea(illustrationNode, 10, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+            ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titleOpacity : 1); // Smoothing the transition with opacity
+        nh = ny - 3 * vGap;
+        ny = vGap;
+        layoutInArea(illustrationNode, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
     }
 
     private void onTitleOpacityChanged() {

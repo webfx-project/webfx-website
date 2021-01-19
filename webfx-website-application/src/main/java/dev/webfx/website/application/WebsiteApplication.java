@@ -3,13 +3,13 @@ package dev.webfx.website.application;
 import javafx.animation.*;
 import javafx.application.Application;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -28,20 +28,24 @@ public class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        VBox textVBox = new VBox();
-        textVBox.getChildren().setAll(webFxText, subtitle);
-        textVBox.setCursor(Cursor.HAND);
-        textVBox.setOnMouseClicked(e -> toggleTextColorAnimation());
-        textVBox.setAlignment(Pos.TOP_CENTER);
-        subtitle.setTranslateY(-10);
-
+        webFxText.setOnMouseClicked(e -> toggleTextColorAnimation());
+        webFxText.setCursor(Cursor.HAND);
         double MARGIN = 10;
-        Pane rootPane = new Pane(textVBox, cards[0], cards[1], cards[2]) {
+        Pane rootPane = new Pane(webFxText, subtitle, cards[0], cards[1], cards[2]) {
             @Override
             protected void layoutChildren() {
-                double w = getWidth() - 4 * MARGIN, h = getHeight() - MARGIN;
-                double vh = textVBox.prefHeight(w), cx = MARGIN, cy = vh, cw = w / 3, ch = h - vh;
-                layoutInArea(textVBox, cx, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
+                double w = getWidth() - 4 * MARGIN, h = getHeight() - MARGIN, fontSize;
+                webFxText.setFont(Font.font("Arial", FontWeight.BOLD, fontSize = h * 0.12));
+                webFxText.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+                subtitle.setFont(Font.font("Arial", FontWeight.NORMAL, fontSize = h * 0.03));
+                subtitle.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+                double vh = webFxText.prefHeight(w), cx = MARGIN;
+                layoutInArea(webFxText, cx, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
+                double sh = subtitle.prefHeight(w);
+                vh = 0.9 * vh;
+                layoutInArea(subtitle, cx, vh, w, sh, 0, null, HPos.CENTER, VPos.TOP);
+                vh += sh * 1.2;
+                double cy = vh, cw = w / 3, ch = h - vh;
                 layoutInArea(cards[0], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
                 cx += cw + MARGIN;
                 layoutInArea(cards[1], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);

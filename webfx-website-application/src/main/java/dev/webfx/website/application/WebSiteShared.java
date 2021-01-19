@@ -28,7 +28,7 @@ public final class WebSiteShared {
     static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #c33764, #1d2671");
     public static final LinearGradient circleGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
             new Stop(0, Color.gray(0.90)),
-            new Stop(1, Color.gray(0.70))
+            new Stop(1, Color.gray(0.60))
     );
     public static final LinearGradient githubGradient = LinearGradient.valueOf("to left, #FFE580, #FF7571, #EA5DAD, #C2A0FD, #3BF0E4, #B2F4B6");
     private static final List<Stop> githubStops = githubGradient.getStops();
@@ -70,8 +70,11 @@ public final class WebSiteShared {
         return text;
     }
 
+    public static Font htmlTextFont = Font.font("Arial", FontWeight.NORMAL, 22);
+
     public static HtmlText setHtmlText(HtmlText htmlText, String text) {
-        htmlText.setText(text == null ? null : "<center style='font-size: 22px; font-style: oblique; color:white'>" + text + "</center>");
+        htmlText.setFont(htmlTextFont);
+        htmlText.setText(text == null ? null : "<center style='font-style: oblique; line-height: 1.5em; color:white'>" + text + "</center>");
         htmlText.setMouseTransparent(true);
         return htmlText;
     }
