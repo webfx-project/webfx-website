@@ -113,7 +113,7 @@ public final class FullySustainabilityCard extends Card {
                 htmlText.setOpacity(0);
                 refactoringAnimationPane = new RefactoringAnimationPane(this);
                 performFadingTransition(new StackPane(refactoringAnimationPane, htmlText), cardTransition, true);
-                refactoringAnimationPane.startBadRefactoringBrickAnimation(wallHeight = (flipPanel.getHeight() - htmlText.getLayoutY() - htmlText.getHeight()) * 0.8 , () -> {
+                refactoringAnimationPane.startBadRefactoringBrickAnimation(wallHeight = (flipPanel.getHeight() - htmlText.getLayoutY() - htmlText.getHeight()) * 0.7 , () -> {
                     cardTransition.addKeyValue(new KeyValue(htmlText.opacityProperty(), 1));
                     cardTransition.run(true);
                 });
