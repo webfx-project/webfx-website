@@ -97,8 +97,8 @@ public abstract class Card extends Pane {
         w -= 2 * hgap;
         if (w != cardWidth || h != cardHeight) {
             maxTitleHeight = maxHtmlHeight = 0;
-            Font titleFont = Font.font("Arial", FontWeight.BOLD, w * 0.07);
-            Font captionFont = Font.font("Arial", FontWeight.NORMAL, Math.sqrt(w * h) * 0.035);
+            Font titleFont   = Font.font("Arial", FontWeight.BOLD,   Math.max(16, w * 0.07));
+            Font captionFont = Font.font("Arial", FontWeight.NORMAL, Math.max(16, Math.sqrt(w * h) * 0.035));
             WebSiteShared.htmlTextFont = captionFont;
             for (Card card : WebSiteShared.cards) {
                 card.titleText.setFont(titleFont);
