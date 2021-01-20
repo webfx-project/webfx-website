@@ -26,11 +26,10 @@ final class FxWreathPane extends Pane {
 
     @Override
     protected void layoutChildren() {
-        double w = getWidth(), h = getHeight(), s;
-        //layoutInArea(wreathNode,(w - (s = w      )) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
-        //layoutInArea(fxNode,    (w - (s = w * 0.4)) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
-        layoutInArea(wreathPane,(w - (s = h      )) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
-        layoutInArea(fxPane,    (w - (s = h * 0.4)) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+        double w = getWidth(), h = getHeight(), s = Math.min(w, h);
+        layoutInArea(wreathPane,(w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+        s *= 0.4;
+        layoutInArea(fxPane,    (w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
     }
 
 }

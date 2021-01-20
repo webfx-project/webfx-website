@@ -96,7 +96,7 @@ final class JavaFxToWebAnimationPane extends Pane {
     private long startMillis;
 
     private void paintCanvas(long nowMillis) {
-        double w = getWidth(), h = getHeight(), hd2 = h / 2, hd4 = h / 4;
+        double w = getWidth(), h = getHeight(), hd2 = snapPositionY(h / 2), hd4 = snapPositionY(h / 4);
         GraphicsContext ctx = canvas.getGraphicsContext2D();
         ctx.clearRect(0, 0, w, h);
 
@@ -142,14 +142,14 @@ final class JavaFxToWebAnimationPane extends Pane {
 
     private class Bubble {
         // constant fields for the time of a bubble cycle
-        double xRight, radius, hPercent, decayingWPercent, dyingWPercent;
+        double xRight, radiusHPercent, yHPercent, decayingWPercent, dyingWPercent;
         // constant fields for the time of a draw
         double w, h;
         long nowMillis;
 
         void spawn() {
-            radius = 20 + 20 * Math.random();
-            hPercent = Math.random();
+            radiusHPercent = 0.08 + 0.08 * Math.random();
+            yHPercent = Math.random();
             decayingWPercent = 0.3 + 0.6 * Math.random();
             dyingWPercent = 0.6 * decayingWPercent;
             if (w == 0)
@@ -158,14 +158,14 @@ final class JavaFxToWebAnimationPane extends Pane {
                 if (lastSpawnBubble == null)
                     xRight = (nowMillis + 1000) * SPEED_FACTOR; // Will enter from the right 1s after animation started
                 else
-                    xRight = lastSpawnBubble.xRight + 3 * lastSpawnBubble.radius + 3000 * SPEED_FACTOR * Math.random();
+                    xRight = lastSpawnBubble.xRight + 3 * lastSpawnBubble.radiusHPercent * h + 3000 * SPEED_FACTOR * Math.random();
                 lastSpawnBubble = this;
             }
         }
 
         double getX() {
             double x = w + xRight - nowMillis * SPEED_FACTOR;
-            if (radius == 0 || x < - 2 * radius) {
+            if (radiusHPercent == 0 || x < - 2 * radiusHPercent * h) {
                 spawn();
                 return getX();
             }
@@ -173,8 +173,8 @@ final class JavaFxToWebAnimationPane extends Pane {
         }
 
         double getY() {
-            double r = radius * 1.1;
-            return r + hPercent * (h - 3 * r);
+            double r = radiusHPercent * h * 1.1;
+            return r + yHPercent * (h - 3 * r);
         }
 
         void draw(double w, double h, long nowMillis, GraphicsContext ctx) {
@@ -192,6 +192,7 @@ final class JavaFxToWebAnimationPane extends Pane {
                     decaying ? Color.ORANGE :
                     Color.color(0.4, 0.8, 0.4)
             );
+            double radius = radiusHPercent * h;
             double r = radius * (dying ? 1 + 2 * (dyingWPercent- wPercent) : 1);
             ctx.strokeArc(x + radius - r, getY() + radius - r, 2 * r, 2 * r, 0, 360, ArcType.OPEN);
         }

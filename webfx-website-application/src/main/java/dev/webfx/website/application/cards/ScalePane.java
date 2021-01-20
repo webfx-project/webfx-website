@@ -73,7 +73,7 @@ class ScalePane extends Pane {
         }
         if (tryRescale) {
             double w = node.prefWidth(height), h = node.prefHeight(w);
-            double scale = scaleMode == ScaleMode.HEIGHT ? height / h : scaleMode == ScaleMode.WIDTH ? width / h : Math.min(height / h, width / h);
+            double scale = scaleMode == ScaleMode.HEIGHT ? height / h : scaleMode == ScaleMode.WIDTH ? width / w : Math.min(height / h, width / w);
             if (scale == 1 || scale < 1 && canShrink || scale > 1 && canGrow) {
                 if (canScaleX)
                     node.setScaleX(scale);
