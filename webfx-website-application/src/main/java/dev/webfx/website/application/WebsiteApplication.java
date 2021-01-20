@@ -25,6 +25,7 @@ public class WebsiteApplication extends Application {
     private final Text subtitle = createTranspilerSvgText(25);
     private AnimationTimer gradientAnimationTimer;
     private Timeline dashOffsetTimeline;
+    private boolean showMenu = true;
 
     @Override
     public void start(Stage stage) {
@@ -34,17 +35,21 @@ public class WebsiteApplication extends Application {
         Pane rootPane = new Pane(webFxText, subtitle, cards[0], cards[1], cards[2]) {
             @Override
             protected void layoutChildren() {
-                double w = getWidth() - 4 * MARGIN, h = getHeight() - MARGIN, fontSize;
-                webFxText.setFont(Font.font("Arial", FontWeight.BOLD, fontSize = h * 0.12));
-                webFxText.setStrokeWidth(fontSize >= 70 ? 2 : 1);
-                subtitle.setFont(Font.font("Arial", FontWeight.NORMAL, fontSize = h * 0.03));
-                subtitle.setStrokeWidth(fontSize >= 70 ? 2 : 1);
-                double vh = webFxText.prefHeight(w), cx = MARGIN;
-                layoutInArea(webFxText, cx, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
-                double sh = subtitle.prefHeight(w);
-                vh = 0.9 * vh;
-                layoutInArea(subtitle, cx, vh, w, sh, 0, null, HPos.CENTER, VPos.TOP);
-                vh += sh * 1.2;
+                double w = getWidth() - 4 * MARGIN, h = getHeight() - MARGIN, fontSize, vh = 0, cx = MARGIN;
+                webFxText.setVisible(showMenu);
+                subtitle.setVisible(showMenu);
+                if (showMenu) {
+                    webFxText.setFont(Font.font("Arial", FontWeight.BOLD, fontSize = h * 0.12));
+                    webFxText.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+                    subtitle.setFont(Font.font("Arial", FontWeight.NORMAL, fontSize = h * 0.03));
+                    subtitle.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+                    vh = webFxText.prefHeight(w);
+                    layoutInArea(webFxText, cx, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
+                    double sh = subtitle.prefHeight(w);
+                    vh = 0.9 * vh;
+                    layoutInArea(subtitle, cx, vh, w, sh, 0, null, HPos.CENTER, VPos.TOP);
+                    vh += sh * 1.2;
+                }
                 double cy = vh, cw = w / 3, ch = h - vh;
                 layoutInArea(cards[0], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
                 cx += cw + MARGIN;
@@ -54,6 +59,14 @@ public class WebsiteApplication extends Application {
             }
         };
         rootPane.setBackground(null);
+        rootPane.setOnSwipeUp(e -> {
+            showMenu = false;
+            rootPane.requestLayout();
+        });
+        rootPane.setOnSwipeDown(e -> {
+            showMenu = true;
+            rootPane.requestLayout();
+        });
 
         Scene scene = new Scene(rootPane, 800, 600, backgroundGradient);
         stage.setTitle(webFxText.getText() + " - " + subtitle.getText());
