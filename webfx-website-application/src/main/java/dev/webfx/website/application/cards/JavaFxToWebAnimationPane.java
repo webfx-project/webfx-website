@@ -26,7 +26,7 @@ import static dev.webfx.website.application.cards.Card.createCloud;
 final class JavaFxToWebAnimationPane extends Pane {
 
     private final static long MILLIS_IN_NANO = 1_000_000;
-    private final static double SPEED_FACTOR = 0.1;
+    private final static double SPEED_FACTOR = 0.05;
 
     private final Pane cloudScalePane = new ScalePane(createCloud());
     private final FxWreathPane fxWreathPane = new FxWreathPane();
@@ -84,6 +84,7 @@ final class JavaFxToWebAnimationPane extends Pane {
         animationTimer.stop();
         playing = false;
         startMillis = 0;
+        paintCanvas(0);
     }
 
     private long normalizeNowMillis(long nowMillis) {

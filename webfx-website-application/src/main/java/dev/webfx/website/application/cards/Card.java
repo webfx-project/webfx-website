@@ -35,11 +35,20 @@ public abstract class Card extends Pane {
     protected final Text titleText;
     protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
+    protected boolean forwardingStep;
     protected boolean useHiddenTitleSpaceForIllustration = true, smoothIllustrationMove = true;
     private CardTransition cardTransition;
+    private final String longestCaption;
 
     Card(String title) {
         setBorder(CARD_BORDER);
+        String longestCaption = "";
+        for (int step = 1; caption(step) != null; step++) {
+            String caption = caption(step);
+            if (caption.length() > longestCaption.length())
+                longestCaption = caption;
+        }
+        this.longestCaption = longestCaption;
         titleText = WebSiteShared.setUpText(new Text(title + " \u2192"), 30, true, true, false, true);
         illustrationNode = createIllustrationNode();
         captionText1.setMouseTransparent(true);
@@ -47,7 +56,7 @@ public abstract class Card extends Pane {
         getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
         setCursor(Cursor.HAND);
         transitionToNextStep();
-        setOnMouseClicked(e -> transitionToNextStep());
+        setOnMouseClicked(e -> doStepTransition(!e.isControlDown()));
         setUpCardClip();
         titleText.opacityProperty().addListener((observableValue, number, t1) -> onTitleOpacityChanged());
     }
@@ -61,9 +70,21 @@ public abstract class Card extends Pane {
 
     abstract Node createIllustrationNode();
 
-    void transitionToNextStep() {
-        boolean animateTransition = currentAnimationStep > 0;
-        if (caption(++currentAnimationStep) == null)
+    public void transitionToNextStep() {
+        doStepTransition(true);
+    }
+
+    public void transitionToPreviousStep() {
+        doStepTransition(false);
+    }
+
+    private void doStepTransition(boolean forwardStep) {
+        if (currentAnimationStep == 1 && !forwardStep)
+            return;
+        this.forwardingStep = forwardStep;
+        boolean animateTransition = !forwardStep || currentAnimationStep > 0;
+        currentAnimationStep += forwardStep ? 1 : -1;
+        if (forwardStep && caption(currentAnimationStep) == null)
             currentAnimationStep = 1;
         if (cardTransition != null)
             cardTransition.stop();
@@ -80,10 +101,11 @@ public abstract class Card extends Pane {
         String caption = caption(step);
         WebSiteShared.setHtmlText(enteringCaptionText, caption == null ? null : caption + (step > 1 && caption(step + 1) != null ? " \u2192" : ""));
         double width = getWidth();
-        enteringCaptionText.setTranslateX(width);
+        double initialEnteringX = forwardingStep ? width : -width;
+        enteringCaptionText.setTranslateX(initialEnteringX);
         cardTransition.addKeyValue(
                 new KeyValue(enteringCaptionText.translateXProperty(), 0, Interpolator.EASE_OUT),
-                new KeyValue(leavingCaptionText.translateXProperty(), -width, Interpolator.EASE_OUT)
+                new KeyValue(leavingCaptionText.translateXProperty(), -initialEnteringX, Interpolator.EASE_OUT)
         );
         enteringCaptionText.setVisible(true);
         cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
@@ -103,19 +125,13 @@ public abstract class Card extends Pane {
             for (Card card : WebSiteShared.cards) {
                 card.titleText.setFont(titleFont);
                 maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
-                String longestCaption = "";
-                for (int step = 1; card.caption(step) != null; step++) {
-                    String caption = card.caption(step);
-                    if (caption.length() > longestCaption.length())
-                        longestCaption = caption;
-                }
                 card.captionText1.setFont(captionFont);
                 card.captionText2.setFont(captionFont);
                 HtmlText htmlText = card.captionText1.getTranslateX() == 0 ? card.captionText2 : card.captionText1;
-                String displayedText = htmlText.getText();
-                WebSiteShared.setHtmlText(htmlText, longestCaption);
+                String savedText = htmlText.getText();
+                WebSiteShared.setHtmlText(htmlText, card.longestCaption);
                 maxHtmlHeight = Math.max(htmlText.prefHeight(w), maxHtmlHeight);
-                htmlText.setText(displayedText);
+                htmlText.setText(savedText);
             }
             cardWidth = w;
             cardHeight = h;
@@ -223,7 +239,7 @@ public abstract class Card extends Pane {
         SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), null);
         cloudSVGPath.setStroke(WebSiteShared.githubGradient);
         cloudSVGPath.setStrokeWidth(4);
-        cloudSVGPath.setFill(Color.gray(1, 0.9));
+        cloudSVGPath.setFill(Color.gray(1, 0.8));
         return cloudSVGPath;
     }
 
@@ -231,7 +247,7 @@ public abstract class Card extends Pane {
         SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowUpPath(), null);
         arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
         arrowUpSVGPath.setStrokeWidth(4);
-        arrowUpSVGPath.setFill(Color.WHITE);
+        arrowUpSVGPath.setFill(Color.gray(1, 0.8));
         return arrowUpSVGPath;
     }
 

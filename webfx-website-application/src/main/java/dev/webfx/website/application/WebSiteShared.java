@@ -50,7 +50,7 @@ public final class WebSiteShared {
     }
 
     public static SvgText createTranspilerSvgText(double fontSize) {
-        SvgText text = setUpText(new SvgText("The JavaFX \u2192 Web transpiler"), fontSize, false, false, false, false);
+        SvgText text = setUpText(new SvgText("JavaFX \u2192 JS transpiler"), fontSize, false, false, false, false);
         text.setStrokeWidth(2);
         text.setStrokeLineCap(StrokeLineCap.BUTT);
         text.getStrokeDashArray().setAll(5d, 20d);
@@ -80,9 +80,9 @@ public final class WebSiteShared {
     }
 
     public static final Card[] cards = {
+            new FullySustainabilityCard(),
             new FullyJavaCard(),
             new FullyCrossPlatformCard(),
-            new FullySustainabilityCard(),
     };
 
     public static LinearGradient createAngleGithubGradient(double angle) {

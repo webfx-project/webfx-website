@@ -148,7 +148,7 @@ public final class FullyJavaCard extends Card {
             FlipPanel flipPanel = flipPanels[i];
             cardTransition.addKeyValue(new KeyValue(flipPanel.opacityProperty(), step >= 2 && step <= 5 ? 1 : 0));
             Node stepLogo = logos[(step - 1) * n + i];
-            Node previousStepLogo = logos[(step == 1 ? 6 : step - 2) * n + i];
+            Node previousStepLogo = logos[((step - 1 + (forwardingStep ? -1 : 1) + 7) % 7) * n + i];
             boolean logoChanged = !getLogoId(stepLogo).equals(getLogoId(previousStepLogo));
             boolean mustBeFront = step == 1 || step == 6;
             if (logoChanged || mustBeFront) {
@@ -157,9 +157,9 @@ public final class FullyJavaCard extends Card {
                 flipPanel.setFlipTime(mustBeFront ? 0 : 700);
                 if (mustBeFront)
                     flipPanel.flipToFront();
-                else if (step == 2)
+                else if (step == 2 && forwardingStep)
                     cardTransition.addOnFinished(() -> flip(flipPanel));
-                else if (step >= 3 && step <= 5)
+                else if (step >= 2 && step <= 5)
                     flip(flipPanel);
             }
         }

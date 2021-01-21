@@ -61,7 +61,9 @@ final class LongevityAnimationPane extends ScalePane {
     void startJavaFxAnimation(CardTransition cardTransition) {
         backToOriginal = false;
         cardTransition.addKeyValue(
-                new KeyValue(fxWreathPane.opacityProperty(), 1)
+                new KeyValue(fxWreathPane.opacityProperty(), 1),
+                new KeyValue(htmlFrameScalePane.opacityProperty(), 0),
+                new KeyValue(scaleXProperty(), 1)
         );
         cardTransition.addOnFinished(this::startAnotherShortRefactoringAnimation);
     }

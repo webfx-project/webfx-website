@@ -36,14 +36,12 @@ public class WebsiteApplication extends Application {
         rootPane = new Pane(webFxText, subtitle, cards[0], cards[1], cards[2]) {
             @Override
             protected void layoutChildren() {
-                double w = getWidth(), h = getHeight(), fontSize, vh = 0;
+                double w = getWidth(), h = getHeight(), vh = 0;
                 webFxText.setVisible(showMenu);
                 subtitle.setVisible(showMenu);
                 if (showMenu) {
-                    webFxText.setFont(Font.font("Arial", FontWeight.BOLD, fontSize = h * 0.12));
-                    webFxText.setStrokeWidth(fontSize >= 70 ? 2 : 1);
-                    subtitle.setFont(Font.font("Arial", FontWeight.NORMAL, fontSize = h * 0.03));
-                    subtitle.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+                    setFontSize(webFxText, h * 0.12, true);
+                    setFontSize(subtitle, h * 0.037, false);
                     vh = webFxText.prefHeight(w);
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
                     double sh = subtitle.prefHeight(w);
@@ -77,13 +75,22 @@ public class WebsiteApplication extends Application {
             }
         };
         rootPane.setBackground(null);
-        rootPane.setOnSwipeUp(  e -> setFocusedCardIndex(focusedCardIndex + 1));
-        rootPane.setOnSwipeDown(e -> setFocusedCardIndex(focusedCardIndex - 1));
+        rootPane.setOnSwipeUp(    e -> setFocusedCardIndex(focusedCardIndex + 1));
+        rootPane.setOnSwipeDown(  e -> setFocusedCardIndex(focusedCardIndex - 1));
+        rootPane.setOnSwipeLeft(  e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
+        rootPane.setOnSwipeRight( e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
 
         Scene scene = new Scene(rootPane, 800, 600, backgroundGradient);
         stage.setTitle(webFxText.getText() + " - " + subtitle.getText());
         stage.setScene(scene);
         stage.show();
+    }
+
+    private static void setFontSize(Text text, double fontSize, boolean bold) {
+        if (text.getFont().getSize() != fontSize) {
+            text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
+            text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
+        }
     }
 
     private void setFocusedCardIndex(int index) {

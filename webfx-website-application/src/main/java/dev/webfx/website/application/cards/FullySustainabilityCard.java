@@ -36,6 +36,7 @@ public final class FullySustainabilityCard extends Card {
     Node createIllustrationNode() {
         useHiddenTitleSpaceForIllustration = true;
         longevityAnimationPane = new LongevityAnimationPane();
+        javaFxToWebAnimationPane = new JavaFxToWebAnimationPane();
         flipShowingFront = true;
         return flipPanel = new FlipPanel();
     }
@@ -52,7 +53,7 @@ public final class FullySustainabilityCard extends Card {
             case 7: return "A second requirement for your application to grow successfully is a good refactoring support.";
             case 8: return "One of the big advantages of a strict language is to excel in refactoring.";
             case 9: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
-            case 10: return "This is what have motivated us to build WebFX, and use this sustainable technology for the web development.";
+            case 10: return "This is what have motivated us to create WebFX, and use Java & JavaFX as a sustainable alternative for modern web development.";
             default: return null;
         }
     }
@@ -65,6 +66,7 @@ public final class FullySustainabilityCard extends Card {
             case 1:
                 longevityAnimationPane.startBackToOriginalAnimation(cardTransition);
                 changeFlipContent(longevityAnimationPane);
+                setUpCardClip();
                 break;
             case 2:
                 smoothIllustrationMove = false;
@@ -79,34 +81,46 @@ public final class FullySustainabilityCard extends Card {
                 );
                 vBox.setAlignment(Pos.CENTER);
                 htmlText.setMaxHeight(0); // Hack for the web version, otherwise takes too much height and vBox is not initially centered
-                years12.setOpacity(0);
-                years12.scaleYProperty().bind(years12.scaleXProperty());
-                years12.setScaleX(15);
-                cardTransition.setDurationMillis(1500);
-                cardTransition.addKeyValue(
-                        new KeyValue(years12.opacityProperty(), 1),
-                        new KeyValue(years12.scaleXProperty(), 2, Interpolator.SPLINE(1, 0.5, 1, 1))
-                );
-                setClip(null);
-                cardTransition.addOnFinished(this::setUpCardClip);
-                changeFlipContent(vBox);
-                //performFadingTransition(vBox, cardTransition, true);
+                if (forwardingStep) {
+                    years12.setOpacity(0);
+                    years12.scaleYProperty().bind(years12.scaleXProperty());
+                    years12.setScaleX(15);
+                    cardTransition.setDurationMillis(1500);
+                    cardTransition.addKeyValue(
+                            new KeyValue(years12.opacityProperty(), 1),
+                            new KeyValue(years12.scaleXProperty(), 2, Interpolator.SPLINE(1, 0.5, 1, 1))
+                    );
+                    setClip(null);
+                    cardTransition.addOnFinished(this::setUpCardClip);
+                }
+                if (forwardingStep)
+                    changeFlipContent(vBox);
+                else
+                    flipToNewContent(vBox);
                 break;
             case 4:
+                setUpCardClip();
                 flipToNewContent(new FrameworksPane(true));
                 break;
             case 3:
-                setUpCardClip();
                 flipToNewContent(new FrameworksPane(false));
                 break;
             case 5:
-                flipToNewContent(javaFxToWebAnimationPane = new JavaFxToWebAnimationPane());
+                javaFxToWebAnimationPane.stopAnimation(); // In case of a backward navigation
+                javaFxToWebAnimationPane.setOpacity(1);
+                flipToNewContent(javaFxToWebAnimationPane);
                 break;
             case 6:
+                if (forwardingStep)
+                    changeFlipContent(javaFxToWebAnimationPane);
+                else {
+                    performFadingTransition(javaFxToWebAnimationPane, cardTransition, true);
+                    cardTransition.addOnFinished(refactoringAnimationPane::stopBrickAnimation);
+                }
                 javaFxToWebAnimationPane.playAnimation();
                 break;
             case 7:
-                htmlText = WebSiteShared.setHtmlText(new HtmlText(), "Refactoring is essential to avoid the pitfall of regular rewrites in your development cycle, a very common point of failure for applications longevity.");
+                htmlText = WebSiteShared.setHtmlText(new HtmlText(), "Refactoring is essential to avoid the pitfall of regular rewrites in your development cycle, a common point of failure in applications longevity.");
                 StackPane.setAlignment(htmlText, Pos.TOP_CENTER);
                 StackPane.setMargin(htmlText, new Insets(50, 0, 0, 0));
                 htmlText.setMaxHeight(0);
@@ -117,9 +131,7 @@ public final class FullySustainabilityCard extends Card {
                     cardTransition.addKeyValue(new KeyValue(htmlText.opacityProperty(), 1));
                     cardTransition.run(true);
                 });
-                cardTransition.addOnFinished(() -> {
-                    javaFxToWebAnimationPane.stopAnimation();
-                });
+                cardTransition.addOnFinished(javaFxToWebAnimationPane::stopAnimation);
                 break;
             case 8:
                 htmlText = WebSiteShared.setHtmlText(new HtmlText(), "Java has a prime refactoring support, a big force to clean, correct and make your code grow successfully.");
@@ -136,7 +148,8 @@ public final class FullySustainabilityCard extends Card {
                 cardTransition.addOnFinished(previousAnimation::stopBrickAnimation);
                 break;
             case 9:
-                performFadingTransition(longevityAnimationPane, cardTransition, false);
+                if (forwardingStep)
+                    performFadingTransition(longevityAnimationPane, cardTransition, false);
                 longevityAnimationPane.startJavaFxAnimation(cardTransition);
                 cardTransition.addOnFinished(refactoringAnimationPane::stopBrickAnimation);
                 break;
@@ -148,7 +161,7 @@ public final class FullySustainabilityCard extends Card {
     }
 
     private void performFadingTransition(Node enteringNode, CardTransition cardTransition, boolean parallel) {
-        ObservableList<Node> containerChildren = (flipShowingFront ? flipPanel.getFront() : flipPanel.getBack()).getChildren();
+        ObservableList<Node> containerChildren = getFlipChildren(flipShowingFront);
         Node leavingNode = containerChildren.get(0);
         enteringNode.setOpacity(0);
         cardTransition.addKeyValue(
@@ -174,19 +187,24 @@ public final class FullySustainabilityCard extends Card {
         return WebSiteShared.setUpText(new Text(text), 20, false, true, false, false);
     }
 
+    ObservableList<Node> getFlipChildren(boolean front) {
+        return (front ? flipPanel.getFront() : flipPanel.getBack()).getChildren();
+    }
+
     private void flipToNewContent(Node newContent) {
-        flipShowingFront = !flipShowingFront;
-        changeFlipContent(newContent);
-        if (flipShowingFront)
-            flipPanel.flipToFront();
-        else
-            flipPanel.flipToBack();
+        ObservableList<Node> children = getFlipChildren(flipShowingFront);
+        boolean changed = children.size() != 1 || children.get(0) != newContent;
+        if (changed) {
+            flipShowingFront = !flipShowingFront;
+            changeFlipContent(newContent);
+            if (flipShowingFront)
+                flipPanel.flipToFront();
+            else
+                flipPanel.flipToBack();
+        }
     }
 
     private void changeFlipContent(Node newContent) {
-        if (flipShowingFront)
-            flipPanel.getFront().getChildren().setAll(newContent);
-        else
-            flipPanel.getBack().getChildren().setAll(newContent);
+        getFlipChildren(flipShowingFront).setAll(newContent);
     }
 }

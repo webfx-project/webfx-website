@@ -28,6 +28,7 @@ public final class FullyCrossPlatformCard extends Card {
     private ImageView jdkImageView, gluonImageView;
     private SvgText webFxText;
     private FlipPanel flipPanel;
+    private boolean flipFrontShowing;
 
     public FullyCrossPlatformCard() {
         super("Fully cross-platform");
@@ -141,9 +142,13 @@ public final class FullyCrossPlatformCard extends Card {
         );
         flipPanel.getFront().getChildren().setAll(step <= 3 ? jdkImageView : webFxText);
         flipPanel.getBack().getChildren().setAll(step <= 2 || step == 7 ? new ImageView() : gluonImageView);
-        if (step == 2 || step == 6)
-            flipPanel.flipToFront();
-        if (step == 3 || step == 7)
-            flipPanel.flipToBack();
+        boolean showFlipFront = step == 2 || step == 6;
+        if (showFlipFront != flipFrontShowing) {
+            if (showFlipFront)
+                flipPanel.flipToFront();
+            else
+                flipPanel.flipToBack();
+            flipFrontShowing = showFlipFront;
+        }
     }
 }
