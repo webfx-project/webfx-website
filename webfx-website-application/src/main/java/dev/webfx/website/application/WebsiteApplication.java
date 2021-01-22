@@ -28,6 +28,8 @@ public class WebsiteApplication extends Application {
     private Pane rootPane;
     private int focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
+    private Timeline scrollTimeline;
+    private double scrollTimelineEndValue;
 
     @Override
     public void start(Stage stage) {
@@ -72,6 +74,7 @@ public class WebsiteApplication extends Application {
                     cy += h + gap;
                     layoutInArea(cards[2], cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
                 }
+                scrollRootPaneToFocusedCard();
             }
         };
         rootPane.setBackground(null);
@@ -95,21 +98,35 @@ public class WebsiteApplication extends Application {
 
     private void setFocusedCardIndex(int index) {
         index = Math.min(index, cards.length - 1);
-        if (!verticalCards)
-            rootPane.setTranslateY(0);
-        else {
-            if (index == 0)
-                index = focusedCardIndex == -1 ? 1 : -1;
-            double translateY = index <= 0 ? 0 : - index * rootPane.getHeight();
-            if (rootPane.getTranslateY() != translateY) {
-                new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(rootPane.translateYProperty(), translateY))).play();
-            }
-        }
+        if (verticalCards && index == 0)
+            index = focusedCardIndex == -1 ? 1 : -1;
         if (showMenu != (verticalCards || index < 0)) {
             showMenu = !showMenu;
             rootPane.requestLayout();
         }
         focusedCardIndex = index;
+        scrollRootPaneToFocusedCard();
+    }
+
+    private void scrollRootPaneToFocusedCard() {
+        if (!verticalCards) {
+            stopScrollTimeline();
+            rootPane.setTranslateY(0);
+        } else {
+            double translateY = focusedCardIndex <= 0 ? 0 : - focusedCardIndex * rootPane.getHeight();
+            if (rootPane.getTranslateY() != translateY && translateY != scrollTimelineEndValue) {
+                stopScrollTimeline();
+                scrollTimelineEndValue = translateY;
+                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(rootPane.translateYProperty(), scrollTimelineEndValue)));
+                scrollTimeline.play();
+            }
+        }
+    }
+
+    private void stopScrollTimeline() {
+        if (scrollTimeline != null)
+            scrollTimeline.stop();
+        scrollTimelineEndValue = -1;
     }
 
     private void startTextColorAnimation() {

@@ -45,6 +45,12 @@ public final class WebSiteShared {
     // Ease out interpolator closer to the web standard than the one proposed in JavaFx (ie Interpolator.EASE_OUT)
     //public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
 
+    public static final Card[] cards = {
+            new FullyJavaCard(),
+            new FullyCrossPlatformCard(),
+            new FullySustainabilityCard(),
+    };
+
     public static SvgText createWebFxSvgText(double fontSize) {
         return setUpText(new SvgText("WebFX"), fontSize, true, false, true, true);
     }
@@ -78,12 +84,6 @@ public final class WebSiteShared {
         htmlText.setMouseTransparent(true);
         return htmlText;
     }
-
-    public static final Card[] cards = {
-            new FullySustainabilityCard(),
-            new FullyJavaCard(),
-            new FullyCrossPlatformCard(),
-    };
 
     public static LinearGradient createAngleGithubGradient(double angle) {
         return createAngleGithubGradient(angle, 200, 0);
