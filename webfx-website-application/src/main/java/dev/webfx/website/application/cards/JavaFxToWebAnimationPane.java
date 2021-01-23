@@ -98,6 +98,8 @@ final class JavaFxToWebAnimationPane extends Pane {
 
     private void paintCanvas(long nowMillis) {
         double w = getWidth(), h = getHeight(), hd2 = snapPositionY(h / 2), hd4 = snapPositionY(h / 4);
+        if (w == 0)
+            return;
         GraphicsContext ctx = canvas.getGraphicsContext2D();
         ctx.clearRect(0, 0, w, h);
 

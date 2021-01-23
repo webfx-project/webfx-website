@@ -82,7 +82,7 @@ final class CreditsPane extends Pane {
     private final int cardStep;
     private final HBox javaFxLogo = Card.createJavaFxLogo();
     private final ImageView ltsImageView = new ImageView(ResourceService.toUrl("LTS.png", getClass()));
-    private final VBox creditsBox = new VBox(10, Arrays.stream(credits).map(FullySustainabilityCard::createText).toArray(Node[]::new));
+    private final VBox creditsBox = new VBox(10, Arrays.stream(credits).map(FullySustainableCard::createText).toArray(Node[]::new));
     private final DoubleProperty creditsBottomDistanceProperty = new SimpleDoubleProperty() {
         @Override
         protected void invalidated() {

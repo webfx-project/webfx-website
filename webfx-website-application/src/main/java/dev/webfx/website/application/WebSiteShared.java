@@ -2,10 +2,8 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
-import dev.webfx.website.application.cards.Card;
-import dev.webfx.website.application.cards.FullyCrossPlatformCard;
-import dev.webfx.website.application.cards.FullyJavaCard;
-import dev.webfx.website.application.cards.FullySustainabilityCard;
+import dev.webfx.website.application.cards.*;
+import javafx.animation.Interpolator;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
@@ -25,10 +23,10 @@ import java.util.List;
  */
 public final class WebSiteShared {
 
-    static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #c33764, #1d2671");
+    static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #1d2671, #9b2b4f");
     public static final LinearGradient circleGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
             new Stop(0, Color.gray(0.90)),
-            new Stop(1, Color.gray(0.60))
+            new Stop(1, Color.gray(0.65))
     );
     public static final LinearGradient githubGradient = LinearGradient.valueOf("to left, #FFE580, #FF7571, #EA5DAD, #C2A0FD, #3BF0E4, #B2F4B6");
     private static final List<Stop> githubStops = githubGradient.getStops();
@@ -43,12 +41,13 @@ public final class WebSiteShared {
     public static final Color appleColor       = Color.grayRgb(30);
 
     // Ease out interpolator closer to the web standard than the one proposed in JavaFx (ie Interpolator.EASE_OUT)
-    //public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
+    public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
 
     public static final Card[] cards = {
-            new FullyJavaCard(),
+            new WebFxCard(),
             new FullyCrossPlatformCard(),
-            new FullySustainabilityCard(),
+            new FullySustainableCard(),
+            new FullStackJavaCard(),
     };
 
     public static SvgText createWebFxSvgText(double fontSize) {
@@ -99,7 +98,6 @@ public final class WebSiteShared {
     public static LinearGradient createVerticalGithubGradiant(double shift) {
         return WebSiteShared.createAngleGithubGradient(Math.PI / 2, 200, -shift);
     }
-
 
     public static void setBackground(Region region, Paint fill) {
         setBackground(region, fill, null);

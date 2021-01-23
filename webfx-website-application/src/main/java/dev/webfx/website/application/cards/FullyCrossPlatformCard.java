@@ -68,6 +68,8 @@ public final class FullyCrossPlatformCard extends Card {
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight();
+                if (currentAnimationStep == 1)
+                    useTitleSpaceForIllustrationWhenHidden = w > h;
                 layoutInArea(platformScalePane, 0, 0, w, h,0, HPos.CENTER, VPos.CENTER);
                 double sh = platformScalePane.getHeight(), fh = Math.min(90, 0.3 * sh);
                 layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh,0, HPos.CENTER, VPos.CENTER);
@@ -101,12 +103,12 @@ public final class FullyCrossPlatformCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "Your back-end and front-end will also run on desktops, mobiles & embeds.";
-            case 2: return "The standard JDK toolchain will generate desktop executables of your application with an optimized JVM.";
-            case 3: return "The Gluon toolchain will invoke GraalVM to generate native executables of your application";
-            case 4: return "including for Android & iOS.";
-            case 5: return "Gluon also makes your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
-            case 6: return "And WebFX is here to add the Web platform to this collection.";
+            case 1: return "Your WebFX applications will also run natively on desktops, mobiles & embeds.";
+            case 2: return "Like for any JavaFX application, the JDK toolchain can generate the desktop executables (powered by an optimized JVM) of your WebFX application.";
+            case 3: return "In addition, the Gluon toolchain can generate the native executables (no JVM - all your application compiled into native by GraalVM) for the desktop,";
+            case 4: return "but also for Android & iOS.";
+            case 5: return "Gluon can also make your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
+            case 6: return "And WebFX enters the scene to add the Web platform to this collection.";
             case 7: return "7 platforms from a single code base! (check-out the demos for a Github workflow example)";
             default: return null;
         }
@@ -141,7 +143,7 @@ public final class FullyCrossPlatformCard extends Card {
                 new KeyValue(flipPanel.opacityProperty(), step >= 2 && step <= 6 ? 1 : 0)
         );
         flipPanel.getFront().getChildren().setAll(step <= 3 ? jdkImageView : webFxText);
-        flipPanel.getBack().getChildren().setAll(step <= 2 || step == 7 ? new ImageView() : gluonImageView);
+        flipPanel.getBack().getChildren().setAll(step == 2 || step == 7 ? new ImageView() : gluonImageView);
         boolean showFlipFront = step == 2 || step == 6;
         if (showFlipFront != flipFrontShowing) {
             if (showFlipFront)

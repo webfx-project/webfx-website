@@ -36,7 +36,7 @@ public abstract class Card extends Pane {
     protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
     protected boolean forwardingStep;
-    protected boolean useHiddenTitleSpaceForIllustration = true, smoothIllustrationMove = true;
+    protected boolean useTitleSpaceForIllustrationWhenHidden = true, alwaysUseTitleSpaceForIllustration = false, smoothIllustrationMove = true;
     private CardTransition cardTransition;
     private final String longestCaption;
 
@@ -109,6 +109,7 @@ public abstract class Card extends Pane {
         );
         enteringCaptionText.setVisible(true);
         cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
+        requestLayout(); // Since we have changed the content of the caption, it is necessary to request a layout
     }
 
     abstract String caption(int step);
@@ -148,15 +149,19 @@ public abstract class Card extends Pane {
         ny -= nh + vGap;
         layoutInArea(titleText, hgap, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
         double titleOpacity = titleText.getOpacity();
-        if (useHiddenTitleSpaceForIllustration && titleOpacity < 1)
-            ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titleOpacity : 1); // Smoothing the transition with opacity
-        nh = ny - 3 * vGap;
+        if (alwaysUseTitleSpaceForIllustration) {
+            nh = h - maxHtmlHeight - 2 * vGap;
+        } else {
+            if (useTitleSpaceForIllustrationWhenHidden && titleOpacity < 1)
+                ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titleOpacity : 1); // Smoothing the transition with opacity
+            nh = ny - 3 * vGap;
+        }
         ny = vGap;
         layoutInArea(illustrationNode, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
     }
 
     private void onTitleOpacityChanged() {
-        if (useHiddenTitleSpaceForIllustration && smoothIllustrationMove)
+        if (useTitleSpaceForIllustrationWhenHidden && smoothIllustrationMove)
             layoutChildren();
     }
 
@@ -247,7 +252,7 @@ public abstract class Card extends Pane {
         SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowUpPath(), null);
         arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
         arrowUpSVGPath.setStrokeWidth(4);
-        arrowUpSVGPath.setFill(Color.gray(1, 0.8));
+        arrowUpSVGPath.setFill(Color.WHITE);
         return arrowUpSVGPath;
     }
 
