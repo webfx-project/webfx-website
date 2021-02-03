@@ -1,18 +1,25 @@
 package dev.webfx.website.application;
 
-import javafx.animation.*;
+import dev.webfx.website.application.cards.Card;
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.HPos;
+import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
+import java.util.Arrays;
 
 import static dev.webfx.website.application.WebSiteShared.*;
 
@@ -22,9 +29,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 public class WebsiteApplication extends Application {
 
     private final Text webFxText = createWebFxSvgText(100);
-    private final Text subtitle = createTranspilerSvgText(25);
     private AnimationTimer gradientAnimationTimer;
-    private Timeline dashOffsetTimeline;
     private Pane rootPane;
     private int focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
@@ -35,21 +40,16 @@ public class WebsiteApplication extends Application {
     public void start(Stage stage) {
         webFxText.setOnMouseClicked(e -> toggleTextColorAnimation());
         webFxText.setCursor(Cursor.HAND);
-        rootPane = new Pane(webFxText, subtitle, cards[0], cards[1], cards[2]) {
+        rootPane = new Pane(cards) { { getChildren().add(webFxText); }
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight(), vh = 0;
                 webFxText.setVisible(showMenu);
-                subtitle.setVisible(showMenu);
                 if (showMenu) {
                     setFontSize(webFxText, h * 0.12, true);
-                    setFontSize(subtitle, h * 0.037, false);
                     vh = webFxText.prefHeight(w);
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
-                    double sh = subtitle.prefHeight(w);
-                    vh = 0.9 * vh;
-                    layoutInArea(subtitle, 0, vh, w, sh, 0, null, HPos.CENTER, VPos.TOP);
-                    vh += sh * 1.2;
+                    //vh += sh * 1.2;
                 }
                 double gap = Math.max(5, w * 0.01);
                 w -= 4 * gap; h -= gap;
@@ -60,31 +60,34 @@ public class WebsiteApplication extends Application {
                 }
                 verticalCards = cw < 230;
                 if (!verticalCards) {
-                    layoutInArea(cards[0], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
-                    cx += cw + gap;
-                    layoutInArea(cards[1], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
-                    cx += cw + gap;
-                    layoutInArea(cards[2], cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                    for (Card card : cards) {
+                        layoutInArea(card, cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                        cx += cw + gap;
+                    }
                 } else {
                     w += 2 * gap;
-                    layoutInArea(cards[0], cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
-                    cy = h + 2 * gap;
-                    ch = h - gap;
-                    layoutInArea(cards[1], cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
-                    cy += h + gap;
-                    layoutInArea(cards[2], cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                    for (Card card : cards) {
+                        layoutInArea(card, cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                        if (card == cards[0]) {
+                            ch = h - gap;
+                            cy = h + 2 * gap;
+                        } else
+                            cy += h + gap;
+                    }
                 }
-                scrollRootPaneToFocusedCard();
+                scrollToFocusedCard();
             }
         };
         rootPane.setBackground(null);
-        rootPane.setOnSwipeUp(    e -> setFocusedCardIndex(focusedCardIndex + 1));
-        rootPane.setOnSwipeDown(  e -> setFocusedCardIndex(focusedCardIndex - 1));
+        rootPane.setOnSwipeUp(    e -> scrollVerticallyToCard(focusedCardIndex + 1));
+        rootPane.setOnSwipeDown(  e -> scrollVerticallyToCard(focusedCardIndex - 1));
         rootPane.setOnSwipeLeft(  e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
         rootPane.setOnSwipeRight( e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
+        rootPane.setOnMouseClicked(e -> scrollHorizontallyToCard((int) (3 * (e.getX() - cards[0].getTranslateX()) / rootPane.getWidth())));
 
-        Scene scene = new Scene(rootPane, 800, 600, backgroundGradient);
-        stage.setTitle(webFxText.getText() + " - " + subtitle.getText());
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        Scene scene = new Scene(rootPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
+        stage.setTitle("WebFX - JavaFX \u2192 JS transpiler");
         stage.setScene(scene);
         stage.show();
     }
@@ -96,28 +99,45 @@ public class WebsiteApplication extends Application {
         }
     }
 
-    private void setFocusedCardIndex(int index) {
-        index = Math.min(index, cards.length - 1);
-        if (verticalCards && index == 0)
-            index = focusedCardIndex == -1 ? 1 : -1;
-        if (showMenu != (verticalCards || index < 0)) {
-            showMenu = !showMenu;
-            rootPane.requestLayout();
+    private void scrollHorizontallyToCard(int cardIndex) {
+        if (!verticalCards) {
+            cardIndex = Math.min(cardIndex, cards.length - 1);
+            focusedCardIndex = cardIndex;
+            scrollToFocusedCard();
         }
-        focusedCardIndex = index;
-        scrollRootPaneToFocusedCard();
     }
 
-    private void scrollRootPaneToFocusedCard() {
+    private void scrollVerticallyToCard(int cardIndex) {
+        cardIndex = Math.min(cardIndex, cards.length - 1);
+        if (showMenu != (!verticalCards || rootPane.getHeight() > rootPane.getWidth() || cardIndex < 0)) {
+            showMenu = !showMenu;
+            rootPane.requestLayout();
+        } else if (verticalCards && cardIndex == 0)
+            cardIndex = focusedCardIndex == -1 ? 1 : -1;
+        focusedCardIndex = cardIndex;
+        scrollToFocusedCard();
+    }
+
+    private void scrollToFocusedCard() {
         if (!verticalCards) {
-            stopScrollTimeline();
             rootPane.setTranslateY(0);
+            int leftCardIndex = Math.max(0, Math.min(cards.length - 3, focusedCardIndex - 1));
+            double translateX = -leftCardIndex * rootPane.getWidth() / 3;
+            if (cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
+                stopScrollTimeline();
+                scrollTimelineEndValue = translateX;
+                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500),
+                        Arrays.stream(cards).map(c -> new KeyValue(c.translateXProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)).toArray(KeyValue[]::new))
+                );
+                scrollTimeline.play();
+            }
         } else {
+            rootPane.setTranslateX(0);
             double translateY = focusedCardIndex <= 0 ? 0 : - focusedCardIndex * rootPane.getHeight();
             if (rootPane.getTranslateY() != translateY && translateY != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateY;
-                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(rootPane.translateYProperty(), scrollTimelineEndValue)));
+                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(rootPane.translateYProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)));
                 scrollTimeline.play();
             }
         }
@@ -139,24 +159,13 @@ public class WebsiteApplication extends Application {
             }
         };
         gradientAnimationTimer.start();
-
-        subtitle.setStroke(new Color(1, 1, 1, 0.5));
-        subtitle.setStrokeDashOffset(0);
-        dashOffsetTimeline = new Timeline();
-        dashOffsetTimeline.getKeyFrames().setAll(new KeyFrame(new Duration(2000), new KeyValue(subtitle.strokeDashOffsetProperty(), 25)));
-        dashOffsetTimeline.setCycleCount(Animation.INDEFINITE);
-        dashOffsetTimeline.play();
     }
 
     private void stopTextColorAnimation() {
         if (gradientAnimationTimer != null) {
             gradientAnimationTimer.stop();
-            dashOffsetTimeline.stop();
             gradientAnimationTimer = null;
-            dashOffsetTimeline = null;
         }
-        subtitle.setStroke(null);
-        webFxText.setFill(Color.BLACK);
     }
 
     private void toggleTextColorAnimation() {

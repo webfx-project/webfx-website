@@ -2,10 +2,8 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
-import dev.webfx.website.application.cards.Card;
-import dev.webfx.website.application.cards.FullyCrossPlatformCard;
-import dev.webfx.website.application.cards.FullyJavaCard;
-import dev.webfx.website.application.cards.FullySustainabilityCard;
+import dev.webfx.website.application.cards.*;
+import javafx.animation.Interpolator;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.Background;
@@ -13,7 +11,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.*;
-import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -25,10 +22,10 @@ import java.util.List;
  */
 public final class WebSiteShared {
 
-    static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #c33764, #1d2671");
+    static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #4C2459, #6F295A");
     public static final LinearGradient circleGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
             new Stop(0, Color.gray(0.90)),
-            new Stop(1, Color.gray(0.60))
+            new Stop(1, Color.gray(0.65))
     );
     public static final LinearGradient githubGradient = LinearGradient.valueOf("to left, #FFE580, #FF7571, #EA5DAD, #C2A0FD, #3BF0E4, #B2F4B6");
     private static final List<Stop> githubStops = githubGradient.getStops();
@@ -41,32 +38,25 @@ public final class WebSiteShared {
     public static final Color windowsColor     = Color.rgb(47,  116, 212);
     public static final Color androidColor     = Color.rgb(116, 140,  38); //Official color Color.rgb(165, 199, 54) is too bright for the circle background;
     public static final Color appleColor       = Color.grayRgb(30);
+    public static final Color gwtColor         = Color.rgb(249,  53, 53);
 
     // Ease out interpolator closer to the web standard than the one proposed in JavaFx (ie Interpolator.EASE_OUT)
-    //public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
+    public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
 
     public static final Card[] cards = {
-            new FullyJavaCard(),
+            new WebFxCard(),
             new FullyCrossPlatformCard(),
-            new FullySustainabilityCard(),
+            new FullySustainableCard(),
+            new FullStackJavaCard(),
     };
 
     public static SvgText createWebFxSvgText(double fontSize) {
         return setUpText(new SvgText("WebFX"), fontSize, true, false, true, true);
     }
 
-    public static SvgText createTranspilerSvgText(double fontSize) {
-        SvgText text = setUpText(new SvgText("JavaFX \u2192 JS transpiler"), fontSize, false, false, false, false);
-        text.setStrokeWidth(2);
-        text.setStrokeLineCap(StrokeLineCap.BUTT);
-        text.getStrokeDashArray().setAll(5d, 20d);
-        text.setFill(githubGradient);
-        return text;
-    }
-
     public static <T extends Text> T setUpText(T text, double fontSize, boolean bold, boolean white, boolean stroke, boolean shadow) {
         text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
-        text.setFill(white ? Color.WHITE : Color.BLACK);
+        text.setFill(white ? Color.WHITE : githubGradient);
         if (stroke) {
             text.setStroke(Color.WHITE);
             text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
@@ -96,17 +86,16 @@ public final class WebSiteShared {
         return new LinearGradient(shift * cos, shift * sin, (shift + length) * cos, (shift + length) * sin, false, CycleMethod.REPEAT, githubStops);
     }
 
-    public static LinearGradient createVerticalGithubGradiant(double shift) {
-        return WebSiteShared.createAngleGithubGradient(Math.PI / 2, 200, -shift);
+    public static LinearGradient createVerticalGithubGradiant(double length, double shift) {
+        return WebSiteShared.createAngleGithubGradient(Math.PI / 2, length, -shift);
     }
-
 
     public static void setBackground(Region region, Paint fill) {
         setBackground(region, fill, null);
     }
 
     public static void setBackground(Region region, Paint fill, CornerRadii radii) {
-        region.setBackground(new Background(new BackgroundFill(fill, radii, null)));
+        region.setBackground(fill == null || fill == Color.TRANSPARENT ? null : new Background(new BackgroundFill(fill, radii, null)));
     }
 
     public static <T extends Region> T setFixedSize(T region, double wh) {

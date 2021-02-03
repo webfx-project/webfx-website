@@ -24,26 +24,33 @@ final class CirclePane extends Pane {
     private double radius;
     private final Text[] circleLetters;
     private final Paint fill;
-    private final ScalePane scalePane1, scalePane2;
+    private Paint stroke = Color.WHITE;
+    private final ScalePane topScalePane, bottomScalePane;
 
-    CirclePane(String circleText, double angle, Paint fill, Node node1, Node node2) {
+    CirclePane(String circleText, double angle, Paint fill, Node topNode, Node bottomNode) {
         this.angle = angle;
         this.lettersAngle = angle;
         this.fill = fill;
-        scalePane1 = new ScalePane(node1);
-        scalePane2 = node2 == null ? null : new ScalePane(node2);
+        topScalePane = createScalePane(topNode);
+        bottomScalePane = createScalePane(bottomNode);
         setBlendMode(BlendMode.SCREEN); // Note: HTML & JavaFX implementation differs, so the rendering is different
         getChildren().setAll(circleLetters = createLetters(circleText));
-        scalePane1.setAlwaysTry(true);
-        getChildren().add(scalePane1);
-        if (scalePane2 != null) {
-            scalePane2.setAlwaysTry(true);
-            getChildren().add(scalePane2);
-        }
+        getChildren().add(topScalePane);
+        if (bottomScalePane != null)
+            getChildren().add(bottomScalePane);
     }
 
-    double getAngle() {
-        return angle;
+    private ScalePane createScalePane(Node node) {
+        ScalePane scalePane = null;
+        if (node != null) {
+            scalePane = new ScalePane(node);
+            scalePane.setAlwaysTry(true);
+        }
+        return scalePane;
+    }
+
+    public void setStroke(Paint stroke) {
+        this.stroke = stroke;
     }
 
     void setRadius(double radius) {
@@ -54,8 +61,12 @@ final class CirclePane extends Pane {
             setMaxSize(d, d);
             CornerRadii radii = new CornerRadii(radius);
             WebSiteShared.setBackground(this, fill, radii);
-            setBorder(new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, radii, new BorderWidths(radius * 0.05))));
+            setBorder(new Border(new BorderStroke(stroke, BorderStrokeStyle.SOLID, radii, new BorderWidths(radius * 0.05))));
         }
+    }
+
+    double getAngle() {
+        return angle;
     }
 
     private Text[] createLetters(String text) {
@@ -76,8 +87,8 @@ final class CirclePane extends Pane {
         double width  = getWidth();
         double height = getHeight();
         double size = Math.min(width, height);
-        double length = Arrays.stream(circleLetters).mapToDouble(l -> getLetterBounds(l).getWidth()).sum();
         double r = size / 2;
+        double length = Arrays.stream(circleLetters).mapToDouble(l -> getLetterBounds(l).getWidth()).sum();
         boolean top = lettersAngle < 0;
         double middleAngle = (top ? -1 : +1) * Math.PI / 2;  //lettersAngle * Math.PI / 180;
         double anglePerLength = 0.9 * Math.PI / 2 / length * (top ? 1 : -1);
@@ -96,13 +107,13 @@ final class CirclePane extends Pane {
             angle += anglePerLength * lw / 2;
         }
         double h = 0.3 * height;
-        if (scalePane2 == null) {
+        if (bottomScalePane == null) {
             double dy = -0.04 * height;
-            layoutInArea(scalePane1, 0, height / 2 - h / 2 + dy, width, h, 0, HPos.CENTER, VPos.CENTER);
+            layoutInArea(topScalePane, 0, height / 2 - h / 2 + dy, width, h, 0, HPos.CENTER, VPos.CENTER);
         } else {
             double dy = 0.06 * height, gap = 0.03 * height;
-            layoutInArea(scalePane1, 0, height / 2 - h + dy - gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
-            layoutInArea(scalePane2, 0, height / 2 + dy + gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
+            layoutInArea(topScalePane,    0, height / 2 - h + dy - gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
+            layoutInArea(bottomScalePane, 0, height / 2 + dy + gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
         }
     }
 

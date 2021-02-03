@@ -13,7 +13,7 @@ class ScalePane extends Pane {
 
     enum ScaleMode { WIDTH, HEIGHT, WIDTH_OR_HEIGHT}
 
-    private final ScaleMode scaleMode;
+    private ScaleMode scaleMode;
     private Node node;
     private boolean canGrow = true, canShrink = true;
     private boolean canScaleX = true, canScaleY = true;
@@ -40,6 +40,18 @@ class ScalePane extends Pane {
         this.node = node;
         if (node != null)
             getChildren().setAll(node);
+    }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public ScaleMode getScaleMode() {
+        return scaleMode;
+    }
+
+    public void setScaleMode(ScaleMode scaleMode) {
+        this.scaleMode = scaleMode;
     }
 
     public void setCanGrow(boolean canGrow) {
@@ -72,7 +84,7 @@ class ScalePane extends Pane {
             tryRescale = region.minWidth(height) > width || region.maxWidth(height) < width || region.minHeight(width) > height || region.maxHeight(width) < height;
         }
         if (tryRescale) {
-            double w = node.prefWidth(height), h = node.prefHeight(w);
+            double w = node.prefWidth(height), h = node.prefHeight(width);
             double scale = scaleMode == ScaleMode.HEIGHT ? height / h : scaleMode == ScaleMode.WIDTH ? width / w : Math.min(height / h, width / w);
             if (scale == 1 || scale < 1 && canShrink || scale > 1 && canGrow) {
                 if (canScaleX)

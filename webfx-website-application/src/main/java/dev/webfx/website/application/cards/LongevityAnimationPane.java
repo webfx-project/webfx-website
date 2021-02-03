@@ -36,7 +36,7 @@ final class LongevityAnimationPane extends ScalePane {
         WebSiteShared.setFixedSize(fixedSizePane, 1000);
         htmlFrameScalePane.setScaleX(2);
         htmlFrameScalePane.setScaleY(2);
-        fxWreathPane.setRotate(-45);
+        fxWreathPane.setRotate(-42);
         scaleYProperty().bind(scaleXProperty());
     }
 

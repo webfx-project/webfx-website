@@ -6,7 +6,6 @@ import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
-import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -24,7 +23,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 public final class FullyCrossPlatformCard extends Card {
 
     private Pane[] platformsNodes;
-    private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle, fxPane;
+    private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle;
     private ImageView jdkImageView, gluonImageView;
     private SvgText webFxText;
     private FlipPanel flipPanel;
@@ -36,30 +35,32 @@ public final class FullyCrossPlatformCard extends Card {
 
     @Override
     Node createIllustrationNode() {
+        FxWreathPane fxPane = Card.createWebFxLogo();
+        fxPane.setScaleMode(ScalePane.ScaleMode.WIDTH_OR_HEIGHT);
         platformsNodes = new Pane[] {
-                html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 0),
-                raspberryPiCircle = createSVGCircle(SvgLogoPaths.getRaspberryPiLogoPath(), raspberryPiColor, 0, 0),
+                html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 2),
+                raspberryPiCircle = createSVGCircle(SvgLogoPaths.getRaspberryPiLogoPath(), raspberryPiColor, 0, 2),
                 iOSCircle         = createSVGCircle(SvgLogoPaths.getIOSLogoPath(), appleColor, 1, -3),
                 androidCircle     = createSVGCircle(SvgLogoPaths.getAndroidLogoPath(), androidColor, 1, 0),
                 windowsCircle     = createSVGCircle(SvgLogoPaths.getWindowsLogoPath(), windowsColor, -4, 0),
                 macOSCircle       = createSVGCircle(SvgLogoPaths.getApplePath(), appleColor, 0, -3),
                 linuxCircle       = createSVGCircle(SvgLogoPaths.getLinuxLogoPath(), Color.BLACK, 2, -1),
-                fxPane            = createSVGCircle(SvgLogoPaths.getFxWordPath(), fxColor, 0, 0)
+                fxPane
         };
         double cr = 64 * 1.4 / 2, osr = 2.5 * cr;
         platformsPane = new Pane(platformsNodes);
         int n = platformsNodes.length - 1;
         for (int i = 0; i < n; i++) {
             double angle = 2 * Math.PI * i / n - Math.PI / 2;
-            platformsNodes[i].relocate(osr + osr * Math.cos(angle), osr + osr * Math.sin(angle));
+            platformsNodes[i].relocate(osr * (1 + Math.cos(angle)), osr * ( 1 + Math.sin(angle)));
         }
-        fxPane.relocate(osr, osr);
+        fxPane.relocate(osr - 0.25 * cr, osr - 0.25 * cr);
+        fxPane.setPrefSize(2.5 * cr, 2.5 * cr);
         jdkImageView   = new ImageView(ResourceService.toUrl("JDK.png", getClass()));
         jdkImageView.setEffect(dropShadow);
         gluonImageView = new ImageView(ResourceService.toUrl("Gluon.png", getClass()));
         gluonImageView.setEffect(dropShadow);
         webFxText = createWebFxSvgText(50);
-        webFxText.setFill(createAngleGithubGradient(Math.PI));
         flipPanel = new FlipPanel();
         flipPanel.flipToBack();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
@@ -68,6 +69,8 @@ public final class FullyCrossPlatformCard extends Card {
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight();
+                //if (currentAnimationStep == 1)
+                    //bindTitleSpaceWithOpacity(w > h);
                 layoutInArea(platformScalePane, 0, 0, w, h,0, HPos.CENTER, VPos.CENTER);
                 double sh = platformScalePane.getHeight(), fh = Math.min(90, 0.3 * sh);
                 layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh,0, HPos.CENTER, VPos.CENTER);
@@ -78,35 +81,28 @@ public final class FullyCrossPlatformCard extends Card {
     private static Pane createSVGCircle(String svgPath, Paint fill, double dx, double dy) {
         SVGPath path = new SVGPath();
         path.setContent(svgPath);
-        if (fill != null)
-            path.setFill(fill);
+        path.setFill(fill);
         path.setTranslateX(dx);
         path.setTranslateY(dy);
-        Pane pane = new BorderPane(path);
-        // The pane needs to be reduced to the svg path size (which we can get using the layout bounds).
-        path.sceneProperty().addListener((observableValue, scene, t1) -> { // This postpone is necessary only when running in the browser, not in standard JavaFx
-            Bounds b = path.getLayoutBounds(); // Bounds computation should be correct now even in the browser
-            double h = b.getHeight() * 1.4;
-            pane.setMinSize(h, h);
-            pane.setMaxSize(h, h);
-            if (fill != null && fill != fxColor) {
-                CornerRadii radii = new CornerRadii(h / 2);
-                WebSiteShared.setBackground(pane, circleGradient, radii);
-                pane.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID, radii, BorderStroke.THICK)));
-            }
-        });
+        Pane pane = new StackPane(path);
+        double h = 64 * 1.4; // 64 is the height of the SVGPath
+        pane.setMinSize(h, h);
+        pane.setMaxSize(h, h);
+        CornerRadii radii = new CornerRadii(h / 2);
+        WebSiteShared.setBackground(pane, circleGradient, radii);
+        pane.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID, radii, BorderStroke.THICK)));
         return pane;
     }
 
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "Your back-end and front-end will also run on desktops, mobiles & embeds.";
-            case 2: return "The standard JDK toolchain will generate desktop executables of your application with an optimized JVM.";
-            case 3: return "The Gluon toolchain will invoke GraalVM to generate native executables of your application";
-            case 4: return "including for Android & iOS.";
-            case 5: return "Gluon also makes your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
-            case 6: return "And WebFX is here to add the Web platform to this collection.";
+            case 1: return "Your WebFX applications will also run natively on desktops, mobiles & embeds.";
+            case 2: return "Like for any JavaFX application, the JDK toolchain can generate the desktop executables (powered by an optimized JVM) of your WebFX application.";
+            case 3: return "In addition, the Gluon toolchain can generate the native executables (no JVM - all your application compiled into native by GraalVM) for the desktop,";
+            case 4: return "but also for Android & iOS.";
+            case 5: return "Gluon can also make your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
+            case 6: return "And WebFX enters the scene to add the Web platform to this collection.";
             case 7: return "7 platforms from a single code base! (check-out the demos for a Github workflow example)";
             default: return null;
         }
@@ -141,7 +137,7 @@ public final class FullyCrossPlatformCard extends Card {
                 new KeyValue(flipPanel.opacityProperty(), step >= 2 && step <= 6 ? 1 : 0)
         );
         flipPanel.getFront().getChildren().setAll(step <= 3 ? jdkImageView : webFxText);
-        flipPanel.getBack().getChildren().setAll(step <= 2 || step == 7 ? new ImageView() : gluonImageView);
+        flipPanel.getBack().getChildren().setAll(step == 2 || step == 7 ? new ImageView() : gluonImageView);
         boolean showFlipFront = step == 2 || step == 6;
         if (showFlipFront != flipFrontShowing) {
             if (showFlipFront)

@@ -1,9 +1,13 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.website.application.SvgLogoPaths;
+import dev.webfx.website.application.WebSiteShared;
+import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.geometry.HPos;
+import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.SVGPath;
 
@@ -12,16 +16,30 @@ import javafx.scene.shape.SVGPath;
  */
 final class FxWreathPane extends Pane {
 
-    private final SVGPath wreathSVGPath = Card.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange"));
-    private final ScalePane wreathPane = new ScalePane(wreathSVGPath);
-    private final ScalePane fxPane = new ScalePane(Card.createFxLogo());
+    private final SVGPath wreathSVGPath;
+    private final SVGPath fxLogo = Card.createFxLogo();
+    private final SVGPath thumbUp = Card.createThumbUp();
+    private final ScalePane wreathPane;
+    private final FlipPanel flipPanel = new FlipPanel();
 
     public FxWreathPane() {
-        getChildren().setAll(wreathPane, fxPane);
+        this(Card.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange")));
+    }
+
+    public FxWreathPane(SVGPath wreathSVGPath) {
+        this.wreathSVGPath = wreathSVGPath;
+        wreathPane = new ScalePane(ScalePane.ScaleMode.HEIGHT, wreathSVGPath);
+        getChildren().setAll(wreathPane, flipPanel);
+        flipPanel.getFront().getChildren().setAll(new ScalePane(fxLogo));
+        flipPanel.getBack().getChildren().setAll(thumbUp);
     }
 
     SVGPath getWreathSVGPath() {
         return wreathSVGPath;
+    }
+
+    void setScaleMode(ScalePane.ScaleMode scaleMode) {
+        wreathPane.setScaleMode(scaleMode);
     }
 
     @Override
@@ -29,7 +47,20 @@ final class FxWreathPane extends Pane {
         double w = getWidth(), h = getHeight(), s = Math.min(w, h);
         layoutInArea(wreathPane,(w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
         s *= 0.4;
-        layoutInArea(fxPane,    (w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(flipPanel,    (w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+        thumbUp.setScaleX(fxLogo.getScaleX() * 1.25);
+        thumbUp.setScaleY(fxLogo.getScaleY() * 1.25);
     }
 
+    void flipThumbUp() {
+        fxLogo.setFill(Color.TRANSPARENT);
+        flipPanel.setFlipDirection(Orientation.VERTICAL);
+        flipPanel.flipToBack();
+    }
+
+    void flipFx() {
+        fxLogo.setFill(WebSiteShared.fxColor);
+        flipPanel.setFlipDirection(Orientation.HORIZONTAL);
+        flipPanel.flipToFront();
+    }
 }

@@ -6,6 +6,8 @@ import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -21,7 +23,6 @@ import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
 
 /**
  * @author Bruno Salmon
@@ -36,9 +37,15 @@ public abstract class Card extends Pane {
     protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
     protected boolean forwardingStep;
-    protected boolean useHiddenTitleSpaceForIllustration = true, smoothIllustrationMove = true;
+    protected boolean alwaysUseTitleSpaceForIllustration = false, smoothIllustrationMove = true;
     private CardTransition cardTransition;
     private final String longestCaption;
+    protected final DoubleProperty titleSpacePercent = new SimpleDoubleProperty(1) {
+        @Override
+        protected void invalidated() {
+            requestLayout();
+        }
+    };
 
     Card(String title) {
         setBorder(CARD_BORDER);
@@ -58,7 +65,6 @@ public abstract class Card extends Pane {
         transitionToNextStep();
         setOnMouseClicked(e -> doStepTransition(!e.isControlDown()));
         setUpCardClip();
-        titleText.opacityProperty().addListener((observableValue, number, t1) -> onTitleOpacityChanged());
     }
 
     void setUpCardClip() {
@@ -109,6 +115,7 @@ public abstract class Card extends Pane {
         );
         enteringCaptionText.setVisible(true);
         cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
+        requestLayout(); // Since we have changed the content of the caption, it is necessary to request a layout
     }
 
     abstract String caption(int step);
@@ -147,17 +154,28 @@ public abstract class Card extends Pane {
         nh = maxTitleHeight;
         ny -= nh + vGap;
         layoutInArea(titleText, hgap, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
-        double titleOpacity = titleText.getOpacity();
-        if (useHiddenTitleSpaceForIllustration && titleOpacity < 1)
-            ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titleOpacity : 1); // Smoothing the transition with opacity
-        nh = ny - 3 * vGap;
+        if (alwaysUseTitleSpaceForIllustration) {
+            nh = h - maxHtmlHeight - 2 * vGap;
+        } else {
+            double titlePercent = titleSpacePercent.get();
+            //if (/*useTitleSpaceForIllustrationWhenHidden && */titlePercent < 1)
+                ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titlePercent : 1); // Smoothing the transition with opacity
+            nh = ny - 3 * vGap;
+        }
         ny = vGap;
         layoutInArea(illustrationNode, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
     }
 
-    private void onTitleOpacityChanged() {
-        if (useHiddenTitleSpaceForIllustration && smoothIllustrationMove)
-            layoutChildren();
+    protected void bindTitleSpaceWithOpacity(boolean bind) {
+        if (!bind) {
+            titleSpacePercent.unbind();
+            titleSpacePercent.set(1);
+        } else if (!titleSpacePercent.isBound())
+            bindTitleSpaceWithOpacity();
+    }
+
+    protected void bindTitleSpaceWithOpacity() {
+        titleSpacePercent.bind(titleText.opacityProperty());
     }
 
     // Static utility methods
@@ -190,13 +208,19 @@ public abstract class Card extends Pane {
         return createImageViewLogo("Angular.png");
     }
 
+    static FxWreathPane createWebFxLogo() {
+        SVGPath cloud = Card.createCloud();
+        cloud.setTranslateY(-5);
+        return setLogoId(new FxWreathPane(cloud), "WebFX");
+    }
+
     static Pane createJSLogo() {
         SVGPath jsPath = new SVGPath();
         jsPath.setContent(SvgLogoPaths.getJSLogoPath());
         jsPath.setFill(Color.BLACK);
         Pane jsPane = new StackPane(jsPath);
         jsPane.setMaxSize(64, 64);
-        WebSiteShared.setBackground(jsPane, Color.web("#f7df1e"));
+        WebSiteShared.setBackground(jsPane, Color.web("#f7df1e")); // JS yellow background color
         return setLogoId(jsPane, "JS");
     }
 
@@ -228,6 +252,14 @@ public abstract class Card extends Pane {
         return createLogoSVGPath(SvgLogoPaths.getFxWordPath(), WebSiteShared.fxColor, "FX");
     }
 
+    static SVGPath createGwtLogo() {
+        return createLogoSVGPath(SvgLogoPaths.getGwtLogoPath(), WebSiteShared.gwtColor, "GWT");
+    }
+
+    static SVGPath createGwtText() {
+        return createLogoSVGPath(SvgLogoPaths.getGwtTextPath(), WebSiteShared.gwtColor, "GWT");
+    }
+
     static ScalePane createFlashLogo() {
         ScalePane pane = new ScalePane(createLogoSVGPath(SvgLogoPaths.getFlashLetterPath(), Color.WHITE));
         pane.setPrefSize(64, 64);
@@ -247,20 +279,20 @@ public abstract class Card extends Pane {
         SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowUpPath(), null);
         arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
         arrowUpSVGPath.setStrokeWidth(4);
-        arrowUpSVGPath.setFill(Color.gray(1, 0.8));
+        arrowUpSVGPath.setFill(Color.WHITE);
+        return arrowUpSVGPath;
+    }
+
+    static SVGPath createArrowDown() {
+        SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowDownPath(), null);
+        arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
+        arrowUpSVGPath.setStrokeWidth(4);
+        arrowUpSVGPath.setFill(Color.WHITE);
         return arrowUpSVGPath;
     }
 
     static SVGPath createThumbUp() {
-        return createLogoSVGPath(SvgLogoPaths.getThumbUpPath(), Color.WHITE);
-    }
-
-    static SVGPath createThumbDown() {
-        SVGPath thumb = createThumbUp();
-        Rotate rotate = new Rotate(180, Rotate.X_AXIS);
-        rotate.setPivotY(thumb.getLayoutBounds().getHeight() / 2);
-        thumb.getTransforms().add(rotate);
-        return thumb;
+        return createLogoSVGPath(SvgLogoPaths.getThumbUpPath(), WebSiteShared.fxColor);
     }
 
     static ImageView createJQueryLogo() {
