@@ -57,21 +57,21 @@ public final class WebFxCard extends Card {
                 flipPanel.flipToBack();
                 webFxDevAnimationPane.hideArcs();
                 webFxDevAnimationPane.showRightArrow(cardTransition);
-                webFxDevAnimationPane.playMoveAppCenter(cardTransition); // In case of forward
+                webFxDevAnimationPane.playRotateAppCenter(cardTransition); // In case of forward
                 break;
             case 4:
                 webFxDevAnimationPane.hideRightArrow(cardTransition);
-                webFxDevAnimationPane.playMoveAppLeft(cardTransition);
+                webFxDevAnimationPane.playRotateAppLeft(cardTransition);
                 // Preparing the front for step 7
                 webFxCloudAnimationPane.playContractionAnimation(cardTransition);
                 webFxCloudAnimationPane.flipFx(); // In case of reward
                 break;
             case 5:
-                webFxDevAnimationPane.playMoveAppRight(cardTransition);
+                webFxDevAnimationPane.playRotateAppRight(cardTransition);
                 webFxDevAnimationPane.hideArcs(); // In case of reward
                 break;
             case 6:
-                webFxDevAnimationPane.playMoveAppCenter(cardTransition); // In case of forward
+                webFxDevAnimationPane.playRotateAppCenter(cardTransition); // In case of forward
                 webFxDevAnimationPane.playArcs(cardTransition);
                 flipPanel.flipToBack(); // In case of reward
                 cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 0)); // In case of reward

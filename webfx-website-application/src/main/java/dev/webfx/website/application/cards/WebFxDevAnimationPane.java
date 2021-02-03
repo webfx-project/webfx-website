@@ -3,6 +3,8 @@ package dev.webfx.website.application.cards;
 import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.KeyValue;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -24,6 +26,17 @@ final class WebFxDevAnimationPane extends Pane {
     private final CirclePane webFXCirclePane   = new CirclePane("WebFX",  -90, Color.PURPLE, Card.createGwtLogo(), Card.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
     private final CirclePane appCirclePane     = new CirclePane("Your App",90, Color.rgb(89, 36, 189), Card.createGwtLogo(), downArrow);
     private final Arc openJFXArc = createArc(), webFXArc = createArc();
+    private double fullAngle = 30;
+    private final DoubleProperty anglePercentProperty = new SimpleDoubleProperty() {
+        @Override
+        protected void invalidated() {
+            updateAppAngle();
+        }
+    };
+
+    private void updateAppAngle() {
+        appCirclePane.setRotate(fullAngle * anglePercentProperty.get());
+    }
 
     public WebFxDevAnimationPane() {
         getChildren().setAll(appCirclePane, openJFXCirclePane, openJFXArc, webFXCirclePane, webFXArc, rightArrowPane);
@@ -74,6 +87,8 @@ final class WebFxDevAnimationPane extends Pane {
         layoutInArea(webFXArc, 1.5 * wd2 + xac, ya, ba.getWidth(), ha, 0, HPos.LEFT, VPos.TOP);
         double sa = 0.7 * r;
         layoutInArea(rightArrowPane, wd2 - sa / 2, 1.5 * hd2 - sa / 2, sa, sa, 0, HPos.LEFT, VPos.TOP);
+        fullAngle = Math.atan(0.5 * wd2 / hd2) / Math.PI * 180;
+        updateAppAngle();
     }
 
     void showRightArrow(CardTransition cardTransition) {
@@ -84,24 +99,24 @@ final class WebFxDevAnimationPane extends Pane {
         cardTransition.addKeyValue(new KeyValue(rightArrow.opacityProperty(), 0));
     }
 
-    void playMoveAppLeft(CardTransition cardTransition) {
+    void playRotateAppLeft(CardTransition cardTransition) {
         cardTransition.addKeyValue(
                 new KeyValue(downArrow.opacityProperty(), 1),
-                new KeyValue(appCirclePane.rotateProperty(), 30)
+                new KeyValue(anglePercentProperty, 1)
         );
     }
 
-    void playMoveAppRight(CardTransition cardTransition) {
+    void playRotateAppRight(CardTransition cardTransition) {
         cardTransition.addKeyValue(
                 new KeyValue(downArrow.opacityProperty(), 1),
-                new KeyValue(appCirclePane.rotateProperty(), -30)
+                new KeyValue(anglePercentProperty, -1)
         );
     }
 
-    void playMoveAppCenter(CardTransition cardTransition) {
+    void playRotateAppCenter(CardTransition cardTransition) {
         cardTransition.addKeyValue(
                 new KeyValue(downArrow.opacityProperty(), 0),
-                new KeyValue(appCirclePane.rotateProperty(), 0)
+                new KeyValue(anglePercentProperty, 0)
         );
     }
 

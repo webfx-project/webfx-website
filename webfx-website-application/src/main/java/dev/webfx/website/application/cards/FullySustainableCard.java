@@ -50,12 +50,12 @@ public final class FullySustainableCard extends Card {
     String caption(int step) {
         switch (step) {
             case 1: return "WebFX will give your web applications a much longer lifespan potential.";
-            case 2: return "The lifespan potential of your web application firstly depends on the lifespan of its UI toolkit, which makes JavaFX very interesting in this respect.";
+            case 2: return "The lifespan potential of your web application firstly depends on the lifespan of its UI toolkit, which makes JavaFX a very interesting choice.";
             case 3: return "As the Java desktop ecosystem has become hyper stable with no more competitor to come, JavaFX can safely enjoy a long life with many good days ahead.";
             case 4: return "While in the divided and highly competitive Web ecosystem, the lifespan of a web toolkit is very uncertain.";
             case 0: return "Now with WebFX, JavaFX has gained this unique position of a major desktop toolkit that can be transpiled to the web with an acceptable size and startup time.";
             case 5: return "Therefore every WebFX application will inherit from JavaFX a lifespan potential that is likely much longer than any toolkit from the standard Web ecosystem.";
-            case 6: return "To make your web application grow successfully, you also need a good refactoring support.";
+            case 6: return "Another requirement you need to make your web application grow successfully is a good refactoring support.";
             case 7: return "And one big advantage of a strict language like Java is to excel in refactoring.";
             case 8: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
             case 9: return "This is what have motivated us to build WebFX, and port this sustainable development model to the web.";
