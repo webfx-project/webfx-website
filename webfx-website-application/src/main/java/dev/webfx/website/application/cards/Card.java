@@ -63,7 +63,10 @@ public abstract class Card extends Pane {
         getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
         setCursor(Cursor.HAND);
         transitionToNextStep();
-        setOnMouseClicked(e -> doStepTransition(!e.isControlDown()));
+        setOnMouseClicked(e -> {
+            doStepTransition(!e.isControlDown());
+            e.consume();
+        });
         setUpCardClip();
     }
 

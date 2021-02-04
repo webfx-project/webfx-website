@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,7 +27,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-public class WebsiteApplication extends Application {
+public final class WebsiteApplication extends Application {
 
     private final Text webFxText = createWebFxSvgText(100);
     private AnimationTimer gradientAnimationTimer;
@@ -34,7 +35,7 @@ public class WebsiteApplication extends Application {
     private int focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
     private Timeline scrollTimeline;
-    private double scrollTimelineEndValue;
+    private double gap, scrollTimelineEndValue;
 
     @Override
     public void start(Stage stage) {
@@ -51,7 +52,7 @@ public class WebsiteApplication extends Application {
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
                     //vh += sh * 1.2;
                 }
-                double gap = Math.max(5, w * 0.01);
+                gap = Math.max(5, w * 0.01);
                 w -= 4 * gap; h -= gap;
                 double cx = gap, cy = vh, cw = w / 3, ch = h - vh;
                 if (!showMenu) {
@@ -79,11 +80,13 @@ public class WebsiteApplication extends Application {
             }
         };
         rootPane.setBackground(null);
-        rootPane.setOnSwipeUp(    e -> scrollVerticallyToCard(focusedCardIndex + 1));
-        rootPane.setOnSwipeDown(  e -> scrollVerticallyToCard(focusedCardIndex - 1));
-        rootPane.setOnSwipeLeft(  e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
-        rootPane.setOnSwipeRight( e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
-        rootPane.setOnMouseClicked(e -> scrollHorizontallyToCard((int) (3 * (e.getX() - cards[0].getTranslateX()) / rootPane.getWidth())));
+        for (Card card : cards)
+            card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(cards).indexOf(card)));
+        rootPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
+        rootPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
+        rootPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
+        rootPane.setOnSwipeLeft(   e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
+        rootPane.setOnSwipeRight(  e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(rootPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
@@ -97,6 +100,13 @@ public class WebsiteApplication extends Application {
             text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
             text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
         }
+    }
+
+    private int clickedCardIndex(double clickX) {
+        int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
+        if (cardIndex > focusedCardIndex)
+            cardIndex = Math.min(focusedCardIndex <= 0 ? 2 : focusedCardIndex + 1, cardIndex);
+        return cardIndex;
     }
 
     private void scrollHorizontallyToCard(int cardIndex) {
@@ -122,7 +132,7 @@ public class WebsiteApplication extends Application {
         if (!verticalCards) {
             rootPane.setTranslateY(0);
             int leftCardIndex = Math.max(0, Math.min(cards.length - 3, focusedCardIndex - 1));
-            double translateX = -leftCardIndex * rootPane.getWidth() / 3;
+            double translateX = -leftCardIndex * (rootPane.getWidth() - gap) / 3;
             if (cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateX;

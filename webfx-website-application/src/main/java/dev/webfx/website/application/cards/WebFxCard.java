@@ -28,8 +28,8 @@ public final class WebFxCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "A new alternative to develop modern web applications in Java & JavaFX!";
-            case 2: return "WebFX is a JavaFX \u2192 JS transpiler powered by GWT. You write your application in JavaFX and GWT will transpile it in pure JS (no plugin, no server).";
+            case 1: return "A new way to develop modern web applications: with Java & JavaFX!";
+            case 2: return "WebFX is a JavaFX \u2192 JS transpiler powered by GWT. You write your application in JavaFX, and GWT will transpile it in pure JS (no plugin, no server).";
             case 3: return "WebFX patches the higher layer of OpenJFX to make it GWT compatible, and replaces the lower layer with a JavaFX scene graph \u2192 browser DOM mapper.";
             case 4: return "You don't need to transpile each code change, you can use the OpenJFX runtime to develop, test and debug your application as usual in your Java IDE,";
             case 5: return "and transpile it only from time to time to check your web version is working as expected.";
