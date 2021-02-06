@@ -16,7 +16,7 @@ import javafx.scene.paint.Paint;
 /**
  * @author Bruno Salmon
  */
-public final class FullStackJavaCard extends Card {
+public final class FullStackCard extends Card {
 
     private Pane pane;
     private Node[] stepToolkitLogos, stepLanguageLogos;
@@ -24,8 +24,8 @@ public final class FullStackJavaCard extends Card {
     private Node[] puzzles;
     private DoubleProperty expansionProperty;
 
-    public FullStackJavaCard() {
-        super("Full-stack Java");
+    public FullStackCard() {
+        super("Full-stack");
         alwaysUseTitleSpaceForIllustration = true;
         //useTitleSpaceForIllustrationWhenHidden = false;
     }

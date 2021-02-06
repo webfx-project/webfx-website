@@ -22,12 +22,12 @@ import java.util.List;
  */
 public final class WebSiteShared {
 
-    static final LinearGradient backgroundGradient = LinearGradient.valueOf("from 0% 0% to 100% 100%, #4C2459, #6F295A");
+    static final LinearGradient backgroundGradient = LinearGradient.valueOf("to right bottom, #4C2459, #6F295A");
     public static final LinearGradient circleGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
             new Stop(0, Color.gray(0.90)),
             new Stop(1, Color.gray(0.65))
     );
-    public static final LinearGradient githubGradient = LinearGradient.valueOf("to left, #FFE580, #FF7571, #EA5DAD, #C2A0FD, #3BF0E4, #B2F4B6");
+    public static final LinearGradient githubGradient = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
     private static final List<Stop> githubStops = githubGradient.getStops();
 
     public static final DropShadow dropShadow  = new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 10, 0, 8, 8);
@@ -45,13 +45,14 @@ public final class WebSiteShared {
 
     public static final Card[] cards = {
             new WebFxCard(),
-            new FullyCrossPlatformCard(),
-            new FullySustainableCard(),
-            new FullStackJavaCard(),
+            new CrossPlatformCard(),
+            new SustainableCard(),
+            new ResponsiveCard(),
+            new FullStackCard(),
     };
 
-    public static SvgText createWebFxSvgText(double fontSize) {
-        return setUpText(new SvgText("WebFX"), fontSize, true, false, true, true);
+    public static SvgText createWebFxSvgText() {
+        return setUpText(new SvgText("WebFX"), 50, true, false, true, true);
     }
 
     public static <T extends Text> T setUpText(T text, double fontSize, boolean bold, boolean white, boolean stroke, boolean shadow) {
@@ -87,7 +88,7 @@ public final class WebSiteShared {
     }
 
     public static LinearGradient createVerticalGithubGradiant(double length, double shift) {
-        return WebSiteShared.createAngleGithubGradient(Math.PI / 2, length, -shift);
+        return WebSiteShared.createAngleGithubGradient(-Math.PI / 2, length, shift);
     }
 
     public static void setBackground(Region region, Paint fill) {

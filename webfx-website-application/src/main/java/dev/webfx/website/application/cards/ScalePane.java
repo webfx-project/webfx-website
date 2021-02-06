@@ -9,7 +9,7 @@ import javafx.scene.layout.Region;
 /**
  * @author Bruno Salmon
  */
-class ScalePane extends Pane {
+public class ScalePane extends Pane {
 
     enum ScaleMode { WIDTH, HEIGHT, WIDTH_OR_HEIGHT}
 
@@ -19,19 +19,19 @@ class ScalePane extends Pane {
     private boolean canScaleX = true, canScaleY = true;
     private boolean alwaysTry = false;
 
-    ScalePane() {
+    public ScalePane() {
         this((Node) null);
     }
 
-    ScalePane(ScaleMode scaleMode) {
+    public ScalePane(ScaleMode scaleMode) {
         this(scaleMode, null);
     }
 
-    ScalePane(Node node) {
+    public ScalePane(Node node) {
         this(ScaleMode.WIDTH_OR_HEIGHT, node);
     }
 
-    ScalePane(ScaleMode scaleMode, Node node) {
+    public ScalePane(ScaleMode scaleMode, Node node) {
         this.scaleMode = scaleMode;
         setNode(node);
     }

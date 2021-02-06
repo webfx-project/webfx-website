@@ -13,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -220,10 +222,10 @@ public abstract class Card extends Pane {
     static Pane createJSLogo() {
         SVGPath jsPath = new SVGPath();
         jsPath.setContent(SvgLogoPaths.getJSLogoPath());
-        jsPath.setFill(Color.BLACK);
+        jsPath.setFill(Color.web("#323330"));
         Pane jsPane = new StackPane(jsPath);
         jsPane.setMaxSize(64, 64);
-        WebSiteShared.setBackground(jsPane, Color.web("#f7df1e")); // JS yellow background color
+        WebSiteShared.setBackground(jsPane, Color.web("#F0DB4F")); // JS yellow background color
         return setLogoId(jsPane, "JS");
     }
 
@@ -270,11 +272,18 @@ public abstract class Card extends Pane {
         return pane;
     }
 
+    public static SVGPath createGithubLogo() {
+        SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getGithubLogoPath(), Color.gray(0.2));
+        githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
+        githubSVGPath.setStroke(Color.WHITE);
+        githubSVGPath.setStrokeWidth(1);
+        return githubSVGPath;
+    }
+
     static SVGPath createCloud() {
-        SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), null);
+        SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), Color.gray(1, 0.8));
         cloudSVGPath.setStroke(WebSiteShared.githubGradient);
         cloudSVGPath.setStrokeWidth(4);
-        cloudSVGPath.setFill(Color.gray(1, 0.8));
         return cloudSVGPath;
     }
 

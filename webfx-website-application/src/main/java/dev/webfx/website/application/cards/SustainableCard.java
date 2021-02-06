@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 /**
  * @author Bruno Salmon
  */
-public final class FullySustainableCard extends Card {
+public final class SustainableCard extends Card {
 
     private FlipPanel flipPanel;
     private FrameworksPane javaFrameworksPane, webFrameworksPane;
@@ -29,8 +29,8 @@ public final class FullySustainableCard extends Card {
     private boolean flipShowingFront;
     private double wallHeight;
 
-    public FullySustainableCard() {
-        super("Fully sustainable");
+    public SustainableCard() {
+        super("Sustainable");
     }
 
     @Override
@@ -49,13 +49,12 @@ public final class FullySustainableCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX will give your web applications a much longer lifespan potential.";
+            case 1: return "WebFX will give your web applications a longer lifespan potential.";
             case 2: return "The lifespan potential of your web application firstly depends on the lifespan of its UI toolkit, which makes JavaFX a very interesting choice.";
             case 3: return "As the Java desktop ecosystem has become hyper stable with no more competitor to come, JavaFX can safely enjoy a long life with many good days ahead.";
             case 4: return "While in the divided and highly competitive Web ecosystem, the lifespan of a web toolkit is very uncertain.";
-            case 0: return "Now with WebFX, JavaFX has gained this unique position of a major desktop toolkit that can be transpiled to the web with an acceptable size and startup time.";
-            case 5: return "Therefore your WebFX application will inherit from JavaFX a lifespan potential that is likely much longer than any toolkit from the standard Web ecosystem.";
-            case 6: return "Another requirement to make your web application grow successfully is a good refactoring support.";
+            case 5: return "Your WebFX application will therefore inherit from JavaFX a lifespan potential that is likely longer than any toolkit from the standard Web ecosystem.";
+            case 6: return "Another requirement for your web application to grow successfully is a good refactoring support.";
             case 7: return "And one big advantage of a strict language like Java is to excel in refactoring.";
             case 8: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
             case 9: return "This is what have motivated us to build WebFX, and port this sustainable development model to the web.";
@@ -109,11 +108,6 @@ public final class FullySustainableCard extends Card {
                 break;
             case 4:
                 flipToNewContent(webFrameworksPane);
-                break;
-            case 0:
-                webFxCloudAnimationPane.stopAnimation(); // In case of a backward navigation
-                webFxCloudAnimationPane.setOpacity(1);
-                flipToNewContent(webFxCloudAnimationPane);
                 break;
             case 5:
                 if (forwardingStep) {

@@ -4,7 +4,6 @@ import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -54,13 +53,13 @@ final class FxWreathPane extends Pane {
 
     void flipThumbUp() {
         fxLogo.setFill(Color.TRANSPARENT);
-        flipPanel.setFlipDirection(Orientation.VERTICAL);
+        //flipPanel.setFlipDirection(Orientation.VERTICAL);
         flipPanel.flipToBack();
     }
 
     void flipFx() {
         fxLogo.setFill(WebSiteShared.fxColor);
-        flipPanel.setFlipDirection(Orientation.HORIZONTAL);
+        //flipPanel.setFlipDirection(Orientation.HORIZONTAL);
         flipPanel.flipToFront();
     }
 }

@@ -20,7 +20,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-public final class FullyCrossPlatformCard extends Card {
+public final class CrossPlatformCard extends Card {
 
     private Pane[] platformsNodes;
     private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle;
@@ -29,8 +29,8 @@ public final class FullyCrossPlatformCard extends Card {
     private FlipPanel flipPanel;
     private boolean flipFrontShowing;
 
-    public FullyCrossPlatformCard() {
-        super("Fully cross-platform");
+    public CrossPlatformCard() {
+        super("Cross-platform");
     }
 
     @Override
@@ -60,7 +60,7 @@ public final class FullyCrossPlatformCard extends Card {
         jdkImageView.setEffect(dropShadow);
         gluonImageView = new ImageView(ResourceService.toUrl("Gluon.png", getClass()));
         gluonImageView.setEffect(dropShadow);
-        webFxText = createWebFxSvgText(50);
+        webFxText = createWebFxSvgText();
         flipPanel = new FlipPanel();
         flipPanel.flipToBack();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem

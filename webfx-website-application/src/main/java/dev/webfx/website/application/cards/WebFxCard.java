@@ -28,13 +28,14 @@ public final class WebFxCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "A new way to develop modern web applications: with Java & JavaFX!";
+            case 1: return "A new way to develop modern web applications... in Java & JavaFX!";
             case 2: return "WebFX is a JavaFX \u2192 JS transpiler powered by GWT. You write your application in JavaFX, and GWT will transpile it in pure JS (no plugin, no server).";
             case 3: return "WebFX patches the higher layer of OpenJFX to make it GWT compatible, and replaces the lower layer with a JavaFX scene graph \u2192 browser DOM mapper.";
             case 4: return "You don't need to transpile each code change, you can use the OpenJFX runtime to develop, test and debug your application as usual in your Java IDE,";
             case 5: return "and transpile it only from time to time to check your web version is working as expected.";
-            case 6: return "WebFX is a just starting and doesn't cover all JavaFX features yet, but it has a big potential and may quickly receive support from the JavaFX & GWT communities.";
-            case 7: return "WebFX will soon be ready for beta testing. We hope you will love it.";
+            case 6: return "WebFX is a just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
+            case 7: return "With WebFX, JavaFX shall become the first major desktop toolkit that can be transpiled to the web with an acceptable size and startup time.";
+            case 8: return "WebFX will soon be ready for beta testing. We hope you will love it.";
             default : return null;
         }
     }
@@ -50,7 +51,7 @@ public final class WebFxCard extends Card {
                 break;
             case 2:
                 cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 0));
-                webFxCloudAnimationPane.playExpansionAnimation(cardTransition);
+                webFxCloudAnimationPane.playExpansionAnimation(cardTransition, true);
                 flipPanel.flipToFront(); // In case of reward
                 break;
             case 3:
@@ -62,9 +63,6 @@ public final class WebFxCard extends Card {
             case 4:
                 webFxDevAnimationPane.hideRightArrow(cardTransition);
                 webFxDevAnimationPane.playRotateAppLeft(cardTransition);
-                // Preparing the front for step 7
-                webFxCloudAnimationPane.playContractionAnimation(cardTransition);
-                webFxCloudAnimationPane.flipFx(); // In case of reward
                 break;
             case 5:
                 webFxDevAnimationPane.playRotateAppRight(cardTransition);
@@ -77,8 +75,13 @@ public final class WebFxCard extends Card {
                 cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 0)); // In case of reward
                 break;
             case 7:
-                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 1));
                 flipPanel.flipToFront();
+                webFxCloudAnimationPane.playExpansionAnimation(cardTransition, false);  // In case of reward
+                webFxCloudAnimationPane.flipFx(); // In case of reward
+                break;
+            case 8:
+                webFxCloudAnimationPane.playContractionAnimation(cardTransition);
+                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 1));
                 webFxCloudAnimationPane.flipThumbUp();
                 break;
         }

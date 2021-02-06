@@ -1,6 +1,8 @@
 package dev.webfx.website.application;
 
+import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.website.application.cards.Card;
+import dev.webfx.website.application.cards.ScalePane;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -13,6 +15,8 @@ import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -21,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static dev.webfx.website.application.WebSiteShared.*;
 
@@ -29,9 +34,12 @@ import static dev.webfx.website.application.WebSiteShared.*;
  */
 public final class WebsiteApplication extends Application {
 
-    private final Text webFxText = createWebFxSvgText(100);
+    private final Text webFxText = createWebFxSvgText();
+    private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
+    private final SVGPath githubLogo = Card.createGithubLogo();
+    private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
     private AnimationTimer gradientAnimationTimer;
-    private Pane rootPane;
+    private Pane cardsPane;
     private int focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
     private Timeline scrollTimeline;
@@ -39,17 +47,19 @@ public final class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        webFxText.setOnMouseClicked(e -> toggleTextColorAnimation());
-        webFxText.setCursor(Cursor.HAND);
-        rootPane = new Pane(cards) { { getChildren().add(webFxText); }
+        cardsPane = new Pane(demosText, webFxText, githubLogoPane) { { getChildren().addAll(cards); }
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight(), vh = 0;
                 webFxText.setVisible(showMenu);
+                demosText.setVisible(showMenu);
                 if (showMenu) {
                     setFontSize(webFxText, h * 0.12, true);
+                    setFontSize(demosText, h * 0.12, true);
                     vh = webFxText.prefHeight(w);
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
+                    layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
+                    layoutInArea(githubLogoPane, w - w/3, vh * 0.1, w/3, vh * 0.7, 0, null, HPos.CENTER, VPos.TOP);
                     //vh += sh * 1.2;
                 }
                 gap = Math.max(5, w * 0.01);
@@ -79,17 +89,37 @@ public final class WebsiteApplication extends Application {
                 scrollToFocusedCard();
             }
         };
-        rootPane.setBackground(null);
+        cardsPane.setBackground(null);
         for (Card card : cards)
             card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(cards).indexOf(card)));
-        rootPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
-        rootPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
-        rootPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
-        rootPane.setOnSwipeLeft(   e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
-        rootPane.setOnSwipeRight(  e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
+        cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
+        cardsPane.setOnSwipeUp(e -> scrollVerticallyToCard(focusedCardIndex + 1));
+        cardsPane.setOnSwipeDown(e -> scrollVerticallyToCard(focusedCardIndex - 1));
+        cardsPane.setOnSwipeLeft(e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
+        cardsPane.setOnSwipeRight(e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
+
+        webFxText.setOnMouseClicked(e -> toggleTextColorAnimation());
+        webFxText.setCursor(Cursor.HAND);
+
+        demosText.setOnMouseClicked(e -> {
+            //flipPanel.flipToBack();
+            e.consume();
+        });
+        demosText.setCursor(Cursor.HAND);
+        List<Stop> githubStops = githubGradient.getStops();
+        demosText.setFill(githubStops.get(0).getColor().darker());
+
+        githubLogo.setOnMouseClicked(e -> {
+            getHostServices().showDocument("https://github.com/webfx-project/webfx");
+            e.consume();
+        });
+        githubLogo.setCursor(Cursor.HAND);
+        githubLogo.setFill(githubStops.get(githubStops.size() - 1).getColor().darker());
+
+        Pane demosPane = new Pane();
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        Scene scene = new Scene(rootPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
+        Scene scene = new Scene(cardsPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
         stage.setTitle("WebFX - JavaFX \u2192 JS transpiler");
         stage.setScene(scene);
         stage.show();
@@ -119,9 +149,9 @@ public final class WebsiteApplication extends Application {
 
     private void scrollVerticallyToCard(int cardIndex) {
         cardIndex = Math.min(cardIndex, cards.length - 1);
-        if (showMenu != (!verticalCards || rootPane.getHeight() > rootPane.getWidth() || cardIndex < 0)) {
+        if (showMenu != (!verticalCards || cardsPane.getHeight() > cardsPane.getWidth() || cardIndex < 0)) {
             showMenu = !showMenu;
-            rootPane.requestLayout();
+            cardsPane.requestLayout();
         } else if (verticalCards && cardIndex == 0)
             cardIndex = focusedCardIndex == -1 ? 1 : -1;
         focusedCardIndex = cardIndex;
@@ -130,9 +160,9 @@ public final class WebsiteApplication extends Application {
 
     private void scrollToFocusedCard() {
         if (!verticalCards) {
-            rootPane.setTranslateY(0);
+            cardsPane.setTranslateY(0);
             int leftCardIndex = Math.max(0, Math.min(cards.length - 3, focusedCardIndex - 1));
-            double translateX = -leftCardIndex * (rootPane.getWidth() - gap) / 3;
+            double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / 3;
             if (cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateX;
@@ -142,12 +172,12 @@ public final class WebsiteApplication extends Application {
                 scrollTimeline.play();
             }
         } else {
-            rootPane.setTranslateX(0);
-            double translateY = focusedCardIndex <= 0 ? 0 : - focusedCardIndex * rootPane.getHeight();
-            if (rootPane.getTranslateY() != translateY && translateY != scrollTimelineEndValue) {
+            cardsPane.setTranslateX(0);
+            double translateY = focusedCardIndex <= 0 ? 0 : - focusedCardIndex * cardsPane.getHeight();
+            if (cardsPane.getTranslateY() != translateY && translateY != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateY;
-                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(rootPane.translateYProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)));
+                scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(cardsPane.translateYProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)));
                 scrollTimeline.play();
             }
         }

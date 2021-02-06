@@ -110,9 +110,14 @@ final class WebFxCloudAnimationPane extends Pane {
         );
     }
 
-    void playExpansionAnimation(CardTransition cardTransition) {
+    void playExpansionAnimation(CardTransition cardTransition, boolean showJsGwtLogos) {
         cardTransition.addKeyValue(new KeyValue(expansionProperty, 1));
-        cardTransition.addOnFinished(() -> {
+        if (!showJsGwtLogos) {
+            jsLogoPane.setOpacity(0);
+            gwtLogoPane.setOpacity(0);
+            gwtTextPane.setOpacity(0);
+            arrowUp.setOpacity(1);
+        } else cardTransition.addOnFinished(() -> {
             cardTransition.addKeyValue(
                     new KeyValue(arrowUp.opacityProperty(), 1),
                     new KeyValue(jsLogoPane.opacityProperty(), 1),
