@@ -239,8 +239,11 @@
     <!-- used by webfx-website-application-gwt (APPLICATION) -->
     <source path="dev/webfx/website/application"/>
     <source path="dev/webfx/website/application/cards"/>
+    <source path="dev/webfx/website/application/demos"/>
     <resource path="dev/webfx/website/application/cards"/>
     <public includes="dev/webfx/website/application/cards/" path=""/>
+    <resource path="dev/webfx/website/application/demos"/>
+    <public includes="dev/webfx/website/application/demos/" path=""/>
 
     <source path="mongoose/client/services/bus/conf/gwt"/>
     <source path="mongoose/shared/domainmodel/gwt"/>

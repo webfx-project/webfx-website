@@ -60,7 +60,7 @@ final class CirclePane extends Pane {
             setMinSize(d, d);
             setMaxSize(d, d);
             CornerRadii radii = new CornerRadii(radius);
-            WebSiteShared.setBackground(this, fill, radii);
+            WebSiteShared.setRegionBackground(this, fill, radii);
             setBorder(new Border(new BorderStroke(stroke, BorderStrokeStyle.SOLID, radii, new BorderWidths(radius * 0.05))));
         }
     }

@@ -36,7 +36,7 @@ public final class CrossPlatformCard extends Card {
     @Override
     Node createIllustrationNode() {
         FxWreathPane fxPane = Card.createWebFxLogo();
-        fxPane.setScaleMode(ScalePane.ScaleMode.WIDTH_OR_HEIGHT);
+        fxPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         platformsNodes = new Pane[] {
                 html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 2),
                 raspberryPiCircle = createSVGCircle(SvgLogoPaths.getRaspberryPiLogoPath(), raspberryPiColor, 0, 2),
@@ -89,7 +89,7 @@ public final class CrossPlatformCard extends Card {
         pane.setMinSize(h, h);
         pane.setMaxSize(h, h);
         CornerRadii radii = new CornerRadii(h / 2);
-        WebSiteShared.setBackground(pane, circleGradient, radii);
+        WebSiteShared.setRegionBackground(pane, circleGradient, radii);
         pane.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID, radii, BorderStroke.THICK)));
         return pane;
     }

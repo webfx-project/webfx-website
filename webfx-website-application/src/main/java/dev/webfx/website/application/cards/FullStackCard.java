@@ -135,7 +135,7 @@ public final class FullStackCard extends Card {
         switch (step) {
             case 1: return "WebFX will simplify your development stack.";
             case 2: return "Mixing different UI toolkits and languages makes your stack complex, and prevents you to share any common code.";
-            case 3: return "Some frameworks provide full-stack solutions, but they don't have a full-stack language, so your stack is still not fully homogeneous.";
+            case 3: return "Most of full-stack frameworks actually don't have a full-stack language, so your stack is still not fully homogeneous.";
             case 4: return "Very few languages can be used both on client and server, especially when targeting the Web. JavaScript is one of them, but perhaps you would prefer Java?";
             case 5: return "WebFX opens the door to a 100% full-stack Java development, with JavaFX as common UI toolkit for your back-end and front-end.";
             case 6: return "Same language for all your stack. Same UI toolkit for your back-end & front-end. Same IDE for all your code.";

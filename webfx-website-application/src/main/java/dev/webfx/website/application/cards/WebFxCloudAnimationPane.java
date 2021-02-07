@@ -60,7 +60,7 @@ final class WebFxCloudAnimationPane extends Pane {
 
     public WebFxCloudAnimationPane() {
         getChildren().setAll(canvas, cloudPane, jsLogoPane, arrowUpScalePane, gwtLogoPane, gwtTextPane, fxWreathPane);
-        fxWreathPane.setScaleMode(ScalePane.ScaleMode.WIDTH_OR_HEIGHT);
+        fxWreathPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         gwtLogo.setEffect(WebSiteShared.dropShadow);
         gwtText.setEffect(WebSiteShared.dropShadow);
         updateVisibilities();

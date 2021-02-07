@@ -114,7 +114,7 @@ final class FrameworksPane extends Pane {
             double clumpDeathYear = Math.min(deathYear, year1);
             double d = year1 - startYear;
             Color increasingColor = Color.color(0.1, 0.5, 0.1), decayingColor = Color.ORANGE, dyingColor = Color.color(1, 0.2, 0.2);
-            WebSiteShared.setBackground(liveBar, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
+            WebSiteShared.setRegionBackground(liveBar, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE,
                     new Stop(0,                                increasingColor),
                     new Stop((apogeeYear     - startYear) / d, increasingColor),
                     new Stop((apogeeYear     - startYear) / d, decayingColor),

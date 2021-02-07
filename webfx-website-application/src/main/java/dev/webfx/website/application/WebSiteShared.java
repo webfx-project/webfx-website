@@ -4,16 +4,26 @@ import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.website.application.cards.*;
 import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.application.HostServices;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.*;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.List;
 
@@ -29,6 +39,7 @@ public final class WebSiteShared {
     );
     public static final LinearGradient githubGradient = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
     private static final List<Stop> githubStops = githubGradient.getStops();
+    public static Color firstGithubGradientColor = githubStops.get(0).getColor(), lastGithubGradientColor = githubStops.get(githubStops.size() - 1).getColor();
 
     public static final DropShadow dropShadow  = new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 10, 0, 8, 8);
     public static final Color javaColor        = Color.rgb(244, 175, 103);
@@ -47,7 +58,7 @@ public final class WebSiteShared {
             new WebFxCard(),
             new CrossPlatformCard(),
             new SustainableCard(),
-            new ResponsiveCard(),
+            //new ResponsiveCard(),
             new FullStackCard(),
     };
 
@@ -91,11 +102,11 @@ public final class WebSiteShared {
         return WebSiteShared.createAngleGithubGradient(-Math.PI / 2, length, shift);
     }
 
-    public static void setBackground(Region region, Paint fill) {
-        setBackground(region, fill, null);
+    public static void setRegionBackground(Region region, Paint fill) {
+        setRegionBackground(region, fill, null);
     }
 
-    public static void setBackground(Region region, Paint fill, CornerRadii radii) {
+    public static void setRegionBackground(Region region, Paint fill, CornerRadii radii) {
         region.setBackground(fill == null || fill == Color.TRANSPARENT ? null : new Background(new BackgroundFill(fill, radii, null)));
     }
 
@@ -108,5 +119,47 @@ public final class WebSiteShared {
         region.setMinSize(w, h);
         region.setPrefSize(w, h);
         return region;
+    }
+
+    private static HostServices hostServices;
+
+    public static HostServices getHostServices() {
+        return hostServices;
+    }
+
+    public static void openUrl(String url) {
+        hostServices.showDocument(url);
+    }
+
+    public static void setHostServices(HostServices hostServices) {
+        WebSiteShared.hostServices = hostServices;
+    }
+
+    public static void runOnMouseClick(Node node, Runnable runnable) {
+        runOnMouseClick(node, e -> runnable.run());
+    }
+
+    public static void runOnMouseClick(Node node, EventHandler<? super MouseEvent> eventHandler) {
+        node.setCursor(Cursor.HAND);
+        node.setOnMouseClicked(e -> {
+            eventHandler.handle(e);
+            e.consume();
+        });
+    }
+
+    public static void setShapeHoverAnimationColor(Shape shape, Color color) {
+        Timeline[] timelineHolder = { new Timeline() };
+        shape.setOnMouseEntered(e -> {
+            timelineHolder[0].stop();
+            timelineHolder[0] = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(shape.fillProperty(), color)));
+            timelineHolder[0].play();
+        });
+        Color darker = color.darker();
+        shape.setOnMouseExited(e -> {
+            timelineHolder[0].stop();
+            timelineHolder[0] = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(shape.fillProperty(), darker)));
+            timelineHolder[0].play();
+        });
+        shape.setFill(darker);
     }
 }

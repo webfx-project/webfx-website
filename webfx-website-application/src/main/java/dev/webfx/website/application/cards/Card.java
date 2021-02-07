@@ -11,7 +11,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
@@ -31,7 +30,7 @@ import javafx.scene.text.Text;
  */
 public abstract class Card extends Pane {
 
-    private final static Border CARD_BORDER = new Border(new BorderStroke(Color.grayRgb(255, 0.5), BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
+    private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
     private static double cardWidth, cardHeight, maxTitleHeight, maxHtmlHeight;
 
     protected final Node illustrationNode;
@@ -51,6 +50,7 @@ public abstract class Card extends Pane {
 
     Card(String title) {
         setBorder(CARD_BORDER);
+        WebSiteShared.setRegionBackground(this, Color.grayRgb(0, 0.25), CARD_BORDER.getStrokes().get(0).getRadii());
         String longestCaption = "";
         for (int step = 1; caption(step) != null; step++) {
             String caption = caption(step);
@@ -63,12 +63,8 @@ public abstract class Card extends Pane {
         captionText1.setMouseTransparent(true);
         captionText2.setMouseTransparent(true);
         getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
-        setCursor(Cursor.HAND);
         transitionToNextStep();
-        setOnMouseClicked(e -> {
-            doStepTransition(!e.isControlDown());
-            e.consume();
-        });
+        WebSiteShared.runOnMouseClick(this, e -> doStepTransition(!e.isControlDown()));
         setUpCardClip();
     }
 
@@ -225,7 +221,7 @@ public abstract class Card extends Pane {
         jsPath.setFill(Color.web("#323330"));
         Pane jsPane = new StackPane(jsPath);
         jsPane.setMaxSize(64, 64);
-        WebSiteShared.setBackground(jsPane, Color.web("#F0DB4F")); // JS yellow background color
+        WebSiteShared.setRegionBackground(jsPane, Color.web("#F0DB4F")); // JS yellow background color
         return setLogoId(jsPane, "JS");
     }
 
@@ -268,7 +264,7 @@ public abstract class Card extends Pane {
     static ScalePane createFlashLogo() {
         ScalePane pane = new ScalePane(createLogoSVGPath(SvgLogoPaths.getFlashLetterPath(), Color.WHITE));
         pane.setPrefSize(64, 64);
-        WebSiteShared.setBackground(pane, LinearGradient.valueOf("to bottom, #D21921, #4C060A"));
+        WebSiteShared.setRegionBackground(pane, LinearGradient.valueOf("to bottom, #D21921, #4C060A"));
         return pane;
     }
 

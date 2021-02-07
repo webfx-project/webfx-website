@@ -10,6 +10,7 @@
 
     <resource-packages>
         <package>dev.webfx.website.application.cards</package>
+        <package>dev.webfx.website.application.demos</package>
     </resource-packages>
 
     <providers>

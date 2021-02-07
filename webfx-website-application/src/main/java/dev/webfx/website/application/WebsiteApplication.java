@@ -3,6 +3,7 @@ package dev.webfx.website.application;
 import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.website.application.cards.Card;
 import dev.webfx.website.application.cards.ScalePane;
+import dev.webfx.website.application.demos.DemoThumbnailsPane;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -11,11 +12,9 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -25,7 +24,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.stream.Stream;
 
 import static dev.webfx.website.application.WebSiteShared.*;
 
@@ -38,7 +37,8 @@ public final class WebsiteApplication extends Application {
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
     private final SVGPath githubLogo = Card.createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
-    private AnimationTimer gradientAnimationTimer;
+    private final DemoThumbnailsPane demoThumbnailsPane = new DemoThumbnailsPane();
+    private AnimationTimer webFxFillAnimationTimer;
     private Pane cardsPane;
     private int focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
@@ -47,7 +47,7 @@ public final class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        cardsPane = new Pane(demosText, webFxText, githubLogoPane) { { getChildren().addAll(cards); }
+        cardsPane = new Pane(cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane, demoThumbnailsPane); }
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight(), vh = 0;
@@ -60,8 +60,8 @@ public final class WebsiteApplication extends Application {
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
                     layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
                     layoutInArea(githubLogoPane, w - w/3, vh * 0.1, w/3, vh * 0.7, 0, null, HPos.CENTER, VPos.TOP);
-                    //vh += sh * 1.2;
                 }
+                layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh, 0, HPos.CENTER, VPos.BOTTOM);
                 gap = Math.max(5, w * 0.01);
                 w -= 4 * gap; h -= gap;
                 double cx = gap, cy = vh, cw = w / 3, ch = h - vh;
@@ -93,30 +93,24 @@ public final class WebsiteApplication extends Application {
         for (Card card : cards)
             card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(cards).indexOf(card)));
         cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
-        cardsPane.setOnSwipeUp(e -> scrollVerticallyToCard(focusedCardIndex + 1));
-        cardsPane.setOnSwipeDown(e -> scrollVerticallyToCard(focusedCardIndex - 1));
-        cardsPane.setOnSwipeLeft(e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
-        cardsPane.setOnSwipeRight(e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
+        cardsPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
+        cardsPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
+        cardsPane.setOnSwipeLeft(   e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
+        cardsPane.setOnSwipeRight(  e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
 
-        webFxText.setOnMouseClicked(e -> toggleTextColorAnimation());
-        webFxText.setCursor(Cursor.HAND);
+        runOnMouseClick(demosText,  () -> showDemos(true));
+        runOnMouseClick(webFxText,  () -> { if (demoThumbnailsPane.isVisible()) showDemos(false); });
+        runOnMouseClick(githubLogo, () -> openUrl("https://github.com/webfx-project/webfx"));
+        WebSiteShared.setHostServices(getHostServices()); // To make openUrl() work
 
-        demosText.setOnMouseClicked(e -> {
-            //flipPanel.flipToBack();
-            e.consume();
-        });
-        demosText.setCursor(Cursor.HAND);
-        List<Stop> githubStops = githubGradient.getStops();
-        demosText.setFill(githubStops.get(0).getColor().darker());
+        webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
+        webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
-        githubLogo.setOnMouseClicked(e -> {
-            getHostServices().showDocument("https://github.com/webfx-project/webfx");
-            e.consume();
-        });
-        githubLogo.setCursor(Cursor.HAND);
-        githubLogo.setFill(githubStops.get(githubStops.size() - 1).getColor().darker());
+        setShapeHoverAnimationColor(githubLogo, lastGithubGradientColor.darker());
+        setShapeHoverAnimationColor(demosText, firstGithubGradientColor.darker());
 
-        Pane demosPane = new Pane();
+        demoThumbnailsPane.setVisible(false);
+        demoThumbnailsPane.setOpacity(0);
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(cardsPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
@@ -130,6 +124,15 @@ public final class WebsiteApplication extends Application {
             text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
             text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
         }
+    }
+
+    private void showDemos(boolean show) {
+        demoThumbnailsPane.setVisible(true);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500),
+                Stream.concat(Stream.of(demoThumbnailsPane), Arrays.stream(cards)).map(node -> new KeyValue(node.opacityProperty(), node == demoThumbnailsPane ? (show ? 1 : 0) : (show ? 0 : 1))).toArray(KeyValue[]::new))
+        );
+        timeline.setOnFinished(e -> demoThumbnailsPane.setVisible(show));
+        timeline.play();
     }
 
     private int clickedCardIndex(double clickX) {
@@ -189,29 +192,22 @@ public final class WebsiteApplication extends Application {
         scrollTimelineEndValue = -1;
     }
 
-    private void startTextColorAnimation() {
-        stopTextColorAnimation();
-
-        gradientAnimationTimer = new AnimationTimer() {
+    private void startWebFxFillAnimation() {
+        stopWebFxFillAnimation();
+        webFxFillAnimationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 webFxText.setFill(createAngleGithubGradient(now / (2 * Math.PI * 100_000_000)));
             }
         };
-        gradientAnimationTimer.start();
+        webFxFillAnimationTimer.start();
     }
 
-    private void stopTextColorAnimation() {
-        if (gradientAnimationTimer != null) {
-            gradientAnimationTimer.stop();
-            gradientAnimationTimer = null;
+    private void stopWebFxFillAnimation() {
+        if (webFxFillAnimationTimer != null) {
+            webFxFillAnimationTimer.stop();
+            webFxFillAnimationTimer = null;
         }
-    }
-
-    private void toggleTextColorAnimation() {
-        if (gradientAnimationTimer != null)
-            stopTextColorAnimation();
-        else
-            startTextColorAnimation();
+        webFxText.setFill(githubGradient);
     }
 }
