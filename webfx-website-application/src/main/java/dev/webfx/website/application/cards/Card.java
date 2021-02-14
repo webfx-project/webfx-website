@@ -1,26 +1,17 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.platform.shared.services.resource.ResourceService;
-import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.HPos;
-import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.effect.BlurType;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -32,6 +23,15 @@ public abstract class Card extends Pane {
 
     private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
     private static double cardWidth, cardHeight, maxTitleHeight, maxHtmlHeight;
+
+    public static final Card[] cards = {
+            new WebFxCard(),
+            new JavaFullStackCard(),
+            new CrossPlatformCard(),
+            new SustainableCard(),
+            new ResponsiveCard(),
+            new MagicalCard(),
+    };
 
     protected final Node illustrationNode;
     protected final Text titleText;
@@ -130,7 +130,7 @@ public abstract class Card extends Pane {
             Font titleFont   = Font.font("Arial", FontWeight.BOLD,   Math.max(16, w * 0.07));
             Font captionFont = Font.font("Arial", FontWeight.NORMAL, Math.max(16, Math.sqrt(w * h) * 0.035));
             WebSiteShared.htmlTextFont = captionFont;
-            for (Card card : WebSiteShared.cards) {
+            for (Card card : cards) {
                 card.titleText.setFont(titleFont);
                 maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
                 card.captionText1.setFont(captionFont);
@@ -179,174 +179,4 @@ public abstract class Card extends Pane {
         titleSpacePercent.bind(titleText.opacityProperty());
     }
 
-    // Static utility methods
-
-    static Pane createNoLogo() {
-        return setLogoId(new StackPane(), "no");
-    }
-
-    private static ImageView createImageViewLogo(String file) {
-        return setLogoId(new ImageView(ResourceService.toUrl(file, Card.class)), file);
-    }
-
-    static ImageView createQtLogo() {
-        return createImageViewLogo("Qt.png");
-    }
-
-    static ImageView createFlutterLogo() {
-        return createImageViewLogo("Flutter.png");
-    }
-
-    static ImageView createVueLogo() {
-        return createImageViewLogo("Vue.png");
-    }
-
-    static ImageView createReactLogo() {
-        return createImageViewLogo("React.png");
-    }
-
-    static ImageView createAngularLogo() {
-        return createImageViewLogo("Angular.png");
-    }
-
-    static FxWreathPane createWebFxLogo() {
-        SVGPath cloud = Card.createCloud();
-        cloud.setTranslateY(-5);
-        return setLogoId(new FxWreathPane(cloud), "WebFX");
-    }
-
-    static Pane createJSLogo() {
-        SVGPath jsPath = new SVGPath();
-        jsPath.setContent(SvgLogoPaths.getJSLogoPath());
-        jsPath.setFill(Color.web("#323330"));
-        Pane jsPane = new StackPane(jsPath);
-        jsPane.setMaxSize(64, 64);
-        WebSiteShared.setRegionBackground(jsPane, Color.web("#F0DB4F")); // JS yellow background color
-        return setLogoId(jsPane, "JS");
-    }
-
-    static SVGPath createLogoSVGPath(String content, Paint fill) {
-        return createLogoSVGPath(content, fill, null);
-    }
-
-    static SVGPath createLogoSVGPath(String content, Paint fill, String logoId) {
-        SVGPath javaPath = new SVGPath();
-        javaPath.setContent(content);
-        javaPath.setFill(fill);
-        return setLogoId(javaPath, logoId);
-    }
-
-    static <N extends Node> N setLogoId(N node, String logoId) {
-        node.getProperties().put("logoId", logoId);
-        return node;
-    }
-
-    static String getLogoId(Node node) {
-        return (String) node.getProperties().get("logoId");
-    }
-
-    static SVGPath createJavaLogo() {
-        return createLogoSVGPath(SvgLogoPaths.getJavaLogoPath(), Color.WHITE, "Java");
-    }
-
-    static SVGPath createFxLogo() {
-        return createLogoSVGPath(SvgLogoPaths.getFxWordPath(), WebSiteShared.fxColor, "FX");
-    }
-
-    static SVGPath createGwtLogo() {
-        return createLogoSVGPath(SvgLogoPaths.getGwtLogoPath(), WebSiteShared.gwtColor, "GWT");
-    }
-
-    static SVGPath createGwtText() {
-        return createLogoSVGPath(SvgLogoPaths.getGwtTextPath(), WebSiteShared.gwtColor, "GWT");
-    }
-
-    static ScalePane createFlashLogo() {
-        ScalePane pane = new ScalePane(createLogoSVGPath(SvgLogoPaths.getFlashLetterPath(), Color.WHITE));
-        pane.setPrefSize(64, 64);
-        WebSiteShared.setRegionBackground(pane, LinearGradient.valueOf("to bottom, #D21921, #4C060A"));
-        return pane;
-    }
-
-    public static SVGPath createGithubLogo() {
-        SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getGithubLogoPath(), Color.gray(0.2));
-        githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
-        githubSVGPath.setStroke(Color.WHITE);
-        githubSVGPath.setStrokeWidth(1);
-        return githubSVGPath;
-    }
-
-    static SVGPath createCloud() {
-        SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), Color.gray(1, 0.8));
-        cloudSVGPath.setStroke(WebSiteShared.githubGradient);
-        cloudSVGPath.setStrokeWidth(4);
-        return cloudSVGPath;
-    }
-
-    static SVGPath createArrowUp() {
-        SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowUpPath(), null);
-        arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
-        arrowUpSVGPath.setStrokeWidth(4);
-        arrowUpSVGPath.setFill(Color.WHITE);
-        return arrowUpSVGPath;
-    }
-
-    static SVGPath createArrowDown() {
-        SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowDownPath(), null);
-        arrowUpSVGPath.setStroke(WebSiteShared.createAngleGithubGradient(0));
-        arrowUpSVGPath.setStrokeWidth(4);
-        arrowUpSVGPath.setFill(Color.WHITE);
-        return arrowUpSVGPath;
-    }
-
-    static SVGPath createThumbUp() {
-        return createLogoSVGPath(SvgLogoPaths.getThumbUpPath(), WebSiteShared.fxColor);
-    }
-
-    static ImageView createJQueryLogo() {
-        return createImageViewLogo("JQuery.png");
-    }
-
-    static ImageView createSilverlightLogo() {
-        return createImageViewLogo("Silverlight.png");
-    }
-
-    static ImageView createBackboneLogo() {
-        return createImageViewLogo("Backbone.png");
-    }
-
-    static ImageView createEmberLogo() {
-        return createImageViewLogo("Ember.png");
-    }
-
-    static ImageView createMeteorLogo() {
-        return createImageViewLogo("Meteor.png");
-    }
-
-    static ImageView createDartLogo() {
-        return createImageViewLogo("Dart.png");
-    }
-
-    static ImageView createCppLogo() {
-        return createImageViewLogo("Cpp.png");
-    }
-
-    static ImageView createPythonLogo() {
-        return createImageViewLogo("Python.png");
-    }
-
-    static HBox createJavaFxLogo() {
-        SVGPath javaPath = new SVGPath();
-        javaPath.setContent(SvgLogoPaths.getJavaWordPath());
-        javaPath.setFill(WebSiteShared.javaColor);
-        javaPath.setTranslateY(12);
-        //javaPath.setEffect(WebSiteShared.dropShadow);
-        SVGPath fxPath = new SVGPath();
-        fxPath.setContent(SvgLogoPaths.getFxWordPath());
-        fxPath.setFill(WebSiteShared.fxColor);
-        //fxPath.setEffect(WebSiteShared.dropShadow);
-        HBox javaFxHBox = new HBox(5, javaPath, fxPath);
-        javaFxHBox.setAlignment(Pos.CENTER);
-        return javaFxHBox;
-    }
 }

@@ -35,7 +35,7 @@ public final class WebsiteApplication extends Application {
 
     private final Text webFxText = createWebFxSvgText();
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
-    private final SVGPath githubLogo = Card.createGithubLogo();
+    private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
     private final DemoThumbnailsPane demoThumbnailsPane = new DemoThumbnailsPane();
     private AnimationTimer webFxFillAnimationTimer;
@@ -47,15 +47,17 @@ public final class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        cardsPane = new Pane(cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane, demoThumbnailsPane); }
+        cardsPane = new Pane(Card.cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane, demoThumbnailsPane); }
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight(), vh = 0;
-                webFxText.setVisible(showMenu);
                 demosText.setVisible(showMenu);
+                webFxText.setVisible(showMenu);
+                githubLogoPane.setVisible(showMenu);
                 if (showMenu) {
-                    setFontSize(webFxText, h * 0.12, true);
-                    setFontSize(demosText, h * 0.12, true);
+                    double fontSize = Math.min(0.08 * w, 0.12 * h);
+                    setFontSize(webFxText, fontSize, true);
+                    setFontSize(demosText, fontSize, true);
                     vh = webFxText.prefHeight(w);
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
                     layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
@@ -71,15 +73,15 @@ public final class WebsiteApplication extends Application {
                 }
                 verticalCards = cw < 230;
                 if (!verticalCards) {
-                    for (Card card : cards) {
+                    for (Card card : Card.cards) {
                         layoutInArea(card, cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
                         cx += cw + gap;
                     }
                 } else {
                     w += 2 * gap;
-                    for (Card card : cards) {
+                    for (Card card : Card.cards) {
                         layoutInArea(card, cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
-                        if (card == cards[0]) {
+                        if (card == Card.cards[0]) {
                             ch = h - gap;
                             cy = h + 2 * gap;
                         } else
@@ -90,13 +92,13 @@ public final class WebsiteApplication extends Application {
             }
         };
         cardsPane.setBackground(null);
-        for (Card card : cards)
-            card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(cards).indexOf(card)));
+        for (Card card : Card.cards)
+            card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(Card.cards).indexOf(card)));
         cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
         cardsPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
         cardsPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
-        cardsPane.setOnSwipeLeft(   e -> cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
-        cardsPane.setOnSwipeRight(  e -> cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
+        cardsPane.setOnSwipeLeft(   e -> Card.cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
+        cardsPane.setOnSwipeRight(  e -> Card.cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
 
         runOnMouseClick(demosText,  () -> showDemos(true));
         runOnMouseClick(webFxText,  () -> { if (demoThumbnailsPane.isVisible()) showDemos(false); });
@@ -127,16 +129,17 @@ public final class WebsiteApplication extends Application {
     }
 
     private void showDemos(boolean show) {
+        stopWebFxFillAnimation();
         demoThumbnailsPane.setVisible(true);
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500),
-                Stream.concat(Stream.of(demoThumbnailsPane), Arrays.stream(cards)).map(node -> new KeyValue(node.opacityProperty(), node == demoThumbnailsPane ? (show ? 1 : 0) : (show ? 0 : 1))).toArray(KeyValue[]::new))
+                Stream.concat(Stream.of(demoThumbnailsPane), Arrays.stream(Card.cards)).map(node -> new KeyValue(node.opacityProperty(), node == demoThumbnailsPane ? (show ? 1 : 0) : (show ? 0 : 1))).toArray(KeyValue[]::new))
         );
         timeline.setOnFinished(e -> demoThumbnailsPane.setVisible(show));
         timeline.play();
     }
 
     private int clickedCardIndex(double clickX) {
-        int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
+        int cardIndex = (int) ((clickX - Card.cards[0].getTranslateX()) / (Card.cards[0].getWidth() + gap));
         if (cardIndex > focusedCardIndex)
             cardIndex = Math.min(focusedCardIndex <= 0 ? 2 : focusedCardIndex + 1, cardIndex);
         return cardIndex;
@@ -144,14 +147,14 @@ public final class WebsiteApplication extends Application {
 
     private void scrollHorizontallyToCard(int cardIndex) {
         if (!verticalCards) {
-            cardIndex = Math.min(cardIndex, cards.length - 1);
+            cardIndex = Math.min(cardIndex, Card.cards.length - 1);
             focusedCardIndex = cardIndex;
             scrollToFocusedCard();
         }
     }
 
     private void scrollVerticallyToCard(int cardIndex) {
-        cardIndex = Math.min(cardIndex, cards.length - 1);
+        cardIndex = Math.min(cardIndex, Card.cards.length - 1);
         if (showMenu != (!verticalCards || cardsPane.getHeight() > cardsPane.getWidth() || cardIndex < 0)) {
             showMenu = !showMenu;
             cardsPane.requestLayout();
@@ -164,13 +167,13 @@ public final class WebsiteApplication extends Application {
     private void scrollToFocusedCard() {
         if (!verticalCards) {
             cardsPane.setTranslateY(0);
-            int leftCardIndex = Math.max(0, Math.min(cards.length - 3, focusedCardIndex - 1));
+            int leftCardIndex = Math.max(0, Math.min(Card.cards.length - 3, focusedCardIndex - 1));
             double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / 3;
-            if (cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
+            if (Card.cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateX;
                 scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500),
-                        Arrays.stream(cards).map(c -> new KeyValue(c.translateXProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)).toArray(KeyValue[]::new))
+                        Arrays.stream(Card.cards).map(c -> new KeyValue(c.translateXProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)).toArray(KeyValue[]::new))
                 );
                 scrollTimeline.play();
             }

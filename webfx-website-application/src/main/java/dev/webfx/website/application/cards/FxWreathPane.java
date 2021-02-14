@@ -13,16 +13,16 @@ import javafx.scene.shape.SVGPath;
 /**
  * @author Bruno Salmon
  */
-final class FxWreathPane extends Pane {
+public final class FxWreathPane extends Pane {
 
     private final SVGPath wreathSVGPath;
-    private final SVGPath fxLogo = Card.createFxLogo();
-    private final SVGPath thumbUp = Card.createThumbUp();
+    private final SVGPath fxLogo = WebSiteShared.createFxLogo();
+    private final SVGPath thumbUp = WebSiteShared.createThumbUp();
     private final ScalePane wreathPane;
     private final FlipPanel flipPanel = new FlipPanel();
 
     public FxWreathPane() {
-        this(Card.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange")));
+        this(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange")));
     }
 
     public FxWreathPane(SVGPath wreathSVGPath) {
@@ -35,6 +35,10 @@ final class FxWreathPane extends Pane {
 
     SVGPath getWreathSVGPath() {
         return wreathSVGPath;
+    }
+
+    public ScalePane getWreathPane() {
+        return wreathPane;
     }
 
     void setScaleMode(ScalePane.ScaleMode scaleMode) {
@@ -53,13 +57,11 @@ final class FxWreathPane extends Pane {
 
     void flipThumbUp() {
         fxLogo.setFill(Color.TRANSPARENT);
-        //flipPanel.setFlipDirection(Orientation.VERTICAL);
         flipPanel.flipToBack();
     }
 
     void flipFx() {
         fxLogo.setFill(WebSiteShared.fxColor);
-        //flipPanel.setFlipDirection(Orientation.HORIZONTAL);
         flipPanel.flipToFront();
     }
 }

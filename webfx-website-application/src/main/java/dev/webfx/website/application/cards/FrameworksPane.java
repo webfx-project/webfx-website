@@ -26,25 +26,25 @@ final class FrameworksPane extends Pane {
 
     private final static double year1 = 2021.1;
     private final static Framework[] webFrameworks = {             /*1996.8*/
-            new Framework("Flash",       Card::createFlashLogo,      2006.0, 2010.1, 2020.9),
-            new Framework("JQuery",      Card::createJQueryLogo,     2006.7, 2013.8),
-            new Framework("Silverlight", Card::createSilverlightLogo,2007.3, 2011.5, 2017),
-            new Framework("JavaFX",      Card::createFxLogo,         2008.7, year1),
-            new Framework("AngularJS",   Card::createAngularLogo,    2009.0, 2016.0),
-            new Framework("Backbone",    Card::createBackboneLogo,   2010.7, 2013.0),
-            new Framework("Ember",       Card::createEmberLogo,      2010.9, 2013.6),
-            new Framework("Meteor",      Card::createMeteorLogo,     2012.1, 2015.6),
-            new Framework("React",       Card::createReactLogo,      2013.5, year1),
-            new Framework("Vue",         Card::createVueLogo,        2014.1, 2020.5),
-            new Framework("Angular",     Card::createAngularLogo,    2016.7, 2018.5),
-            new Framework("Flutter",     Card::createFlutterLogo,    2018.9, year1),
+            new Framework("Flash",       WebSiteShared::createFlashLogo,      2006.0, 2010.1, 2020.9),
+            new Framework("JQuery",      WebSiteShared::createJQueryLogo,     2006.7, 2013.8),
+            new Framework("Silverlight", WebSiteShared::createSilverlightLogo,2007.3, 2011.5, 2017),
+            new Framework("JavaFX",      WebSiteShared::createFxLogo,         2008.7, year1),
+            new Framework("AngularJS",   WebSiteShared::createAngularLogo,    2009.0, 2016.0),
+            new Framework("Backbone",    WebSiteShared::createBackboneLogo,   2010.7, 2013.0),
+            new Framework("Ember",       WebSiteShared::createEmberLogo,      2010.9, 2013.6),
+            new Framework("Meteor",      WebSiteShared::createMeteorLogo,     2012.1, 2015.6),
+            new Framework("React",       WebSiteShared::createReactLogo,      2013.5, year1),
+            new Framework("Vue",         WebSiteShared::createVueLogo,        2014.1, 2020.5),
+            new Framework("Angular",     WebSiteShared::createAngularLogo,    2016.7, 2018.5),
+            new Framework("Flutter",     WebSiteShared::createFlutterLogo,    2018.9, year1),
     };
     private final static Framework[] javaFrameworks = {
             new Framework("AWT",  null,       1995, 1998, 2018.0),
             new Framework("Swing",null,       1997, 2013, 2030),
             new Framework("SWT",  null,       2003.3, 2009, 2030),
             new Framework("Pivot",null,       2008.5, 2017, 2030),
-            new Framework("JavaFX", Card::createFxLogo, 2008.7, year1),
+            new Framework("JavaFX", WebSiteShared::createFxLogo, 2008.7, year1),
     };
 
     private final Framework[] frameworks;

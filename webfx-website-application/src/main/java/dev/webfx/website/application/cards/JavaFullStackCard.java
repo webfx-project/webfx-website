@@ -1,7 +1,6 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.website.application.SvgLogoPaths;
-import dev.webfx.website.application.WebSiteShared;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
@@ -9,14 +8,17 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import static dev.webfx.website.application.WebSiteShared.*;
+
 /**
  * @author Bruno Salmon
  */
-public final class FullStackCard extends Card {
+final class JavaFullStackCard extends Card {
 
     private Pane pane;
     private Node[] stepToolkitLogos, stepLanguageLogos;
@@ -24,8 +26,8 @@ public final class FullStackCard extends Card {
     private Node[] puzzles;
     private DoubleProperty expansionProperty;
 
-    public FullStackCard() {
-        super("Full-stack");
+    JavaFullStackCard() {
+        super("Java full-stack");
         alwaysUseTitleSpaceForIllustration = true;
         //useTitleSpaceForIllustrationWhenHidden = false;
     }
@@ -36,7 +38,7 @@ public final class FullStackCard extends Card {
                 // Step 1 - Frontend, backend
                 createNoLogo(), createNoLogo(),
                 // Step 2 - Frontend, backend
-                createAngularLogo(), createQtLogo(),
+                createAngularLogo(), createFxLogo(),
                 // Step 3 - Frontend, backend
                 createVueLogo(), createVueLogo(),
                 // Step 4 - Frontend, backend
@@ -52,9 +54,9 @@ public final class FullStackCard extends Card {
                 // Step 1 - Frontend, backend, server
                 createNoLogo(), createNoLogo(), createNoLogo(),
                 // Step 2 - Frontend, backend, server
-                createJSLogo(), createCppLogo(), createJavaLogo(),
+                createJSLogo(), createJavaLogo(), createJavaLogo(),
                 // Step 3 - Frontend, backend, server
-                createJSLogo(), createJSLogo(), createPythonLogo(),
+                createJSLogo(), createJSLogo(), createJavaLogo(),
                 // Step 4 - Frontend, backend, server
                 createJSLogo(), createJSLogo(), createJSLogo(),
                 // Step 5 - Frontend, backend, server
@@ -80,8 +82,12 @@ public final class FullStackCard extends Card {
                 createPuzzle(Color.GREEN)
         };
         CirclePane frontendCirclePane = new CirclePane("Front-end", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
-        CirclePane backendCirclePane  = new CirclePane("Back-end",   -30, WebSiteShared.raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
-        CirclePane serverCirclePane   = new CirclePane("Server",      90, WebSiteShared.fxColor, languageFlipPanels[2], null);
+        CirclePane backendCirclePane  = new CirclePane("Back-end",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
+        CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
+        // Note: HTML & JavaFX implementation differs, so the rendering is different
+        frontendCirclePane.setBlendMode(BlendMode.SCREEN);
+        backendCirclePane.setBlendMode(BlendMode.SCREEN);
+        serverCirclePane.setBlendMode(BlendMode.SCREEN);
         pane = new Pane(frontendCirclePane, backendCirclePane, serverCirclePane) { { getChildren().addAll(puzzles); }
             @Override
             protected void layoutChildren() {
@@ -133,13 +139,13 @@ public final class FullStackCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX will simplify your development stack.";
-            case 2: return "Mixing different UI toolkits and languages makes your stack complex, and prevents you to share any common code.";
-            case 3: return "Most of full-stack frameworks actually don't have a full-stack language, so your stack is still not fully homogeneous.";
-            case 4: return "Very few languages can be used both on client and server, especially when targeting the Web. JavaScript is one of them, but perhaps you would prefer Java?";
-            case 5: return "WebFX opens the door to a 100% full-stack Java development, with JavaFX as common UI toolkit for your back-end and front-end.";
-            case 6: return "Same language for all your stack. Same UI toolkit for your back-end & front-end. Same IDE for all your code.";
-            case 7: return "And share the code between your back-end, front-end and server in a professional manner with the Java module system.";
+            case 1: return "WebFX open the door to a 100% java full-stack web development with JavaFX as client-side technology.";
+            case 2: return "Web development is transitioning to client-side technologies, and this often introduces heterogeneity in java-based environments.";
+            case 3: return "Standardizing your client stack with a web back-end may be an option to share the common client code, but your stack is still heterogeneous.";
+            case 4: return "Switching to a pure JS stack may be a solution, but you would prefer to stay with Java?";
+            case 5: return "WebFX offers you JavaFX for your client-side web technology, and let you stay with Java all along your stack.";
+            case 6: return "Same language for all your stack. Same UI toolkit for your back-end & front-end. Same IDE for all your code. The ideal solution for java-based environments.";
+            case 7: return "And simply share the common code between your back-end, front-end and server with the Java module system.";
             default: return null;
         }
     }

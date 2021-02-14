@@ -16,8 +16,8 @@ import java.util.List;
  */
 final class LongevityAnimationPane extends ScalePane {
 
-    private final ScalePane longevityScalePane = new ScalePane(Card.createLogoSVGPath(SvgLogoPaths.getLongevityPath(), LinearGradient.valueOf("to right, red, brown, orange, green")));
-    private final ScalePane htmlFrameScalePane = new ScalePane(Card.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
+    private final ScalePane longevityScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getLongevityPath(), LinearGradient.valueOf("to right, red, brown, orange, green")));
+    private final ScalePane htmlFrameScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
     private final Pane fxWreathPane = new FxWreathPane();
     private final Pane fixedSizePane;
     private final List<Pane> refactoringAnimationPanes = new ArrayList<>();

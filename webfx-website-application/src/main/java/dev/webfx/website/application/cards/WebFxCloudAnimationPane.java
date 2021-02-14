@@ -21,7 +21,7 @@ import javafx.scene.text.TextAlignment;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.webfx.website.application.cards.Card.createCloud;
+import static dev.webfx.website.application.WebSiteShared.createCloud;
 
 /**
  * @author Bruno Salmon
@@ -34,12 +34,12 @@ final class WebFxCloudAnimationPane extends Pane {
     private final ScalePane cloudPane = new ScalePane(createCloud());
     private final FxWreathPane fxWreathPane = new FxWreathPane();
     private final SVGPath wreath = fxWreathPane.getWreathSVGPath();
-    private final ScalePane jsLogoPane = new ScalePane(Card.createJSLogo());
-    private final SVGPath gwtLogo = Card.createGwtLogo();
-    private final SVGPath gwtText = Card.createGwtText();
+    private final ScalePane jsLogoPane = new ScalePane(WebSiteShared.createJSLogo());
+    private final SVGPath gwtLogo = WebSiteShared.createGwtLogo();
+    private final SVGPath gwtText = WebSiteShared.createGwtText();
     private final ScalePane gwtLogoPane = new ScalePane(gwtLogo);
     private final ScalePane gwtTextPane = new ScalePane(gwtText);
-    private final SVGPath arrowUp = Card.createArrowUp();
+    private final SVGPath arrowUp = WebSiteShared.createArrowUp();
     private final ScalePane arrowUpScalePane = new ScalePane(arrowUp);
     private final Canvas canvas = new Canvas();
     private final AnimationTimer animationTimer = new AnimationTimer() {

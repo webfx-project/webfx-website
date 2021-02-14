@@ -2,6 +2,7 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
+import dev.webfx.platform.shared.services.resource.ResourceService;
 import dev.webfx.website.application.cards.*;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -9,16 +10,16 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.HostServices;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.effect.BlurType;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -50,17 +51,10 @@ public final class WebSiteShared {
     public static final Color androidColor     = Color.rgb(116, 140,  38); //Official color Color.rgb(165, 199, 54) is too bright for the circle background;
     public static final Color appleColor       = Color.grayRgb(30);
     public static final Color gwtColor         = Color.rgb(249,  53, 53);
+    public static final Color jsYellowColor    = Color.web("#F0DB4F");
 
     // Ease out interpolator closer to the web standard than the one proposed in JavaFx (ie Interpolator.EASE_OUT)
     public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
-
-    public static final Card[] cards = {
-            new WebFxCard(),
-            new CrossPlatformCard(),
-            new SustainableCard(),
-            //new ResponsiveCard(),
-            new FullStackCard(),
-    };
 
     public static SvgText createWebFxSvgText() {
         return setUpText(new SvgText("WebFX"), 50, true, false, true, true);
@@ -102,12 +96,13 @@ public final class WebSiteShared {
         return WebSiteShared.createAngleGithubGradient(-Math.PI / 2, length, shift);
     }
 
-    public static void setRegionBackground(Region region, Paint fill) {
-        setRegionBackground(region, fill, null);
+    public static Region setRegionBackground(Region region, Paint fill) {
+        return setRegionBackground(region, fill, null);
     }
 
-    public static void setRegionBackground(Region region, Paint fill, CornerRadii radii) {
+    public static Region setRegionBackground(Region region, Paint fill, CornerRadii radii) {
         region.setBackground(fill == null || fill == Color.TRANSPARENT ? null : new Background(new BackgroundFill(fill, radii, null)));
+        return region;
     }
 
     public static <T extends Region> T setFixedSize(T region, double wh) {
@@ -121,17 +116,18 @@ public final class WebSiteShared {
         return region;
     }
 
-    private static HostServices hostServices;
-
-    public static HostServices getHostServices() {
-        return hostServices;
+    public static <N extends Node> N rotate(N node, double angle) {
+        node.setRotate(angle);
+        return node;
     }
+
+    private static HostServices hostServices;
 
     public static void openUrl(String url) {
         hostServices.showDocument(url);
     }
 
-    public static void setHostServices(HostServices hostServices) {
+    static void setHostServices(HostServices hostServices) {
         WebSiteShared.hostServices = hostServices;
     }
 
@@ -161,5 +157,176 @@ public final class WebSiteShared {
             timelineHolder[0].play();
         });
         shape.setFill(darker);
+    }
+
+    public static Pane createNoLogo() {
+        return setLogoId(new StackPane(), "no");
+    }
+
+    private static ImageView createImageViewLogo(String file) {
+        return setLogoId(new ImageView(ResourceService.toUrl(file, Card.class)), file);
+    }
+
+    public static ImageView createQtLogo() {
+        return createImageViewLogo("Qt.png");
+    }
+
+    public static ImageView createFlutterLogo() {
+        return createImageViewLogo("Flutter.png");
+    }
+
+    public static ImageView createVueLogo() {
+        return createImageViewLogo("Vue.png");
+    }
+
+    public static ImageView createReactLogo() {
+        return createImageViewLogo("React.png");
+    }
+
+    public static ImageView createAngularLogo() {
+        return createImageViewLogo("Angular.png");
+    }
+
+    public static FxWreathPane createWebFxLogo() {
+        SVGPath cloud = createCloud();
+        cloud.setTranslateY(-5);
+        return setLogoId(new FxWreathPane(cloud), "WebFX");
+    }
+
+    public static Pane createJSLogo() {
+        SVGPath jsPath = new SVGPath();
+        jsPath.setContent(SvgLogoPaths.getJSLogoPath());
+        jsPath.setFill(Color.web("#323330"));
+        Pane jsPane = new StackPane(jsPath);
+        jsPane.setMinSize(64, 64);
+        jsPane.setPrefSize(64, 64);
+        jsPane.setMaxSize(64, 64);
+        setRegionBackground(jsPane, jsYellowColor);
+        return setLogoId(jsPane, "JS");
+    }
+
+    public static SVGPath createLogoSVGPath(String content, Paint fill) {
+        return createLogoSVGPath(content, fill, null);
+    }
+
+    static SVGPath createLogoSVGPath(String content, Paint fill, String logoId) {
+        SVGPath javaPath = new SVGPath();
+        javaPath.setContent(content);
+        javaPath.setFill(fill);
+        return setLogoId(javaPath, logoId);
+    }
+
+    static <N extends Node> N setLogoId(N node, String logoId) {
+        node.getProperties().put("logoId", logoId);
+        return node;
+    }
+
+    public static String getLogoId(Node node) {
+        return (String) node.getProperties().get("logoId");
+    }
+
+    public static SVGPath createJavaLogo() {
+        return createLogoSVGPath(SvgLogoPaths.getJavaLogoPath(), Color.WHITE, "Java");
+    }
+
+    public static SVGPath createFxLogo() {
+        return createLogoSVGPath(SvgLogoPaths.getFxWordPath(), fxColor, "FX");
+    }
+
+    public static SVGPath createGwtLogo() {
+        return createLogoSVGPath(SvgLogoPaths.getGwtLogoPath(), gwtColor, "GWT");
+    }
+
+    public static SVGPath createGwtText() {
+        return createLogoSVGPath(SvgLogoPaths.getGwtTextPath(), gwtColor, "GWT");
+    }
+
+    public static ScalePane createFlashLogo() {
+        ScalePane pane = new ScalePane(createLogoSVGPath(SvgLogoPaths.getFlashLetterPath(), Color.WHITE));
+        pane.setPrefSize(64, 64);
+        setRegionBackground(pane, LinearGradient.valueOf("to bottom, #D21921, #4C060A"));
+        return pane;
+    }
+
+    public static SVGPath createGithubLogo() {
+        SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getGithubLogoPath(), Color.gray(0.2));
+        githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
+        githubSVGPath.setStroke(Color.WHITE);
+        githubSVGPath.setStrokeWidth(1);
+        return githubSVGPath;
+    }
+
+    public static SVGPath createCloud() {
+        SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), Color.gray(1, 0.8));
+        cloudSVGPath.setStroke(githubGradient);
+        cloudSVGPath.setStrokeWidth(4);
+        return cloudSVGPath;
+    }
+
+    public static SVGPath createArrowUp() {
+        SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowUpPath(), null);
+        arrowUpSVGPath.setStroke(createAngleGithubGradient(0));
+        arrowUpSVGPath.setStrokeWidth(4);
+        arrowUpSVGPath.setFill(Color.WHITE);
+        return arrowUpSVGPath;
+    }
+
+    public static SVGPath createArrowDown() {
+        SVGPath arrowUpSVGPath = createLogoSVGPath(SvgLogoPaths.getArrowDownPath(), null);
+        arrowUpSVGPath.setStroke(createAngleGithubGradient(0));
+        arrowUpSVGPath.setStrokeWidth(4);
+        arrowUpSVGPath.setFill(Color.WHITE);
+        return arrowUpSVGPath;
+    }
+
+    public static SVGPath createThumbUp() {
+        return createLogoSVGPath(SvgLogoPaths.getThumbUpPath(), fxColor);
+    }
+
+    public static ImageView createJQueryLogo() {
+        return createImageViewLogo("JQuery.png");
+    }
+
+    public static ImageView createSilverlightLogo() {
+        return createImageViewLogo("Silverlight.png");
+    }
+
+    public static ImageView createBackboneLogo() {
+        return createImageViewLogo("Backbone.png");
+    }
+
+    public static ImageView createEmberLogo() {
+        return createImageViewLogo("Ember.png");
+    }
+
+    public static ImageView createMeteorLogo() {
+        return createImageViewLogo("Meteor.png");
+    }
+
+    static ImageView createDartLogo() {
+        return createImageViewLogo("Dart.png");
+    }
+
+    public static ImageView createCppLogo() {
+        return createImageViewLogo("Cpp.png");
+    }
+
+    public static ImageView createPythonLogo() {
+        return createImageViewLogo("Python.png");
+    }
+
+    public static HBox createJavaFxLogo() {
+        SVGPath javaPath = new SVGPath();
+        javaPath.setContent(SvgLogoPaths.getJavaWordPath());
+        javaPath.setFill(javaColor);
+        javaPath.setTranslateY(12);
+        //javaPath.setEffect(WebSiteShared.dropShadow);
+        SVGPath fxPath = new SVGPath();
+        fxPath.setContent(SvgLogoPaths.getFxWordPath());
+        fxPath.setFill(fxColor);
+        //fxPath.setEffect(WebSiteShared.dropShadow);
+        HBox javaFxHBox = new HBox(5, javaPath, fxPath);
+        javaFxHBox.setAlignment(Pos.CENTER);
+        return javaFxHBox;
     }
 }

@@ -20,11 +20,11 @@ import javafx.scene.text.Text;
  */
 final class WebFxDevAnimationPane extends Pane {
 
-    private final SVGPath downArrow = Card.createArrowDown(), rightArrow = Card.createArrowUp(); // Will be rotated in constructor
+    private final SVGPath downArrow = WebSiteShared.createArrowDown(), rightArrow = WebSiteShared.createArrowUp(); // Will be rotated in constructor
     private final ScalePane rightArrowPane = new ScalePane(rightArrow);
     private final CirclePane openJFXCirclePane = new CirclePane("OpenJFX",-90, WebSiteShared.raspberryPiColor, sandyText("API"), sandyText("{...}"));
-    private final CirclePane webFXCirclePane   = new CirclePane("WebFX",  -90, Color.PURPLE, Card.createGwtLogo(), Card.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
-    private final CirclePane appCirclePane     = new CirclePane("Your App",90, Color.rgb(89, 36, 189), Card.createGwtLogo(), downArrow);
+    private final CirclePane webFXCirclePane   = new CirclePane("WebFX",  -90, Color.PURPLE, WebSiteShared.createGwtLogo(), WebSiteShared.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
+    private final CirclePane appCirclePane     = new CirclePane("Your App",90, Color.rgb(89, 36, 189), WebSiteShared.createGwtLogo(), downArrow);
     private final Arc openJFXArc = createArc(), webFXArc = createArc();
     private double fullAngle = 30;
     private final DoubleProperty anglePercentProperty = new SimpleDoubleProperty() {
@@ -39,7 +39,7 @@ final class WebFxDevAnimationPane extends Pane {
     }
 
     public WebFxDevAnimationPane() {
-        getChildren().setAll(appCirclePane, openJFXCirclePane, openJFXArc, webFXCirclePane, webFXArc, rightArrowPane);
+        getChildren().setAll(openJFXCirclePane, openJFXArc, webFXCirclePane, webFXArc, rightArrowPane, appCirclePane);
         downArrow.setOpacity(0);
         rightArrow.setRotate(90);
         webFXArc.visibleProperty().bind(openJFXArc.visibleProperty());

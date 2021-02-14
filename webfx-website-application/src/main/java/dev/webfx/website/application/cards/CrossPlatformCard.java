@@ -20,7 +20,7 @@ import static dev.webfx.website.application.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-public final class CrossPlatformCard extends Card {
+final class CrossPlatformCard extends Card {
 
     private Pane[] platformsNodes;
     private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle;
@@ -29,13 +29,13 @@ public final class CrossPlatformCard extends Card {
     private FlipPanel flipPanel;
     private boolean flipFrontShowing;
 
-    public CrossPlatformCard() {
+    CrossPlatformCard() {
         super("Cross-platform");
     }
 
     @Override
     Node createIllustrationNode() {
-        FxWreathPane fxPane = Card.createWebFxLogo();
+        FxWreathPane fxPane = createWebFxLogo();
         fxPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         platformsNodes = new Pane[] {
                 html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 2),
@@ -100,9 +100,9 @@ public final class CrossPlatformCard extends Card {
             case 1: return "Your WebFX applications will also run natively on desktops, mobiles & embeds.";
             case 2: return "Like for any JavaFX application, the JDK toolchain can generate the desktop executables (powered by an optimized JVM) of your WebFX application.";
             case 3: return "In addition, the Gluon toolchain can generate the native executables (no JVM - all your application compiled into native by GraalVM) for the desktop,";
-            case 4: return "but also for Android & iOS.";
-            case 5: return "Gluon can also make your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
-            case 6: return "And WebFX enters the scene to add the Web platform to this collection.";
+            case 4: return "but also for Android & iOS. Ideal for both your front-end and back-end.";
+            case 5: return "Gluon can even make your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
+            case 6: return "And WebFX adds the Web platform to the collection. Perfect for your front-end, but also to afford a web back-end with minimal effort from your desktop.";
             case 7: return "7 platforms from a single code base! (check-out the demos for a Github workflow example)";
             default: return null;
         }

@@ -1,7 +1,6 @@
 package dev.webfx.website.application.demos;
 
 import dev.webfx.platform.shared.services.resource.ResourceService;
-import dev.webfx.website.application.cards.Card;
 import dev.webfx.website.application.cards.ScalePane;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -45,7 +44,7 @@ final class DemoThumbnail extends Pane {
     private final ScalePane demoImageScalePane;
     private final Text demoNameText, demoCategoryText;
     private final Region categoryFullBackgroundRegion = new Region(), categoryFadingBackgroundRegion = new Region();
-    private final SVGPath githubLogo = Card.createGithubLogo();
+    private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
 
     public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String demoLink, String repositoryLink) {
