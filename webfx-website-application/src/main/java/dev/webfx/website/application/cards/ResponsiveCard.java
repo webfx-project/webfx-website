@@ -80,7 +80,7 @@ final class ResponsiveCard extends FlipCard {
                     desktopTabletMobilePane = new Pane(desktopScreen, tabletScreen, mobileScreen, thumbUpPane) {
                         @Override
                         protected void layoutChildren() {
-                            double width = getWidth(), height = getHeight();
+                            double width = getWidth(), height = getHeight() - getTitleSpace();
                             double dx = 0, dy = 0.1 * height, dw = width, dh = 0.7 * height;
                             double th = 0.5 * height, tw = th * 3 / 4, tx = 0.65 * width - tw / 2, ty = 0.7 * height - th / 2;
                             double mh = 0.25 * height, mw = mh * 414 / 736 , mx = 0.25 * width - mw / 2, my = ty + th - mh;

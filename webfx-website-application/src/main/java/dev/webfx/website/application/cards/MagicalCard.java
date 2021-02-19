@@ -26,7 +26,6 @@ final class MagicalCard extends FlipCard {
 
     MagicalCard() {
         super("Magical");
-        alwaysUseTitleSpaceForIllustration = true;
     }
 
     @Override

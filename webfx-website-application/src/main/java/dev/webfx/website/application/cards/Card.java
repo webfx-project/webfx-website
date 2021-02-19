@@ -4,8 +4,6 @@ import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
@@ -38,15 +36,8 @@ public abstract class Card extends Pane {
     protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
     protected boolean forwardingStep;
-    protected boolean alwaysUseTitleSpaceForIllustration = false, smoothIllustrationMove = true;
     private CardTransition cardTransition;
     private final String longestCaption;
-    protected final DoubleProperty titleSpacePercent = new SimpleDoubleProperty(1) {
-        @Override
-        protected void invalidated() {
-            requestLayout();
-        }
-    };
 
     Card(String title) {
         setBorder(CARD_BORDER);
@@ -155,28 +146,17 @@ public abstract class Card extends Pane {
         nh = maxTitleHeight;
         ny -= nh + vGap;
         layoutInArea(titleText, hgap, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
-        if (alwaysUseTitleSpaceForIllustration) {
-            nh = h - maxHtmlHeight - 2 * vGap;
-        } else {
-            double titlePercent = titleSpacePercent.get();
-            //if (/*useTitleSpaceForIllustrationWhenHidden && */titlePercent < 1)
-                ny += (nh + vGap) * (smoothIllustrationMove ? 1 - titlePercent : 1); // Smoothing the transition with opacity
-            nh = ny - 3 * vGap;
-        }
+        ny += nh + vGap;
+        nh = ny - 2 * vGap;
         ny = vGap;
         layoutInArea(illustrationNode, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
     }
 
-    protected void bindTitleSpaceWithOpacity(boolean bind) {
-        if (!bind) {
-            titleSpacePercent.unbind();
-            titleSpacePercent.set(1);
-        } else if (!titleSpacePercent.isBound())
-            bindTitleSpaceWithOpacity();
+    double getTitleSpace() {
+        return maxTitleHeight + 0.02 * getHeight();
     }
 
-    protected void bindTitleSpaceWithOpacity() {
-        titleSpacePercent.bind(titleText.opacityProperty());
+    double getTransitionalTitleSpace() {
+        return getTitleSpace() * titleText.getOpacity();
     }
-
 }

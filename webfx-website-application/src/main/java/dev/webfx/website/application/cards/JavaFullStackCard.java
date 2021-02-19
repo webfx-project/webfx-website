@@ -28,8 +28,6 @@ final class JavaFullStackCard extends Card {
 
     JavaFullStackCard() {
         super("Java full-stack");
-        alwaysUseTitleSpaceForIllustration = true;
-        //useTitleSpaceForIllustrationWhenHidden = false;
     }
 
     @Override
@@ -139,7 +137,7 @@ final class JavaFullStackCard extends Card {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX open the door to a 100% java full-stack web development with JavaFX as client-side technology.";
+            case 1: return "WebFX opens the door to a 100% java full-stack web development with JavaFX as client-side technology.";
             case 2: return "Web development is transitioning to client-side technologies, and this often introduces heterogeneity in java-based environments.";
             case 3: return "Standardizing your client stack with a web back-end may be an option to share the common client code, but your stack is still heterogeneous.";
             case 4: return "Switching to a pure JS stack may be a solution, but you would prefer to stay with Java?";

@@ -80,17 +80,17 @@ final class WebFxCloudAnimationPane extends Pane {
     @Override
     protected void layoutChildren() {
         double w = getWidth(), h = getHeight(), hd2 = h / 2, hd4 = h / 4, expansion = expansionProperty.get();
-        double sc = (0.5 - 0.1 * expansion) * h, scd2 = sc / 2, yc = hd2 - expansion * hd4 * 1.2;
-        layoutInArea(cloudPane,   0,         yc - scd2, w,  sc, 0, HPos.CENTER, VPos.CENTER);
+        double sc = (0.5 - 0.1 * expansion) * h, scd2 = sc / 2, yc = 0.85 * hd2 - expansion * (hd4 * 1.2 - 0.15 * hd2);
+        layoutInArea(cloudPane,0,yc - scd2, w,  sc, 0, HPos.CENTER, VPos.CENTER);
         double sa = playing ? 1.3 * hd4 : 1.6 * hd4, ya = playing ? hd4 : yc + sc * 0.3;
-        layoutInArea(arrowUpScalePane, 0,                      ya, w,  sa, 0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(arrowUpScalePane, 0, ya, w,  sa, 0, HPos.CENTER, VPos.CENTER);
         double sjs = sc * 0.24, yjs = ya - sjs * 1.5;
         layoutInArea(jsLogoPane, 0, yjs, w, sjs, 0, HPos.CENTER, VPos.CENTER);
         double sg = sa * 0.3, yg = ya + sa * 0.6 - sg / 2;
         layoutInArea(gwtLogoPane,0, yg, w, sg, 0, HPos.CENTER, VPos.CENTER);
         layoutInArea(gwtTextPane,0, yg + sg * 1.1, w, sg / 2, 0, HPos.CENTER, VPos.CENTER);
-        double sfx = (playing ? 0.875 : 1.7 - 0.2 * expansion) * sc, sfxd2 = sfx / 2, yfx = playing ? hd2 + hd4 : hd2 * 1.1 + expansion * hd4 * 1.1;
-        layoutInArea(fxWreathPane,     0,       yfx - sfxd2, w, sfx, 0, HPos.CENTER, VPos.CENTER);
+        double sfx = (playing ? 0.875 : 1.7 - 0.2 * expansion) * sc, sfxd2 = sfx / 2, yfx = playing ? hd2 + hd4 : 0.85 * hd2 * 1.1 + expansion * (hd4 * 1.1 + 0.15 * hd2 * 1.1);
+        layoutInArea(fxWreathPane,0, yfx - sfxd2, w, sfx, 0, HPos.CENTER, VPos.CENTER);
         if (playing) {
             canvas.setWidth(w);
             canvas.setHeight(h);

@@ -5,9 +5,12 @@ import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
@@ -22,11 +25,11 @@ final class SustainableCard extends FlipCard {
     private WebFxCloudAnimationPane webFxCloudAnimationPane;
     private RefactoringAnimationPane refactoringAnimationPane;
     private LongevityAnimationPane longevityAnimationPane;
+    private Pane longevityAnimationEnclosingPane;
     private double wallHeight;
 
     SustainableCard() {
         super("Sustainable");
-        bindTitleSpaceWithOpacity();
     }
 
     @Override
@@ -40,7 +43,7 @@ final class SustainableCard extends FlipCard {
             case 6: return "Another requirement for your web application to grow successfully is a good refactoring support.";
             case 7: return "And one big advantage of a strict language like Java is to excel in refactoring.";
             case 8: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
-            case 9: return "This was our main motivation to build WebFX: make these sustainable technologies available for the web as an alternative to the short-lived web technologies.";
+            case 9: return "This was the main motivation to build WebFX: make these sustainable technologies available for the web as an alternative to the short-lived web technologies.";
             default: return null;
         }
     }
@@ -51,14 +54,21 @@ final class SustainableCard extends FlipCard {
         cardTransition.setApplyFinalValuesOnStop(true);
         switch (step) {
             case 1:
-                if (longevityAnimationPane == null)
+                if (longevityAnimationPane == null) {
                     longevityAnimationPane = new LongevityAnimationPane();
+                    longevityAnimationEnclosingPane = new Pane(longevityAnimationPane) {
+                        @Override
+                        protected void layoutChildren() {
+                            layoutInArea(longevityAnimationPane, 0, 0, getWidth(), getHeight() - getTransitionalTitleSpace(), 0, HPos.CENTER, VPos.CENTER);
+                        }
+                    };
+                    titleText.opacityProperty().addListener(e -> longevityAnimationEnclosingPane.requestLayout());
+                }
                 longevityAnimationPane.startBackToOriginalAnimation(cardTransition);
-                changeFlipContent(longevityAnimationPane);
-                setUpCardClip();
+                changeFlipContent(longevityAnimationEnclosingPane);
+                //setUpCardClip();
                 break;
             case 2:
-                smoothIllustrationMove = false;
                 HBox javaFxLogo = WebSiteShared.createJavaFxLogo();
                 SVGPath years12 = WebSiteShared.createLogoSVGPath(SvgLogoPaths.get12YearsPath(), WebSiteShared.createVerticalGithubGradiant(200, 0));
                 VBox.setMargin(years12, new Insets(50));
@@ -79,7 +89,7 @@ final class SustainableCard extends FlipCard {
                             new KeyValue(years12.opacityProperty(), 1),
                             new KeyValue(years12.scaleXProperty(), 2, Interpolator.SPLINE(1, 0.5, 1, 1))
                     );
-                    setClip(null);
+                    //setClip(null);
                     cardTransition.addOnFinished(this::setUpCardClip);
                 }
                 if (forwardingStep)
@@ -88,7 +98,7 @@ final class SustainableCard extends FlipCard {
                     flipToNewContent(vBox);
                 break;
             case 3:
-                setUpCardClip();
+                //setUpCardClip();
                 if (javaFrameworksPane == null)
                     javaFrameworksPane = new FrameworksPane(false);
                 flipToNewContent(javaFrameworksPane);
@@ -142,13 +152,12 @@ final class SustainableCard extends FlipCard {
                 break;
             case 8:
                 if (forwardingStep)
-                    performFadingTransition(longevityAnimationPane, cardTransition, false);
+                    performFadingTransition(longevityAnimationEnclosingPane, cardTransition, false);
                 longevityAnimationPane.startJavaFxAnimation(cardTransition);
                 cardTransition.addOnFinished(refactoringAnimationPane::stopBrickAnimation);
                 break;
             case 9:
                 longevityAnimationPane.startHtmlFrameAnimation(cardTransition);
-                smoothIllustrationMove = true;
                 break;
         }
     }

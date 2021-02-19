@@ -65,17 +65,17 @@ final class CrossPlatformCard extends Card {
         flipPanel.flipToBack();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
         ScalePane flipPanelScalePane = new ScalePane(flipPanel);
-        return new Pane(platformScalePane, flipPanelScalePane) {
+        Pane pane = new Pane(platformScalePane, flipPanelScalePane) {
             @Override
             protected void layoutChildren() {
-                double w = getWidth(), h = getHeight();
-                //if (currentAnimationStep == 1)
-                    //bindTitleSpaceWithOpacity(w > h);
-                layoutInArea(platformScalePane, 0, 0, w, h,0, HPos.CENTER, VPos.CENTER);
+                double w = getWidth(), h = getHeight() - getTransitionalTitleSpace();
+                layoutInArea(platformScalePane, 0, 0, w, h, 0, HPos.CENTER, VPos.CENTER);
                 double sh = platformScalePane.getHeight(), fh = Math.min(90, 0.3 * sh);
-                layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh,0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh, 0, HPos.CENTER, VPos.CENTER);
             }
         };
+        titleText.opacityProperty().addListener(e -> pane.requestLayout());
+        return pane;
     }
 
     private static Pane createSVGCircle(String svgPath, Paint fill, double dx, double dy) {

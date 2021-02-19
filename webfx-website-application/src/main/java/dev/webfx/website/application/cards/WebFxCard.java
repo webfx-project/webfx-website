@@ -1,7 +1,5 @@
 package dev.webfx.website.application.cards;
 
-import javafx.animation.KeyValue;
-
 /**
  * @author Bruno Salmon
  */
@@ -37,12 +35,10 @@ final class WebFxCard extends FlipCard {
                 if (webFxCloudAnimationPane == null)
                     webFxCloudAnimationPane = new WebFxCloudAnimationPane();
                 flipToNewContent(webFxCloudAnimationPane);
-                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 1));
                 webFxCloudAnimationPane.playContractionAnimation(cardTransition);
                 webFxCloudAnimationPane.flipFx();
                 break;
             case 2:
-                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 0));
                 webFxCloudAnimationPane.playExpansionAnimation(cardTransition, true);
                 flipToNewContent(webFxCloudAnimationPane); // In case of reward
                 break;
@@ -65,7 +61,6 @@ final class WebFxCard extends FlipCard {
             case 6:
                 webFxDevAnimationPane.playRotateAppCenter(cardTransition); // In case of forward
                 webFxDevAnimationPane.playArcs(cardTransition);
-                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 0)); // In case of reward
                 flipToNewContent(webFxDevAnimationPane); // In case of reward
                 break;
             case 7:
@@ -75,7 +70,6 @@ final class WebFxCard extends FlipCard {
                 break;
             case 8:
                 webFxCloudAnimationPane.playContractionAnimation(cardTransition);
-                cardTransition.addKeyValue(new KeyValue(titleSpacePercent, 1));
                 webFxCloudAnimationPane.flipThumbUp();
                 break;
         }
