@@ -1,7 +1,7 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.website.application.SvgLogoPaths;
+import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;

@@ -109,13 +109,13 @@ public final class WebsiteApplication extends Application {
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
         setShapeHoverAnimationColor(githubLogo, lastGithubGradientColor.darker());
-        setShapeHoverAnimationColor(demosText, firstGithubGradientColor.darker());
+        setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
 
         demoThumbnailsPane.setVisible(false);
         demoThumbnailsPane.setOpacity(0);
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        Scene scene = new Scene(cardsPane, screenBounds.getWidth(), screenBounds.getHeight(), backgroundGradient);
+        Scene scene = new Scene(cardsPane, screenBounds.getWidth(), screenBounds.getHeight(), BACKGROUND_GRADIENT);
         stage.setTitle("WebFX - JavaFX \u2192 JS transpiler");
         stage.setScene(scene);
         stage.show();
@@ -211,6 +211,6 @@ public final class WebsiteApplication extends Application {
             webFxFillAnimationTimer.stop();
             webFxFillAnimationTimer = null;
         }
-        webFxText.setFill(githubGradient);
+        webFxText.setFill(GITHUB_GRADIENT);
     }
 }

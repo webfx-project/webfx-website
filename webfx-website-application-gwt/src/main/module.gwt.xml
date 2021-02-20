@@ -37,6 +37,7 @@
     <!-- used by webfx-kit-javafxcontrols-emul (SOURCE) -->
     <!-- used by webfx-kit-gwt (SOURCE) -->
     <!-- used by webfx-kit-javafxgraphics-peers (SOURCE) -->
+    <!-- used by webfx-kit-launcher (SOURCE) -->
     <source path="com/sun/javafx/application"/>
     <source path="com/sun/javafx/cursor"/>
     <source path="com/sun/javafx/geom"/>
@@ -153,6 +154,7 @@
     <source path="dev/webfx/kit/registry/javafxgraphics"/>
     <!--===============================< webfx-kit-launcher >===============================-->
     <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
+    <!-- used by webfx-website-application (SOURCE) -->
     <source path="dev/webfx/kit/launcher"/>
     <source path="dev/webfx/kit/launcher/spi"/>
     <source path="dev/webfx/kit/launcher/spi/base"/>
@@ -197,6 +199,7 @@
     <source path="dev/webfx/platform/shared/services/appcontainer/spi"/>
     <source path="dev/webfx/platform/shared/services/appcontainer/spi/impl"/>
     <!--===========================< webfx-platform-shared-log >============================-->
+    <!-- used by webfx-kit-javafxgraphics-emul (SOURCE) -->
     <!-- used by webfx-kit-launcher (SOURCE) -->
     <!-- used by webfx-platform-gwt-log-impl (SOURCE) -->
     <!-- used by webfx-platform-gwt-uischeduler-impl (SOURCE) -->
@@ -240,10 +243,9 @@
     <source path="dev/webfx/website/application"/>
     <source path="dev/webfx/website/application/cards"/>
     <source path="dev/webfx/website/application/demos"/>
-    <resource path="dev/webfx/website/application/cards"/>
-    <public includes="dev/webfx/website/application/cards/" path=""/>
-    <resource path="dev/webfx/website/application/demos"/>
-    <public includes="dev/webfx/website/application/demos/" path=""/>
+    <source path="dev/webfx/website/application/images"/>
+    <resource path="dev/webfx/website/application/images"/>
+    <public includes="dev/webfx/website/application/images/" path=""/>
 
     <source path="mongoose/client/services/bus/conf/gwt"/>
     <source path="mongoose/shared/domainmodel/gwt"/>

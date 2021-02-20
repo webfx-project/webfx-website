@@ -1,8 +1,8 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.platform.client.services.uischeduler.UiScheduler;
-import dev.webfx.platform.shared.services.resource.ResourceService;
 import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.images.ImageLoader;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -81,7 +81,7 @@ final class CreditsPane extends Pane {
     private final Card card;
     private final int cardStep;
     private final HBox javaFxLogo = WebSiteShared.createJavaFxLogo();
-    private final ImageView ltsImageView = new ImageView(ResourceService.toUrl("LTS.png", getClass()));
+    private final ImageView ltsImageView = ImageLoader.loadImage("LTS.png");
     private final VBox creditsBox = new VBox(10, Arrays.stream(credits).map(SustainableCard::createText).toArray(Node[]::new));
     private final DoubleProperty creditsBottomDistanceProperty = new SimpleDoubleProperty() {
         @Override

@@ -14,6 +14,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
+import static dev.webfx.website.application.WebSiteShared.CARD_TRANSLUCENT_BACKGROUND;
+
 /**
  * @author Bruno Salmon
  */
@@ -41,7 +43,7 @@ public abstract class Card extends Pane {
 
     Card(String title) {
         setBorder(CARD_BORDER);
-        WebSiteShared.setRegionBackground(this, Color.grayRgb(0, 0.25), CARD_BORDER.getStrokes().get(0).getRadii());
+        WebSiteShared.setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND, CARD_BORDER.getStrokes().get(0).getRadii());
         String longestCaption = "";
         for (int step = 1; caption(step) != null; step++) {
             String caption = caption(step);

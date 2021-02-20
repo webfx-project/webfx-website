@@ -1,9 +1,9 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.SvgText;
-import dev.webfx.platform.shared.services.resource.ResourceService;
-import dev.webfx.website.application.SvgLogoPaths;
 import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.images.ImageLoader;
+import dev.webfx.website.application.images.SvgLogoPaths;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.geometry.HPos;
@@ -56,10 +56,8 @@ final class CrossPlatformCard extends Card {
         }
         fxPane.relocate(osr - 0.25 * cr, osr - 0.25 * cr);
         fxPane.setPrefSize(2.5 * cr, 2.5 * cr);
-        jdkImageView   = new ImageView(ResourceService.toUrl("JDK.png", getClass()));
-        jdkImageView.setEffect(dropShadow);
-        gluonImageView = new ImageView(ResourceService.toUrl("Gluon.png", getClass()));
-        gluonImageView.setEffect(dropShadow);
+        jdkImageView   = createImageView("JDK.png");
+        gluonImageView = createImageView("Gluon.png");
         webFxText = createWebFxSvgText();
         flipPanel = new FlipPanel();
         flipPanel.flipToBack();
@@ -78,6 +76,13 @@ final class CrossPlatformCard extends Card {
         return pane;
     }
 
+    private ImageView createImageView(String resourcePath) {
+        ImageView imageView = ImageLoader.loadImage(resourcePath);
+        imageView.setEffect(dropShadow);
+        //imageView.setAccessibleText(resourcePath);
+        return imageView;
+    }
+
     private static Pane createSVGCircle(String svgPath, Paint fill, double dx, double dy) {
         SVGPath path = new SVGPath();
         path.setContent(svgPath);
@@ -89,7 +94,7 @@ final class CrossPlatformCard extends Card {
         pane.setMinSize(h, h);
         pane.setMaxSize(h, h);
         CornerRadii radii = new CornerRadii(h / 2);
-        WebSiteShared.setRegionBackground(pane, circleGradient, radii);
+        WebSiteShared.setRegionBackground(pane, CIRCLE_GRADIENT, radii);
         pane.setBorder(new Border(new BorderStroke(Color.GOLD, BorderStrokeStyle.SOLID, radii, BorderStroke.THICK)));
         return pane;
     }

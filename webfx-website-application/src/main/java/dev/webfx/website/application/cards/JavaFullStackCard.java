@@ -1,6 +1,6 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.SvgLogoPaths;
+import dev.webfx.website.application.images.SvgLogoPaths;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;

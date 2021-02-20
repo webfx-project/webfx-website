@@ -1,14 +1,13 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.platform.shared.services.resource.ResourceService;
 import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.images.ImageLoader;
 import javafx.animation.KeyValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
@@ -123,7 +122,7 @@ final class ResponsiveCard extends FlipCard {
             case 4:
                 VBox vBox = new VBox(
                         WebSiteShared.setHtmlText(new HtmlText(), "See how the EnzoClocks demo calculates the optimal positions of the clocks using a circle packing algorithm."),
-                        new ScalePane(new ImageView(ResourceService.toUrl("/dev/webfx/website/application/demos/EnzoClocks.png", getClass()))),
+                        new ScalePane(ImageLoader.loadImage("EnzoClocks.png")),
                         WebSiteShared.setHtmlText(new HtmlText(), "Something impossible to achieve with CSS.")
                 );
                 vBox.setAlignment(Pos.CENTER);

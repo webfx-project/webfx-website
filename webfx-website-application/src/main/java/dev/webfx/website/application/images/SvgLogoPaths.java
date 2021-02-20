@@ -1,4 +1,4 @@
-package dev.webfx.website.application;
+package dev.webfx.website.application.images;
 
 /**
  * @author Bruno Salmon

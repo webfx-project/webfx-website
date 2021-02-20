@@ -8,6 +8,7 @@ module webfx.website.application {
     requires javafx.controls;
     requires javafx.graphics;
     requires webfx.extras.webtext.controls;
+    requires webfx.kit.launcher;
     requires webfx.lib.enzo;
     requires webfx.platform.client.uischeduler;
     requires webfx.platform.shared.resource;
@@ -16,10 +17,10 @@ module webfx.website.application {
     exports dev.webfx.website.application;
     exports dev.webfx.website.application.cards;
     exports dev.webfx.website.application.demos;
+    exports dev.webfx.website.application.images;
 
     // Resources packages
-    opens dev.webfx.website.application.cards;
-    opens dev.webfx.website.application.demos;
+    opens dev.webfx.website.application.images;
 
     // Provided services
     provides javafx.application.Application with dev.webfx.website.application.WebsiteApplication;

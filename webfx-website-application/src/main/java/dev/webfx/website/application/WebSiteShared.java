@@ -2,8 +2,10 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
-import dev.webfx.platform.shared.services.resource.ResourceService;
-import dev.webfx.website.application.cards.*;
+import dev.webfx.website.application.cards.FxWreathPane;
+import dev.webfx.website.application.cards.ScalePane;
+import dev.webfx.website.application.images.ImageLoader;
+import dev.webfx.website.application.images.SvgLogoPaths;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -33,14 +35,16 @@ import java.util.List;
  */
 public final class WebSiteShared {
 
-    static final LinearGradient backgroundGradient = LinearGradient.valueOf("to right bottom, #4C2459, #6F295A");
-    public static final LinearGradient circleGradient = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
+    static final LinearGradient BACKGROUND_GRADIENT = LinearGradient.valueOf("to bottom, #4C2459, #6F295A");
+    //public static final LinearGradient CARD_TRANSLUCENT_BACKGROUND = LinearGradient.valueOf("rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.54)");
+    public static final LinearGradient CARD_TRANSLUCENT_BACKGROUND = LinearGradient.valueOf("to bottom, #3C1A43, #34132B");
+    public static final LinearGradient CIRCLE_GRADIENT = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
             new Stop(0, Color.gray(0.90)),
             new Stop(1, Color.gray(0.65))
     );
-    public static final LinearGradient githubGradient = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
-    private static final List<Stop> githubStops = githubGradient.getStops();
-    public static Color firstGithubGradientColor = githubStops.get(0).getColor(), lastGithubGradientColor = githubStops.get(githubStops.size() - 1).getColor();
+    public static final LinearGradient GITHUB_GRADIENT = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
+    private static final List<Stop> GRADIENT_STOPS = GITHUB_GRADIENT.getStops();
+    public static final Color FIRST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(0).getColor(), lastGithubGradientColor = GRADIENT_STOPS.get(GRADIENT_STOPS.size() - 1).getColor();
 
     public static final DropShadow dropShadow  = new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 10, 0, 8, 8);
     public static final Color javaColor        = Color.rgb(244, 175, 103);
@@ -62,7 +66,7 @@ public final class WebSiteShared {
 
     public static <T extends Text> T setUpText(T text, double fontSize, boolean bold, boolean white, boolean stroke, boolean shadow) {
         text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
-        text.setFill(white ? Color.WHITE : githubGradient);
+        text.setFill(white ? Color.WHITE : GITHUB_GRADIENT);
         if (stroke) {
             text.setStroke(Color.WHITE);
             text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
@@ -89,7 +93,7 @@ public final class WebSiteShared {
         shift = shift % length;
         double cos = Math.cos(angle);
         double sin = Math.sin(angle);
-        return new LinearGradient(shift * cos, shift * sin, (shift + length) * cos, (shift + length) * sin, false, CycleMethod.REPEAT, githubStops);
+        return new LinearGradient(shift * cos, shift * sin, (shift + length) * cos, (shift + length) * sin, false, CycleMethod.REPEAT, GRADIENT_STOPS);
     }
 
     public static LinearGradient createVerticalGithubGradiant(double length, double shift) {
@@ -164,11 +168,7 @@ public final class WebSiteShared {
     }
 
     private static ImageView createImageViewLogo(String file) {
-        return setLogoId(new ImageView(ResourceService.toUrl(file, Card.class)), file);
-    }
-
-    public static ImageView createQtLogo() {
-        return createImageViewLogo("Qt.png");
+        return setLogoId(ImageLoader.loadImage(file), file);
     }
 
     public static ImageView createFlutterLogo() {
@@ -258,7 +258,7 @@ public final class WebSiteShared {
 
     public static SVGPath createCloud() {
         SVGPath cloudSVGPath = createLogoSVGPath(SvgLogoPaths.getCloudPath(), Color.gray(1, 0.8));
-        cloudSVGPath.setStroke(githubGradient);
+        cloudSVGPath.setStroke(GITHUB_GRADIENT);
         cloudSVGPath.setStrokeWidth(4);
         return cloudSVGPath;
     }
@@ -301,18 +301,6 @@ public final class WebSiteShared {
 
     public static ImageView createMeteorLogo() {
         return createImageViewLogo("Meteor.png");
-    }
-
-    static ImageView createDartLogo() {
-        return createImageViewLogo("Dart.png");
-    }
-
-    public static ImageView createCppLogo() {
-        return createImageViewLogo("Cpp.png");
-    }
-
-    public static ImageView createPythonLogo() {
-        return createImageViewLogo("Python.png");
     }
 
     public static HBox createJavaFxLogo() {

@@ -1,10 +1,9 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.platform.shared.services.resource.ResourceService;
 import dev.webfx.website.application.cards.ScalePane;
+import dev.webfx.website.application.images.ImageLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -49,11 +48,11 @@ final class DemoThumbnail extends Pane {
 
     public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String demoLink, String repositoryLink) {
         this.demoLink = demoLink;
-        setRegionBackground(this, Color.grayRgb(0, 0.25));
+        setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
         setRegionBackground(categoryFullBackgroundRegion, demoCategory.color);
         setRegionBackground(categoryFadingBackgroundRegion, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.TRANSPARENT), new Stop(1, demoCategory.color)));
-        demoImageScalePane = new ScalePane(crop ? ScalePane.ScaleMode.MAX_WIDTH_HEIGHT : ScalePane.ScaleMode.MIN_WIDTH_HEIGHT, new ImageView(ResourceService.toUrl(imageName, getClass())));
+        demoImageScalePane = new ScalePane(crop ? ScalePane.ScaleMode.MAX_WIDTH_HEIGHT : ScalePane.ScaleMode.MIN_WIDTH_HEIGHT, ImageLoader.loadImage(imageName));
         demoImageScalePane.setCanGrow(false);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);

@@ -9,8 +9,7 @@
     </dependencies>
 
     <resource-packages>
-        <package>dev.webfx.website.application.cards</package>
-        <package>dev.webfx.website.application.demos</package>
+        <package>dev.webfx.website.application.images</package>
     </resource-packages>
 
     <providers>

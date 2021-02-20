@@ -38,6 +38,12 @@
         </dependency>
         
         <dependency>
+            <artifactId>webfx-kit-launcher</artifactId>
+            <groupId>${webfx.groupId}</groupId>
+            <version>${webfx.version}</version>
+        </dependency>
+        
+        <dependency>
             <artifactId>webfx-lib-enzo</artifactId>
             <groupId>${webfx.groupId}</groupId>
             <version>${webfx.version}</version>
