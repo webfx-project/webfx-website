@@ -52,10 +52,12 @@ abstract class FlipCard extends Card {
 
     void flipToNewContent(Node newContent) {
         ObservableList<Node> children = getFlipChildren(flipShowingFront);
-        boolean changed = children.size() != 1 || children.get(0) != newContent;
+        int size = children.size();
+        boolean changed = size != 1 || children.get(0) != newContent;
         if (changed) {
             flipShowingFront = !flipShowingFront;
             changeFlipContent(newContent);
+            flipPanel.setFlipTime(size == 0 ? 0 : 700);
             if (flipShowingFront)
                 flipPanel.flipToFront();
             else
