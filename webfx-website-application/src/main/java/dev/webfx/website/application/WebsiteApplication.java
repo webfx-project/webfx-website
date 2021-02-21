@@ -9,6 +9,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
@@ -37,7 +38,7 @@ public final class WebsiteApplication extends Application {
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
     private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
-    private final DemoThumbnailsPane demoThumbnailsPane = new DemoThumbnailsPane();
+    private DemoThumbnailsPane demoThumbnailsPane;
     private AnimationTimer webFxFillAnimationTimer;
     private Pane cardsPane;
     private int focusedCardIndex = -1;
@@ -47,7 +48,7 @@ public final class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        cardsPane = new Pane(Card.cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane, demoThumbnailsPane); }
+        cardsPane = new Pane(Card.cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane); }
             @Override
             protected void layoutChildren() {
                 double w = getWidth(), h = getHeight(), vh = 0;
@@ -63,7 +64,8 @@ public final class WebsiteApplication extends Application {
                     layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
                     layoutInArea(githubLogoPane, w - w/3, vh * 0.1, w/3, vh * 0.7, 0, null, HPos.CENTER, VPos.TOP);
                 }
-                layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh, 0, HPos.CENTER, VPos.BOTTOM);
+                if (demoThumbnailsPane != null)
+                    layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh, 0, HPos.CENTER, VPos.BOTTOM);
                 gap = Math.max(5, w * 0.01);
                 w -= 4 * gap; h -= gap;
                 double cx = gap, cy = vh, cw = w / 3, ch = h - vh;
@@ -111,9 +113,6 @@ public final class WebsiteApplication extends Application {
         setShapeHoverAnimationColor(githubLogo, lastGithubGradientColor.darker());
         setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
 
-        demoThumbnailsPane.setVisible(false);
-        demoThumbnailsPane.setOpacity(0);
-
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(cardsPane, screenBounds.getWidth(), screenBounds.getHeight(), BACKGROUND_GRADIENT);
         stage.setTitle("WebFX - JavaFX \u2192 JS transpiler");
@@ -129,6 +128,14 @@ public final class WebsiteApplication extends Application {
     }
 
     private void showDemos(boolean show) {
+        if (demoThumbnailsPane == null) {
+            // Creating the demo pane and adding it to the cards pane
+            cardsPane.getChildren().add(demoThumbnailsPane = new DemoThumbnailsPane());
+            demoThumbnailsPane.setOpacity(0);
+            // Postponing the fade effect after the next layout pass (which may take time to consider the demo pane addition)
+            Platform.runLater(() -> showDemos(show));
+            return;
+        }
         stopWebFxFillAnimation();
         demoThumbnailsPane.setVisible(true);
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500),
