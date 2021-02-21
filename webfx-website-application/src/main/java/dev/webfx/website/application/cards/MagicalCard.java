@@ -70,6 +70,8 @@ final class MagicalCard extends FlipCard {
                         ctx.clearRect(0, 0, width, height);
                         double strokeWidth = 0.03 * width, bigRadius = Math.min(width, height) / 2 - strokeWidth / 2, radius = bigRadius;
                         for (Color color : RAINBOW_COLORS) {
+                            if (radius <= 0) // Stopping the loop if radius is negative (may happen if card is very small)
+                                break;
                             ctx.setStroke(color.deriveColor(0, 0.7, 1, 1));
                             ctx.setLineWidth(strokeWidth);
                             ctx.strokeArc(width / 2 - radius, height / 2 - radius, 2 * radius, 2 * radius, 0, 180, ArcType.OPEN);

@@ -41,7 +41,7 @@ public final class WebsiteApplication extends Application {
     private DemoThumbnailsPane demoThumbnailsPane;
     private AnimationTimer webFxFillAnimationTimer;
     private Pane cardsPane;
-    private int focusedCardIndex = -1;
+    private int visibleCardsCount, focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
     private Timeline scrollTimeline;
     private double gap, scrollTimelineEndValue;
@@ -57,8 +57,8 @@ public final class WebsiteApplication extends Application {
                 githubLogoPane.setVisible(showMenu);
                 if (showMenu) {
                     double fontSize = Math.min(0.08 * w, 0.12 * h);
-                    setFontSize(webFxText, fontSize, true);
-                    setFontSize(demosText, fontSize, true);
+                    updateFontSize(webFxText, fontSize, true);
+                    updateFontSize(demosText, fontSize, true);
                     vh = webFxText.prefHeight(w);
                     layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
                     layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
@@ -66,21 +66,21 @@ public final class WebsiteApplication extends Application {
                 }
                 if (demoThumbnailsPane != null)
                     layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh, 0, HPos.CENTER, VPos.BOTTOM);
+                visibleCardsCount = Math.max(1, Math.min(Card.cards.length, (int) (2 * w / h)));
                 gap = Math.max(5, w * 0.01);
-                w -= 4 * gap; h -= gap;
-                double cx = gap, cy = vh, cw = w / 3, ch = h - vh;
+                w -= (visibleCardsCount + 1) * gap; h -= gap;
+                double cx = gap, cy = vh, cw = w / visibleCardsCount, ch = h - vh;
                 if (!showMenu) {
                     cy += gap;
                     ch -= gap;
                 }
-                verticalCards = cw < 230;
+                verticalCards = visibleCardsCount == 1;
                 if (!verticalCards) {
                     for (Card card : Card.cards) {
                         layoutInArea(card, cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
                         cx += cw + gap;
                     }
                 } else {
-                    w += 2 * gap;
                     for (Card card : Card.cards) {
                         layoutInArea(card, cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
                         if (card == Card.cards[0]) {
@@ -120,7 +120,7 @@ public final class WebsiteApplication extends Application {
         stage.show();
     }
 
-    private static void setFontSize(Text text, double fontSize, boolean bold) {
+    private static void updateFontSize(Text text, double fontSize, boolean bold) {
         if (text.getFont().getSize() != fontSize) {
             text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
             text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
@@ -174,8 +174,8 @@ public final class WebsiteApplication extends Application {
     private void scrollToFocusedCard() {
         if (!verticalCards) {
             cardsPane.setTranslateY(0);
-            int leftCardIndex = Math.max(0, Math.min(Card.cards.length - 3, focusedCardIndex - 1));
-            double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / 3;
+            int leftCardIndex = Math.max(0, Math.min(Card.cards.length - visibleCardsCount, focusedCardIndex - 1));
+            double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / visibleCardsCount;
             if (Card.cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateX;
