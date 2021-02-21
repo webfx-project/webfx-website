@@ -1,9 +1,8 @@
-package dev.webfx.website.application;
+package dev.webfx.website.application.shared;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.website.application.cards.FxWreathPane;
-import dev.webfx.website.application.cards.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import javafx.animation.Interpolator;
@@ -35,7 +34,7 @@ import java.util.List;
  */
 public final class WebSiteShared {
 
-    static final LinearGradient BACKGROUND_GRADIENT = LinearGradient.valueOf("to bottom, #4C2459, #6F295A");
+    public static final LinearGradient BACKGROUND_GRADIENT = LinearGradient.valueOf("to bottom, #4C2459, #6F295A");
     //public static final LinearGradient CARD_TRANSLUCENT_BACKGROUND = LinearGradient.valueOf("rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.54)");
     public static final LinearGradient CARD_TRANSLUCENT_BACKGROUND = LinearGradient.valueOf("to bottom, #3C1A43, #34132B");
     public static final LinearGradient CIRCLE_GRADIENT = new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
@@ -131,7 +130,7 @@ public final class WebSiteShared {
         hostServices.showDocument(url);
     }
 
-    static void setHostServices(HostServices hostServices) {
+    public static void setHostServices(HostServices hostServices) {
         WebSiteShared.hostServices = hostServices;
     }
 

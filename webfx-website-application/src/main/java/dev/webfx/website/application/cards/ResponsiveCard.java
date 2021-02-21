@@ -1,12 +1,12 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import javafx.animation.KeyValue;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.CornerRadii;
@@ -35,14 +35,13 @@ final class ResponsiveCard extends FlipCard {
         content.setClip(contentClip);
         content.setScaleX(scale);
         content.setScaleY(scale);
-        return new Pane(content) {
+        return new LayoutPane(content) {
             @Override
-            protected void layoutChildren() {
-                double width = getWidth(), height = getHeight();
+            protected void layoutChildren(double width, double height) {
                 double borderWidth = 0.06 * Math.min(width, height), borderHeight = borderWidth * (scale < 0.5 ? 4 : 1);
                 WebSiteShared.setRegionBackground(this, Color.gray(0.1), new CornerRadii(borderWidth));
                 double cw = (width - 2 * borderWidth) / scale, ch = (height - 2 * borderHeight) / scale, cx = borderWidth - cw * (1 - scale) / 2, cy = borderHeight -ch * (1 - scale) / 2;
-                layoutInArea(content, cx, cy, cw, ch, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(content, cx, cy, cw, ch);
                 contentClip.setWidth(cw);
                 contentClip.setHeight(ch);
             }
@@ -76,18 +75,18 @@ final class ResponsiveCard extends FlipCard {
                     Pane thumbUpPane = new ScalePane(thumbUp = WebSiteShared.createThumbUp());
                     thumbUp.setFill(Color.WHITE);
                     thumbUp.setEffect(WebSiteShared.dropShadow);
-                    desktopTabletMobilePane = new Pane(desktopScreen, tabletScreen, mobileScreen, thumbUpPane) {
+                    desktopTabletMobilePane = new LayoutPane(desktopScreen, tabletScreen, mobileScreen, thumbUpPane) {
                         @Override
-                        protected void layoutChildren() {
-                            double width = getWidth(), height = getHeight() - getTitleSpace();
+                        protected void layoutChildren(double width, double height) {
+                            height -= getTitleSpace();
                             double dx = 0, dy = 0.1 * height, dw = width, dh = 0.7 * height;
                             double th = 0.5 * height, tw = th * 3 / 4, tx = 0.65 * width - tw / 2, ty = 0.7 * height - th / 2;
                             double mh = 0.25 * height, mw = mh * 414 / 736 , mx = 0.25 * width - mw / 2, my = ty + th - mh;
                             double uw = width / 3, uh = height / 3, ux = width / 2 - uw / 2, uy = height / 2 - uh / 2;
-                            layoutInArea(desktopScreen, dx, dy, dw, dh, 0, HPos.CENTER, VPos.CENTER);
-                            layoutInArea(tabletScreen,  tx, ty, tw, th, 0, HPos.CENTER, VPos.CENTER);
-                            layoutInArea(mobileScreen,  mx, my, mw, mh, 0, HPos.CENTER, VPos.CENTER);
-                            layoutInArea(thumbUpPane,   ux, uy, uw, uh, 0, HPos.CENTER, VPos.CENTER);
+                            layoutInArea(desktopScreen, dx, dy, dw, dh);
+                            layoutInArea(tabletScreen,  tx, ty, tw, th);
+                            layoutInArea(mobileScreen,  mx, my, mw, mh);
+                            layoutInArea(thumbUpPane,   ux, uy, uw, uh);
                         }
                     };
                 }
@@ -109,13 +108,12 @@ final class ResponsiveCard extends FlipCard {
                             "<div style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
                             "<span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // You have direct access to your nodes and<br></span><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // can finally position them all in one go:<br></span> &nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node1</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x1<span style=\"color: #e0957b; font-weight: bold;\">, </span>y1<span style=\"color: #e0957b; font-weight: bold;\">, </span>w1<span style=\"color: #e0957b; font-weight: bold;\">, </span>h1<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node2</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x2<span style=\"color: #e0957b; font-weight: bold;\">, </span>y2<span style=\"color: #e0957b; font-weight: bold;\">, </span>w2<span style=\"color: #e0957b; font-weight: bold;\">, </span>h2<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node3</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x3<span style=\"color: #e0957b; font-weight: bold;\">, </span>y3<span style=\"color: #e0957b; font-weight: bold;\">, </span>w3<span style=\"color: #e0957b; font-weight: bold;\">, </span>h3<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; ...<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">nodeN</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>xN<span style=\"color: #e0957b; font-weight: bold;\">, </span>yN<span style=\"color: #e0957b; font-weight: bold;\">, </span>wN<span style=\"color: #e0957b; font-weight: bold;\">, </span>hN<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; }<br>}<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>\n" +
                             "</div>");
-                flipToNewContent(new Pane(screen, codeText) {
+                flipToNewContent(new LayoutPane(screen, codeText) {
                     @Override
-                    protected void layoutChildren() {
-                        double width = getWidth(), height = getHeight();
+                    protected void layoutChildren(double width, double height) {
                         double codeHeight = codeText.prefHeight(width);
-                        layoutInArea(screen, 0, 0, width, height - codeHeight - 0.03 * height, 0, HPos.CENTER, VPos.TOP);
-                        layoutInArea(codeText, 0, height - codeHeight, width, codeHeight, 0, HPos.LEFT, VPos.BOTTOM);
+                        layoutInArea(screen, 0, 0, width, height - codeHeight - 0.03 * height);
+                        layoutInArea(codeText, 0, height - codeHeight, width, codeHeight);
                     }
                 });
                 break;

@@ -1,14 +1,13 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -19,21 +18,20 @@ import javafx.scene.shape.SVGPath;
 
 import java.util.stream.Stream;
 
-import static dev.webfx.website.application.WebSiteShared.jsYellowColor;
+import static dev.webfx.website.application.shared.WebSiteShared.jsYellowColor;
 
 /**
  * @author Bruno Salmon
  */
-final class GwtCompilationAnimationPane extends Pane {
+final class GwtCompilationAnimationPane extends LayoutPane {
 
     private final Region[] javaFxClasses = Stream.generate(() -> WebSiteShared.setRegionBackground(new Region(), WebSiteShared.raspberryPiColor)).limit(16 * 8).toArray(Region[]::new);
     private final int[] nonDeadIndexes = {21, 25, 39, 42, 52, 60, 72, 82, 85, 90, 93, 104, 116, 124};
     private boolean showGrid;
-    private final Pane javaFxClassesPane = new Pane(javaFxClasses) {
+    private final LayoutPane javaFxClassesPane = new LayoutPane(javaFxClasses) {
         private final Circle circleClip = new Circle(); { setClip(circleClip); }
         @Override
-        protected void layoutChildren() {
-            double width = getWidth(), height = getHeight();
+        protected void layoutChildren(double width, double height) {
             double xc = width / 2, yc = height;
             double radius = Math.min(xc, yc);
             circleClip.setCenterX(xc);
@@ -42,7 +40,7 @@ final class GwtCompilationAnimationPane extends Pane {
             double jfxSize = radius / 8;
             for (int i = 0; i < 16 * 8; i++) {
                 int row = i / 16, col = i % 16;
-                layoutInArea(javaFxClasses[i], xc - radius + col * jfxSize, yc - radius + row * jfxSize, jfxSize - (showGrid ? 2 : 0), jfxSize - (showGrid ? 2 : 0), 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(javaFxClasses[i], xc - radius + col * jfxSize, yc - radius + row * jfxSize, jfxSize - (showGrid ? 2 : 0), jfxSize - (showGrid ? 2 : 0));
             }
         }
     };
@@ -110,19 +108,18 @@ final class GwtCompilationAnimationPane extends Pane {
     }
 
     @Override
-    protected void layoutChildren() {
-        double width = getWidth(), height = getHeight();
+    protected void layoutChildren(double width, double height) {
         double xc = width / 2, yc = height / 2;
         double radius = Math.min(xc, yc);
         appCirclePane.setRadius(0.75 * radius);
         if (!appClipPane.isVisible()) {
             javaFxCirclePane.setRadius(radius);
-            layoutInArea(appCirclePane,     0, 0, width, height);
-            layoutInArea(javaFxCirclePane,  0, 0, width, height);
-            layoutInArea(javaFxClassesPane, 0, 0, width, yc);
+            centerInArea(appCirclePane,     0, 0, width, height);
+            centerInArea(javaFxCirclePane,  0, 0, width, height);
+            centerInArea(javaFxClassesPane, 0, 0, width, yc);
             double rw = 0.1 * radius, rh = 0.2 * height, rx = xc - rw / 2, ry = yc + 0.3 * radius - rh / 2;
-            layoutInArea(redCross1, rx, ry, rw, rh);
-            layoutInArea(redCross2, rx, ry, rw, rh);
+            centerInArea(redCross1, rx, ry, rw, rh);
+            centerInArea(redCross2, rx, ry, rw, rh);
         } else {
             // App layout
             double ax = 0, ay = 0, aw = width, ah = yc;
@@ -144,14 +141,10 @@ final class GwtCompilationAnimationPane extends Pane {
         mainClip.setHeight(height);
     }
 
-    private void layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight) {
-        layoutInArea(child, areaX, areaY, areaWidth, areaHeight, 0, HPos.CENTER, VPos.CENTER);
-    }
-
     private void showGrid(boolean showGrid) {
         if (this.showGrid != showGrid) {
             this.showGrid = showGrid;
-            javaFxClassesPane.requestLayout();
+            javaFxClassesPane.forceLayoutChildren();
         }
     }
 

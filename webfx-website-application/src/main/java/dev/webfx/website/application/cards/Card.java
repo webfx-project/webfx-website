@@ -1,25 +1,27 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import static dev.webfx.website.application.WebSiteShared.CARD_TRANSLUCENT_BACKGROUND;
+import static dev.webfx.website.application.shared.WebSiteShared.CARD_TRANSLUCENT_BACKGROUND;
 
 /**
  * @author Bruno Salmon
  */
-public abstract class Card extends Pane {
+public abstract class Card extends LayoutPane {
 
     private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
     private static double cardWidth, cardHeight, maxTitleHeight, maxHtmlHeight;
@@ -109,14 +111,14 @@ public abstract class Card extends Pane {
         );
         enteringCaptionText.setVisible(true);
         cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
-        requestLayout(); // Since we have changed the content of the caption, it is necessary to request a layout
+        forceLayoutChildren(); // Since we have changed the content of the caption, it is necessary to request a layout
     }
 
     abstract String caption(int step);
 
     @Override
-    protected void layoutChildren() {
-        double w = getWidth(), h = getHeight(), hgap = w * 0.02;
+    protected void layoutChildren(double width, double height) {
+        double w = width, h = height, hgap = w * 0.02;
         w -= 2 * hgap;
         if (w != cardWidth || h != cardHeight) {
             maxTitleHeight = maxHtmlHeight = 0;
@@ -142,16 +144,16 @@ public abstract class Card extends Pane {
         double vGap = h * 0.02;
         ny -= nh + vGap;
         captionText1.setMaxHeight(captionText1.prefHeight(w));
-        layoutInArea(captionText1, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+        centerInArea(captionText1, hgap, ny, w, nh);
         captionText2.setMaxHeight(captionText2.prefHeight(w));
-        layoutInArea(captionText2, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+        centerInArea(captionText2, hgap, ny, w, nh);
         nh = maxTitleHeight;
         ny -= nh + vGap;
-        layoutInArea(titleText, hgap, ny, w, nh, 0, HPos.CENTER, VPos.TOP);
+        centerInArea(titleText, hgap, ny, w, nh);
         ny += nh + vGap;
         nh = ny - 2 * vGap;
         ny = vGap;
-        layoutInArea(illustrationNode, hgap, ny, w, nh, 0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(illustrationNode, hgap, ny, w, nh);
     }
 
     double getTitleSpace() {

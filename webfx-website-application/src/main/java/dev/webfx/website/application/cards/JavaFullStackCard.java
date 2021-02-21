@@ -1,26 +1,25 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.website.application.images.SvgLogoPaths;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import static dev.webfx.website.application.WebSiteShared.*;
+import static dev.webfx.website.application.shared.WebSiteShared.*;
 
 /**
  * @author Bruno Salmon
  */
 final class JavaFullStackCard extends Card {
 
-    private Pane pane;
+    private LayoutPane pane;
     private Node[] stepToolkitLogos, stepLanguageLogos;
     private FlipPanel[] toolkitFlipPanels, languageFlipPanels;
     private Node[] puzzles;
@@ -86,34 +85,34 @@ final class JavaFullStackCard extends Card {
         frontendCirclePane.setBlendMode(BlendMode.SCREEN);
         backendCirclePane.setBlendMode(BlendMode.SCREEN);
         serverCirclePane.setBlendMode(BlendMode.SCREEN);
-        pane = new Pane(frontendCirclePane, backendCirclePane, serverCirclePane) { { getChildren().addAll(puzzles); }
+        pane = new LayoutPane(frontendCirclePane, backendCirclePane, serverCirclePane) { { getChildren().addAll(puzzles); }
             @Override
-            protected void layoutChildren() {
-                double w = getWidth(), h = getHeight(), s = Math.min(w, h), wd2 = w / 2, hd2 = h / 2, sd2 = s / 2, r = sd2 * 0.49, d = 2 * r;
+            protected void layoutChildren(double width, double height) {
+                double w = width, h = height, s = Math.min(w, h), wd2 = w / 2, hd2 = h / 2, sd2 = s / 2, r = sd2 * 0.49, d = 2 * r;
                 double R = (s - d) / (2 * Math.cos(Math.PI/6)) * (0.5 + 0.5 * expansionProperty.get());
                 double yc = 0.8 * hd2, yClients = yc - R * Math.sin(Math.PI/6) - r;
                 double Rcos = R * Math.cos(Math.PI/6);
                 frontendCirclePane.setRadius(r);
                 frontendCirclePane.setRotate((frontendCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
-                layoutInArea(frontendCirclePane, wd2 - Rcos - r, yClients,   d, d, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(frontendCirclePane, wd2 - Rcos - r, yClients,   d, d);
                 backendCirclePane.setRadius(r);
                 backendCirclePane.setRotate((backendCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
-                layoutInArea(backendCirclePane,  wd2 + Rcos - r, yClients,   d, d, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(backendCirclePane,  wd2 + Rcos - r, yClients,   d, d);
                 serverCirclePane.setRadius(r);
-                layoutInArea(serverCirclePane,   wd2 - r, yc + R - r,  d, d, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(serverCirclePane,   wd2 - r, yc + R - r,  d, d);
                 if (currentAnimationStep == 7) {
                     double pd = 0.3 * r, pr = pd / 2;
-                    layoutInArea(puzzles[0], wd2 - pr, yc - r * 0.0 - pr, pd, pd, 0, HPos.CENTER, VPos.CENTER);
-                    layoutInArea(puzzles[1], wd2 - pr, yc - r * 0.7 - pr, pd, pd, 0, HPos.CENTER, VPos.CENTER);
-                    layoutInArea(puzzles[2], wd2 - 0.6 * r - pr, yc + r * 0.3 - pr, pd, pd, 0, HPos.CENTER, VPos.CENTER);
-                    layoutInArea(puzzles[3], wd2 + 0.6 * r - pr, yc + r * 0.3 - pr, pd, pd, 0, HPos.CENTER, VPos.CENTER);
+                    layoutInArea(puzzles[0], wd2 - pr, yc - r * 0.0 - pr, pd, pd);
+                    layoutInArea(puzzles[1], wd2 - pr, yc - r * 0.7 - pr, pd, pd);
+                    layoutInArea(puzzles[2], wd2 - 0.6 * r - pr, yc + r * 0.3 - pr, pd, pd);
+                    layoutInArea(puzzles[3], wd2 + 0.6 * r - pr, yc + r * 0.3 - pr, pd, pd);
                 }
             }
         };
         expansionProperty = new SimpleDoubleProperty() {
             @Override
             protected void invalidated() {
-                pane.requestLayout();
+                pane.forceLayoutChildren();
             }
         };
         preloadImages(stepToolkitLogos);

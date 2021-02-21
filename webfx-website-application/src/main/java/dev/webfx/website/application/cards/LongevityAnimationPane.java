@@ -1,10 +1,10 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.website.application.images.SvgLogoPaths;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.KeyValue;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.LinearGradient;
 
@@ -19,18 +19,18 @@ final class LongevityAnimationPane extends ScalePane {
     private final ScalePane longevityScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getLongevityPath(), LinearGradient.valueOf("to right, red, brown, orange, green")));
     private final ScalePane htmlFrameScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
     private final Pane fxWreathPane = new FxWreathPane();
-    private final Pane fixedSizePane;
+    private final LayoutPane fixedSizePane;
     private final List<Pane> refactoringAnimationPanes = new ArrayList<>();
 
     public LongevityAnimationPane() {
-        setNode(fixedSizePane = new Pane(htmlFrameScalePane, longevityScalePane, fxWreathPane) {
+        setNode(fixedSizePane = new LayoutPane(htmlFrameScalePane, longevityScalePane, fxWreathPane) {
             @Override
-            protected void layoutChildren() {
-                layoutInArea(htmlFrameScalePane, 0, 0, 1000, 1000, 0, HPos.CENTER, VPos.CENTER);
-                layoutInArea(longevityScalePane, 0, 0, 1000, 1000, 0, HPos.CENTER, VPos.CENTER);
-                layoutInArea(fxWreathPane, 270, 200, 300, 300, 0, HPos.CENTER, VPos.CENTER);
+            protected void layoutChildren(double width, double height) {
+                layoutInArea(htmlFrameScalePane, 0, 0, width, height);
+                layoutInArea(longevityScalePane, 0, 0, width, height);
+                layoutInArea(fxWreathPane, 270, 200, 300, 300);
                 for (Pane p : refactoringAnimationPanes)
-                    layoutInArea(p, 0, 0, 1000, 1000, 0, HPos.LEFT, VPos.BOTTOM);
+                    layoutInArea(p, 0, 0, width, height);
             }
         });
         WebSiteShared.setFixedSize(fixedSizePane, 1000);
@@ -75,8 +75,8 @@ final class LongevityAnimationPane extends ScalePane {
         int n = refactoringAnimationPanes.size();
         if (n < 5 && !backToOriginal) {
             RefactoringAnimationPane refactoringAnimationPane = new RefactoringAnimationPane(fixedSizePane);
-            refactoringAnimationPane.setTranslateX(Math.max(0, n - 1) * 183 + 100); // Best fit is 9 for HTML, 10 for JavaFX...
-            refactoringAnimationPane.setTranslateY(-98); // Best fit is -10.8 for HTML, -9.8 for JavaFX...
+            refactoringAnimationPane.setTranslateX(Math.max(0, n - 1) * 183 + 100);
+            refactoringAnimationPane.setTranslateY(-98);
             refactoringAnimationPanes.add(refactoringAnimationPane);
             fixedSizePane.getChildren().add(/*n,*/ refactoringAnimationPane);
             refactoringAnimationPane.startGoodShortRefactoringBrickAnimation(n == 0 ? 0 : WALL_BRICK_ROWS[n - 1], WALL_BRICK_ROWS[n], WALL_HEIGHT[n], this::startAnotherShortRefactoringAnimation);

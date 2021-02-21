@@ -1,4 +1,4 @@
-package dev.webfx.website.application.cards;
+package dev.webfx.website.application.shared;
 
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -36,7 +36,7 @@ public class ScalePane extends Pane {
         setNode(node);
     }
 
-    void setNode(Node node) {
+    public void setNode(Node node) {
         this.node = node;
         if (node != null)
             getChildren().setAll(node);

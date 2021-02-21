@@ -1,6 +1,6 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.website.application.cards.ScalePane;
+import dev.webfx.website.application.shared.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
@@ -16,7 +16,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
-import static dev.webfx.website.application.WebSiteShared.*;
+import static dev.webfx.website.application.shared.WebSiteShared.*;
 
 /**
  * @author Bruno Salmon

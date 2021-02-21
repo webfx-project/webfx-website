@@ -1,13 +1,13 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.SvgText;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.SVGPath;
 
-import static dev.webfx.website.application.WebSiteShared.*;
+import static dev.webfx.website.application.shared.WebSiteShared.*;
 
 /**
  * @author Bruno Salmon
@@ -63,16 +63,16 @@ final class CrossPlatformCard extends Card {
         flipPanel.flipToBack();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
         ScalePane flipPanelScalePane = new ScalePane(flipPanel);
-        Pane pane = new Pane(platformScalePane, flipPanelScalePane) {
+        LayoutPane pane = new LayoutPane(platformScalePane, flipPanelScalePane) {
             @Override
-            protected void layoutChildren() {
-                double w = getWidth(), h = getHeight() - getTransitionalTitleSpace();
-                layoutInArea(platformScalePane, 0, 0, w, h, 0, HPos.CENTER, VPos.CENTER);
+            protected void layoutChildren(double width, double height) {
+                double w = width, h = height - getTransitionalTitleSpace();
+                layoutInArea(platformScalePane, 0, 0, w, h);
                 double sh = platformScalePane.getHeight(), fh = Math.min(90, 0.3 * sh);
-                layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(flipPanelScalePane, 0, h / 2 + 0.3 * sh - fh / 2, w, fh);
             }
         };
-        titleText.opacityProperty().addListener(e -> pane.requestLayout());
+        titleText.opacityProperty().addListener(e -> pane.forceLayoutChildren());
         return pane;
     }
 

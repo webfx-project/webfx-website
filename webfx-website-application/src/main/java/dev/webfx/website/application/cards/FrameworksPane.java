@@ -1,12 +1,11 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.WebSiteShared;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
+import dev.webfx.website.application.shared.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -22,7 +21,7 @@ import java.util.function.Supplier;
 /**
  * @author Bruno Salmon
  */
-final class FrameworksPane extends Pane {
+final class FrameworksPane extends LayoutPane {
 
     private final static double year1 = 2021.1;
     private final static Framework[] webFrameworks = {             /*1996.8*/
@@ -61,16 +60,16 @@ final class FrameworksPane extends Pane {
     }
 
     @Override
-    protected void layoutChildren() {
-        double w = getWidth(), h = getHeight();
+    protected void layoutChildren(double width, double height) {
+        double w = width, h = height;
         double rowHeight = h / (frameworks.length + 0.5); // Adding half a row to make space for the years legend
         double vgap = 0.03 * h;
         double fy = 0, fh = rowHeight - vgap;
         for (Framework fw : frameworks) {
             double thisBarX = getYearX(fw.startYear, w), thisBarW = w - thisBarX;
-            layoutInArea(fw.liveBar, thisBarX, fy, thisBarW, fh, 0, HPos.LEFT, VPos.CENTER);
-            layoutInArea(fw.logo, thisBarX + 10, fy, fh, fh, 0, HPos.LEFT, VPos.CENTER);
-            layoutInArea(fw.nameText, thisBarX + 20 + fh, fy, fh, fh, 0, HPos.LEFT, VPos.CENTER);
+            leftInArea(fw.liveBar, thisBarX, fy, thisBarW, fh);
+            leftInArea(fw.logo, thisBarX + 10, fy, fh, fh);
+            leftInArea(fw.nameText, thisBarX + 20 + fh, fy, fh, fh);
             fy += rowHeight;
         }
         yearsCanvas.setWidth(w);

@@ -1,14 +1,13 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.SvgLogoPaths;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
@@ -18,7 +17,7 @@ import javafx.scene.text.Text;
 /**
  * @author Bruno Salmon
  */
-final class WebFxDevAnimationPane extends Pane {
+final class WebFxDevAnimationPane extends LayoutPane {
 
     private final SVGPath downArrow = WebSiteShared.createArrowDown(), rightArrow = WebSiteShared.createArrowUp(); // Will be rotated in constructor
     private final ScalePane rightArrowPane = new ScalePane(rightArrow);
@@ -69,24 +68,24 @@ final class WebFxDevAnimationPane extends Pane {
     }
 
     @Override
-    protected void layoutChildren() {
-        double w = getWidth(), h = getHeight(), wd2 = w / 2, hd2 = h / 2;
+    protected void layoutChildren(double width, double height) {
+        double w = width, h = height, wd2 = w / 2, hd2 = h / 2;
         double d = 0.98 * Math.min(wd2, hd2), r = d / 2;
         appCirclePane.setRadius(r);
         downArrow.setTranslateY(0.8 * r);
-        layoutInArea(appCirclePane, wd2 - r, 0, d, hd2, 0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(appCirclePane, wd2 - r, 0, d, hd2);
         openJFXCirclePane.setRadius(r);
-        layoutInArea(openJFXCirclePane, 0, hd2, wd2, hd2, 0, HPos.CENTER, VPos.CENTER);
+        centerInArea(openJFXCirclePane, 0, hd2, wd2, hd2);
         setArcRadius(openJFXArc, r);
         Bounds ba = openJFXArc.getLayoutBounds();
         double ya = 1.5 * hd2 - r, xac = -Math.min(ba.getWidth(), r), ha = ba.getHeight();
-        layoutInArea(openJFXArc, 0.5 * wd2 + xac, ya, ba.getWidth(), ha, 0, HPos.LEFT, VPos.TOP);
+        centerInArea(openJFXArc, 0.5 * wd2 + xac, ya, ba.getWidth(), ha);
         webFXCirclePane.setRadius(r);
-        layoutInArea(webFXCirclePane, wd2, hd2, wd2, hd2, 0, HPos.CENTER, VPos.CENTER);
+        centerInArea(webFXCirclePane, wd2, hd2, wd2, hd2);
         setArcRadius(webFXArc, r);
-        layoutInArea(webFXArc, 1.5 * wd2 + xac, ya, ba.getWidth(), ha, 0, HPos.LEFT, VPos.TOP);
+        centerInArea(webFXArc, 1.5 * wd2 + xac, ya, ba.getWidth(), ha);
         double sa = 0.7 * r;
-        layoutInArea(rightArrowPane, wd2 - sa / 2, 1.5 * hd2 - sa / 2, sa, sa, 0, HPos.LEFT, VPos.TOP);
+        centerInArea(rightArrowPane, wd2 - sa / 2, 1.5 * hd2 - sa / 2, sa, sa);
         fullAngle = Math.atan(0.5 * wd2 / hd2) / Math.PI * 180;
         updateAppAngle();
     }

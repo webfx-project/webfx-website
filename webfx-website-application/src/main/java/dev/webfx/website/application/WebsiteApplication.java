@@ -2,17 +2,17 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.controls.SvgText;
 import dev.webfx.website.application.cards.Card;
-import dev.webfx.website.application.cards.ScalePane;
 import dev.webfx.website.application.demos.DemoThumbnailsPane;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -27,7 +27,7 @@ import javafx.util.Duration;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import static dev.webfx.website.application.WebSiteShared.*;
+import static dev.webfx.website.application.shared.WebSiteShared.*;
 
 /**
  * @author Bruno Salmon
@@ -48,10 +48,10 @@ public final class WebsiteApplication extends Application {
 
     @Override
     public void start(Stage stage) {
-        cardsPane = new Pane(Card.cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane); }
+        cardsPane = new LayoutPane(Card.cards) { { getChildren().addAll(demosText, webFxText, githubLogoPane); }
             @Override
-            protected void layoutChildren() {
-                double w = getWidth(), h = getHeight(), vh = 0;
+            protected void layoutChildren(double width, double height) {
+                double w = width, h = height, vh = 0;
                 demosText.setVisible(showMenu);
                 webFxText.setVisible(showMenu);
                 githubLogoPane.setVisible(showMenu);
@@ -60,12 +60,12 @@ public final class WebsiteApplication extends Application {
                     updateFontSize(webFxText, fontSize, true);
                     updateFontSize(demosText, fontSize, true);
                     vh = webFxText.prefHeight(w);
-                    layoutInArea(webFxText, 0, 0, w, vh, 0, null, HPos.CENTER, VPos.TOP);
-                    layoutInArea(demosText, 0, 0, w/3, vh, 0, null, HPos.CENTER, VPos.TOP);
-                    layoutInArea(githubLogoPane, w - w/3, vh * 0.1, w/3, vh * 0.7, 0, null, HPos.CENTER, VPos.TOP);
+                    centerInArea(webFxText, 0, 0, w, vh);
+                    centerInArea(demosText, 0, 0, w/3, vh);
+                    layoutInArea(githubLogoPane, w - w/3, vh * 0.1, w/3, vh * 0.7);
                 }
                 if (demoThumbnailsPane != null)
-                    layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh, 0, HPos.CENTER, VPos.BOTTOM);
+                    layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh);
                 visibleCardsCount = Math.max(1, Math.min(Card.cards.length, (int) (2 * w / h)));
                 gap = Math.max(5, w * 0.01);
                 w -= (visibleCardsCount + 1) * gap; h -= gap;
@@ -77,12 +77,12 @@ public final class WebsiteApplication extends Application {
                 verticalCards = visibleCardsCount == 1;
                 if (!verticalCards) {
                     for (Card card : Card.cards) {
-                        layoutInArea(card, cx, cy, cw, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                        layoutInArea(card, cx, cy, cw, ch);
                         cx += cw + gap;
                     }
                 } else {
                     for (Card card : Card.cards) {
-                        layoutInArea(card, cx, cy, w, ch, 0, HPos.CENTER, VPos.BOTTOM);
+                        layoutInArea(card, cx, cy, w, ch);
                         if (card == Card.cards[0]) {
                             ch = h - gap;
                             cy = h + 2 * gap;

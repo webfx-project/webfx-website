@@ -1,11 +1,11 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 /**
  * @author Bruno Salmon
  */
-final class CirclePane extends Pane {
+final class CirclePane extends LayoutPane {
 
     private final double angle, lettersAngle;
     private double radius;
@@ -109,8 +109,7 @@ final class CirclePane extends Pane {
     }
 
     @Override
-    protected void layoutChildren() {
-        double width  = getWidth(), height = getHeight();
+    protected void layoutChildren(double width, double height) {
         double size = Math.min(width, height);
         if (circleLetters != null) {
             double r = size / 2;
@@ -128,7 +127,7 @@ final class CirclePane extends Pane {
                 angle += anglePerLength * lw / 2;
                 if (letter.getRotate() != angle) {
                     letter.setRotate(angle / Math.PI * 180 + (top ? 90 : -90));
-                    layoutInArea(letter, r + 0.75 * r * Math.cos(angle) - lw / 2, r + 0.75 * r * Math.sin(angle) - lh / 2, lw, lh, 0, HPos.CENTER, VPos.CENTER);
+                    layoutInArea(letter, r + 0.75 * r * Math.cos(angle) - lw / 2, r + 0.75 * r * Math.sin(angle) - lh / 2, lw, lh);
                 }
                 angle += anglePerLength * lw / 2;
             }
@@ -137,12 +136,12 @@ final class CirclePane extends Pane {
             double h = 0.3 * height;
             if (bottomScalePane == null) {
                 double dy = -0.04 * height;
-                layoutInArea(topScalePane, 0, height / 2 - h / 2 + dy, width, h, 0, HPos.CENTER, VPos.CENTER);
+                layoutInArea(topScalePane, 0, height / 2 - h / 2 + dy, width, h);
             } else {
                 double dy = 0.06 * height, gap = 0.03 * height;
                 if (topScalePane != null)
-                    layoutInArea(topScalePane, 0, height / 2 - h + dy - gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
-                layoutInArea(bottomScalePane, 0, height / 2 + dy + gap / 2, width, h, 0, HPos.CENTER, VPos.CENTER);
+                    layoutInArea(topScalePane, 0, height / 2 - h + dy - gap / 2, width, h);
+                layoutInArea(bottomScalePane, 0, height / 2 + dy + gap / 2, width, h);
             }
         }
     }

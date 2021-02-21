@@ -1,20 +1,18 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.platform.client.services.uischeduler.UiScheduler;
-import dev.webfx.website.application.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -24,7 +22,7 @@ import java.util.Arrays;
 /**
  * @author Bruno Salmon
  */
-final class CreditsPane extends Pane {
+final class CreditsPane extends LayoutPane {
 
     private final static String[] credits = {
             "Free",
@@ -87,7 +85,7 @@ final class CreditsPane extends Pane {
         @Override
         protected void invalidated() {
             if (card.currentAnimationStep == cardStep)
-                requestLayout();
+                forceLayoutChildren();
         }
     };
 
@@ -107,8 +105,8 @@ final class CreditsPane extends Pane {
     private double lastW, lastH1, lastH2, lastH3;
 
     @Override
-    protected void layoutChildren() {
-        double w = getWidth(), h = getHeight(), h1 = lastH1, h2 = lastH2, h3 = lastH3;
+    protected void layoutChildren(double width, double height) {
+        double w = width, h = height, h1 = lastH1, h2 = lastH2, h3 = lastH3;
         if (w != lastW) {
             h1 = javaFxLogo.prefHeight(w);
             h2 = creditsBox.prefHeight(w);
@@ -119,10 +117,10 @@ final class CreditsPane extends Pane {
                 lastH3 = h3;
             } else
                 lastW = w;
-            layoutInArea(javaFxLogo, 0, 0, w, h1, 0, HPos.CENTER, VPos.TOP);
+            layoutInArea(javaFxLogo, 0, 0, w, h1);
         }
         double y = Math.max(h1 - h2 + h3 + 9, h - creditsBottomDistanceProperty.get());
-        layoutInArea(creditsBox, 0, y, w, h2, 0, HPos.CENTER, VPos.TOP);
+        layoutInArea(creditsBox, 0, y, w, h2);
         creditsBox.setClip(new Rectangle(0, h1 - y, w , h - h1));
     }
 }

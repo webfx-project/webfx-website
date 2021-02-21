@@ -2,15 +2,13 @@ package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
 import dev.webfx.website.application.images.SvgLogoPaths;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
@@ -25,7 +23,7 @@ final class SustainableCard extends FlipCard {
     private WebFxCloudAnimationPane webFxCloudAnimationPane;
     private RefactoringAnimationPane refactoringAnimationPane;
     private LongevityAnimationPane longevityAnimationPane;
-    private Pane longevityAnimationEnclosingPane;
+    private LayoutPane longevityAnimationEnclosingPane;
     private double wallHeight;
 
     SustainableCard() {
@@ -56,13 +54,13 @@ final class SustainableCard extends FlipCard {
             case 1:
                 if (longevityAnimationPane == null) {
                     longevityAnimationPane = new LongevityAnimationPane();
-                    longevityAnimationEnclosingPane = new Pane(longevityAnimationPane) {
+                    longevityAnimationEnclosingPane = new LayoutPane(longevityAnimationPane) {
                         @Override
-                        protected void layoutChildren() {
-                            layoutInArea(longevityAnimationPane, 0, 0, getWidth(), getHeight() - getTransitionalTitleSpace(), 0, HPos.CENTER, VPos.CENTER);
+                        protected void layoutChildren(double width, double height) {
+                            layoutInArea(longevityAnimationPane, 0, 0, width, height - getTransitionalTitleSpace());
                         }
                     };
-                    titleText.opacityProperty().addListener(e -> longevityAnimationEnclosingPane.requestLayout());
+                    titleText.opacityProperty().addListener(e -> longevityAnimationEnclosingPane.forceLayoutChildren());
                 }
                 longevityAnimationPane.startBackToOriginalAnimation(cardTransition);
                 changeFlipContent(longevityAnimationEnclosingPane);

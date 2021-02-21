@@ -1,11 +1,10 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.SvgLogoPaths;
-import dev.webfx.website.application.WebSiteShared;
+import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.ScalePane;
 import eu.hansolo.enzo.flippanel.FlipPanel;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.SVGPath;
@@ -13,7 +12,7 @@ import javafx.scene.shape.SVGPath;
 /**
  * @author Bruno Salmon
  */
-public final class FxWreathPane extends Pane {
+public final class FxWreathPane extends LayoutPane {
 
     private final SVGPath wreathSVGPath;
     private final SVGPath fxLogo = WebSiteShared.createFxLogo();
@@ -46,11 +45,11 @@ public final class FxWreathPane extends Pane {
     }
 
     @Override
-    protected void layoutChildren() {
-        double w = getWidth(), h = getHeight(), s = Math.min(w, h);
-        layoutInArea(wreathPane,(w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+    protected void layoutChildren(double width, double height) {
+        double w = width, h = height, s = Math.min(w, h);
+        centerInArea(wreathPane,(w - s) / 2, (h - s) / 2, s, s);
         s *= 0.4;
-        layoutInArea(flipPanel,    (w - s) / 2, (h - s) / 2, s, s, 0, HPos.CENTER, VPos.CENTER);
+        centerInArea(flipPanel,    (w - s) / 2, (h - s) / 2, s, s);
         thumbUp.setScaleX(fxLogo.getScaleX() * 1.25);
         thumbUp.setScaleY(fxLogo.getScaleY() * 1.25);
     }
