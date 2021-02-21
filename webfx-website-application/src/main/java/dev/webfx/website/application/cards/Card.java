@@ -1,8 +1,8 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
 import javafx.scene.Node;
@@ -13,10 +13,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 import static dev.webfx.website.application.shared.WebSiteShared.CARD_TRANSLUCENT_BACKGROUND;
+import static dev.webfx.website.application.shared.WebSiteShared.updateFontSize;
 
 /**
  * @author Bruno Salmon
@@ -24,7 +24,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.CARD_TRANSLUCEN
 public abstract class Card extends LayoutPane {
 
     private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
-    private static double cardWidth, cardHeight, maxTitleHeight, maxHtmlHeight;
+    private static double maxTitleHeight, maxHtmlHeight;
 
     public static final Card[] cards = {
             new WebFxCard(),
@@ -120,24 +120,24 @@ public abstract class Card extends LayoutPane {
     protected void layoutChildren(double width, double height) {
         double w = width, h = height, hgap = w * 0.02;
         w -= 2 * hgap;
-        if (w != cardWidth || h != cardHeight) {
-            maxTitleHeight = maxHtmlHeight = 0;
-            Font titleFont   = Font.font("Arial", FontWeight.BOLD,   Math.max(16, w * 0.07));
-            Font captionFont = Font.font("Arial", FontWeight.NORMAL, Math.max(16, Math.sqrt(w * h) * 0.035));
-            WebSiteShared.htmlTextFont = captionFont;
-            for (Card card : cards) {
-                card.titleText.setFont(titleFont);
-                maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
-                card.captionText1.setFont(captionFont);
-                card.captionText2.setFont(captionFont);
-                HtmlText htmlText = card.captionText1.getTranslateX() == 0 ? card.captionText2 : card.captionText1;
-                String savedText = htmlText.getText();
-                WebSiteShared.setHtmlText(htmlText, card.longestCaption);
-                maxHtmlHeight = Math.max(htmlText.prefHeight(w), maxHtmlHeight);
-                htmlText.setText(savedText);
-            }
-            cardWidth = w;
-            cardHeight = h;
+        maxTitleHeight = maxHtmlHeight = 0;
+        double titleFontSize   = Math.max(16, w * 0.07);
+        double captionFontSize = Math.max(16, Math.sqrt(w * h) * 0.035);
+        Font titleFont = null, captionFont = null;
+        for (Card card : cards) {
+            if (titleFont == null)
+                titleFont = updateFontSize(card.titleText.getFont(), titleFontSize, true);
+            card.titleText.setFont(titleFont);
+            maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
+            if (captionFont == null)
+                captionFont = WebSiteShared.htmlTextFont = updateFontSize(card.captionText1.getFont(), captionFontSize, false);
+            card.captionText1.setFont(captionFont);
+            card.captionText2.setFont(captionFont);
+            HtmlText htmlText = card.captionText1.getTranslateX() == 0 ? card.captionText2 : card.captionText1;
+            String savedText = htmlText.getText();
+            WebSiteShared.setHtmlText(htmlText, card.longestCaption);
+            maxHtmlHeight = Math.max(htmlText.prefHeight(w), maxHtmlHeight);
+            htmlText.setText(savedText);
         }
         double ny = h;
         double nh = maxHtmlHeight;

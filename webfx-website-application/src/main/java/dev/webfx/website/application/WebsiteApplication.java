@@ -17,8 +17,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -57,8 +55,8 @@ public final class WebsiteApplication extends Application {
                 githubLogoPane.setVisible(showMenu);
                 if (showMenu) {
                     double fontSize = Math.min(0.08 * w, 0.12 * h);
-                    updateFontSize(webFxText, fontSize, true);
-                    updateFontSize(demosText, fontSize, true);
+                    updateTextFontSize(webFxText, fontSize);
+                    updateTextFontSize(demosText, fontSize);
                     vh = webFxText.prefHeight(w);
                     centerInArea(webFxText, 0, 0, w, vh);
                     centerInArea(demosText, 0, 0, w/3, vh);
@@ -120,11 +118,9 @@ public final class WebsiteApplication extends Application {
         stage.show();
     }
 
-    private static void updateFontSize(Text text, double fontSize, boolean bold) {
-        if (text.getFont().getSize() != fontSize) {
-            text.setFont(Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize));
-            text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
-        }
+    public static void updateTextFontSize(Text text, double fontSize) {
+        text.setFont(updateFontSize(text.getFont(), fontSize, true));
+        text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
     }
 
     private void showDemos(boolean show) {

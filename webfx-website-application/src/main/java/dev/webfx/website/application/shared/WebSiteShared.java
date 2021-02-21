@@ -84,6 +84,12 @@ public final class WebSiteShared {
         return htmlText;
     }
 
+    public static Font updateFontSize(Font font, double fontSize, boolean bold) {
+        if (font == null || font.getSize() != fontSize)
+            font = Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize);
+        return font;
+    }
+
     public static LinearGradient createAngleGithubGradient(double angle) {
         return createAngleGithubGradient(angle, 200, 0);
     }
