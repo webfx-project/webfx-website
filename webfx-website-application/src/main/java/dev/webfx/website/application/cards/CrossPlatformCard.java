@@ -60,7 +60,6 @@ final class CrossPlatformCard extends Card {
         gluonImageView = createImageView("Gluon.png");
         webFxText = createWebFxSvgText();
         flipPanel = new FlipPanel();
-        flipPanel.flipToBack();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
         ScalePane flipPanelScalePane = new ScalePane(flipPanel);
         LayoutPane pane = new LayoutPane(platformScalePane, flipPanelScalePane) {
@@ -79,7 +78,9 @@ final class CrossPlatformCard extends Card {
     private ImageView createImageView(String resourcePath) {
         ImageView imageView = ImageLoader.loadImage(resourcePath);
         imageView.setEffect(dropShadow);
-        //imageView.setAccessibleText(resourcePath);
+        // Setting the size of the image (both images are 90x90) to avoid a problem on HTML version (bad position image once loaded because of LayoutPane that doesn't redo layout)
+        imageView.setFitWidth(90);
+        imageView.setFitHeight(90);
         return imageView;
     }
 

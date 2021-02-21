@@ -72,12 +72,6 @@ final class JavaFullStackCard extends Card {
                 new FlipPanel(), // For backend language
                 new FlipPanel()  // For server language
         };
-        puzzles = new Node[] {
-                createPuzzle(Color.RED),
-                createPuzzle(Color.YELLOW),
-                createPuzzle(Color.BLUE),
-                createPuzzle(Color.GREEN)
-        };
         CirclePane frontendCirclePane = new CirclePane("Front-end", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
         CirclePane backendCirclePane  = new CirclePane("Back-end",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
         CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
@@ -85,7 +79,7 @@ final class JavaFullStackCard extends Card {
         frontendCirclePane.setBlendMode(BlendMode.SCREEN);
         backendCirclePane.setBlendMode(BlendMode.SCREEN);
         serverCirclePane.setBlendMode(BlendMode.SCREEN);
-        pane = new LayoutPane(frontendCirclePane, backendCirclePane, serverCirclePane) { { getChildren().addAll(puzzles); }
+        pane = new LayoutPane(frontendCirclePane, backendCirclePane, serverCirclePane) {
             @Override
             protected void layoutChildren(double width, double height) {
                 double w = width, h = height, s = Math.min(w, h), wd2 = w / 2, hd2 = h / 2, sd2 = s / 2, r = sd2 * 0.49, d = 2 * r;
@@ -121,7 +115,9 @@ final class JavaFullStackCard extends Card {
     }
 
     private static Node createPuzzle(Paint fill) {
-        return new ScalePane(createLogoSVGPath(SvgLogoPaths.getPuzzlePath(), fill));
+        ScalePane puzzle = new ScalePane(createLogoSVGPath(SvgLogoPaths.getPuzzlePath(), fill));
+        puzzle.setOpacity(0);
+        return puzzle;
     }
 
     private void preloadImages(Node... nodes) {
@@ -153,8 +149,16 @@ final class JavaFullStackCard extends Card {
         updateFlipPanels(toolkitFlipPanels,  stepToolkitLogos,  step, cardTransition);
         updateFlipPanels(languageFlipPanels, stepLanguageLogos, step, cardTransition);
         cardTransition.addKeyValue(new KeyValue(expansionProperty, step == 1 || step >= 6 ? 0 : 1));
-        for (Node puzzle : puzzles)
-            cardTransition.addKeyValue(new KeyValue(puzzle.opacityProperty(), step == 7 ? 1 : 0));
+        if (step == 7 && puzzles == null)
+            pane.getChildren().addAll(puzzles = new Node[] {
+                    createPuzzle(Color.RED),
+                    createPuzzle(Color.YELLOW),
+                    createPuzzle(Color.BLUE),
+                    createPuzzle(Color.GREEN)
+                });
+        if (puzzles != null)
+            for (Node puzzle : puzzles)
+                cardTransition.addKeyValue(new KeyValue(puzzle.opacityProperty(), step == 7 ? 1 : 0));
     }
 
     private void updateFlipPanels(FlipPanel[] flipPanels, Node[] logos, int step, CardTransition cardTransition) {

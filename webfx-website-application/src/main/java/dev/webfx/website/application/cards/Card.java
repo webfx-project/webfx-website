@@ -24,7 +24,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.updateFontSize;
 public abstract class Card extends LayoutPane {
 
     private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
-    private static double maxTitleHeight, maxHtmlHeight;
+    private static double cardWidth, cardHeight, maxTitleHeight, maxCaptionHeight;
 
     public static final Card[] cards = {
             new WebFxCard(),
@@ -35,24 +35,36 @@ public abstract class Card extends LayoutPane {
             new MagicalCard(),
     };
 
-    protected final Node illustrationNode;
-    protected final Text titleText;
+    private final String title;
+    private boolean initialized;
+    protected Node illustrationNode;
+    protected Text titleText;
     protected final HtmlText captionText1 = new HtmlText(), captionText2 = new HtmlText();
     protected int currentAnimationStep = 0;
     protected boolean forwardingStep;
     private CardTransition cardTransition;
-    private final String longestCaption;
+    private String longestCaption;
 
     Card(String title) {
+        this.title = title;
         setBorder(CARD_BORDER);
         WebSiteShared.setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND, CARD_BORDER.getStrokes().get(0).getRadii());
-        String longestCaption = "";
+    }
+
+    public boolean checkInitialized() {
+        if (initialized)
+            return true;
+        init();
+        return false;
+    }
+
+    protected void init() {
+        longestCaption = "";
         for (int step = 1; caption(step) != null; step++) {
             String caption = caption(step);
             if (caption.length() > longestCaption.length())
                 longestCaption = caption;
         }
-        this.longestCaption = longestCaption;
         titleText = WebSiteShared.setUpText(new Text(title + " \u2192"), 30, true, true, false, true);
         illustrationNode = createIllustrationNode();
         captionText1.setMouseTransparent(true);
@@ -61,6 +73,8 @@ public abstract class Card extends LayoutPane {
         transitionToNextStep();
         WebSiteShared.runOnMouseClick(this, e -> doStepTransition(!e.isControlDown()));
         setUpCardClip();
+        initialized = true;
+        cardWidth = 0;
     }
 
     void setUpCardClip() {
@@ -111,24 +125,26 @@ public abstract class Card extends LayoutPane {
         );
         enteringCaptionText.setVisible(true);
         cardTransition.addOnFinished(() -> leavingCaptionText.setVisible(false));
-        forceLayoutChildren(); // Since we have changed the content of the caption, it is necessary to request a layout
+        forceLayoutChildren(); // Since we have changed the content of the caption, it is necessary to update the layout
     }
 
     abstract String caption(int step);
 
-    @Override
-    protected void layoutChildren(double width, double height) {
-        double w = width, h = height, hgap = w * 0.02;
-        w -= 2 * hgap;
-        maxTitleHeight = maxHtmlHeight = 0;
-        double titleFontSize   = Math.max(16, w * 0.07);
-        double captionFontSize = Math.max(16, Math.sqrt(w * h) * 0.035);
+    private static void computeMaxTextHeights(double width, double height) {
+        if (cardWidth == width && cardHeight == height)
+            return;
+        cardWidth = width; cardHeight = height;
+        maxTitleHeight = maxCaptionHeight = 0;
+        double titleFontSize   = Math.max(16, width * 0.07);
+        double captionFontSize = Math.max(16, Math.sqrt(width * height) * 0.035);
         Font titleFont = null, captionFont = null;
         for (Card card : cards) {
+            if (!card.initialized)
+                continue;
             if (titleFont == null)
                 titleFont = updateFontSize(card.titleText.getFont(), titleFontSize, true);
             card.titleText.setFont(titleFont);
-            maxTitleHeight = Math.max(card.titleText.prefHeight(w), maxTitleHeight);
+            maxTitleHeight = Math.max(card.titleText.prefHeight(width), maxTitleHeight);
             if (captionFont == null)
                 captionFont = WebSiteShared.htmlTextFont = updateFontSize(card.captionText1.getFont(), captionFontSize, false);
             card.captionText1.setFont(captionFont);
@@ -136,11 +152,20 @@ public abstract class Card extends LayoutPane {
             HtmlText htmlText = card.captionText1.getTranslateX() == 0 ? card.captionText2 : card.captionText1;
             String savedText = htmlText.getText();
             WebSiteShared.setHtmlText(htmlText, card.longestCaption);
-            maxHtmlHeight = Math.max(htmlText.prefHeight(w), maxHtmlHeight);
+            maxCaptionHeight = Math.max(htmlText.prefHeight(width), maxCaptionHeight);
             htmlText.setText(savedText);
         }
+    }
+
+    @Override
+    protected void layoutChildren(double width, double height) {
+        if (!initialized)
+            return;
+        double w = width, h = height, hgap = w * 0.02;
+        w -= 2 * hgap;
+        computeMaxTextHeights(w, h);
         double ny = h;
-        double nh = maxHtmlHeight;
+        double nh = maxCaptionHeight;
         double vGap = h * 0.02;
         ny -= nh + vGap;
         captionText1.setMaxHeight(captionText1.prefHeight(w));

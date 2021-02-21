@@ -15,7 +15,6 @@ import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -38,7 +37,7 @@ public final class WebsiteApplication extends Application {
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
     private DemoThumbnailsPane demoThumbnailsPane;
     private AnimationTimer webFxFillAnimationTimer;
-    private Pane cardsPane;
+    private LayoutPane cardsPane;
     private int visibleCardsCount, focusedCardIndex = -1;
     private boolean showMenu = true, verticalCards;
     private Timeline scrollTimeline;
@@ -65,6 +64,9 @@ public final class WebsiteApplication extends Application {
                 if (demoThumbnailsPane != null)
                     layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh);
                 visibleCardsCount = Math.max(1, Math.min(Card.cards.length, (int) (2 * w / h)));
+                int firstVisibleCardIndex = Math.max(0, focusedCardIndex);
+                for (int i = firstVisibleCardIndex; i < Math.min(Card.cards.length, firstVisibleCardIndex + visibleCardsCount); i++)
+                    Card.cards[i].checkInitialized();
                 gap = Math.max(5, w * 0.01);
                 w -= (visibleCardsCount + 1) * gap; h -= gap;
                 double cx = gap, cy = vh, cw = w / visibleCardsCount, ch = h - vh;
@@ -171,6 +173,8 @@ public final class WebsiteApplication extends Application {
         if (!verticalCards) {
             cardsPane.setTranslateY(0);
             int leftCardIndex = Math.max(0, Math.min(Card.cards.length - visibleCardsCount, focusedCardIndex - 1));
+            if (!Card.cards[Math.min(Card.cards.length - 1, leftCardIndex + visibleCardsCount - 1)].checkInitialized())
+                cardsPane.forceLayoutChildren();
             double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / visibleCardsCount;
             if (Card.cards[0].getTranslateX() != translateX && translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();

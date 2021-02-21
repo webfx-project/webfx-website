@@ -49,7 +49,7 @@ final class WebFxCloudAnimationPane extends LayoutPane {
             updateGithubGradients(animationTimeMillis);
         }
     };
-    private final DoubleProperty expansionProperty = new SimpleDoubleProperty() {
+    private final DoubleProperty expansionProperty = new SimpleDoubleProperty(1) {
         @Override
         protected void invalidated() {
             forceLayoutChildren();
@@ -101,11 +101,11 @@ final class WebFxCloudAnimationPane extends LayoutPane {
 
     void playContractionAnimation(CardTransition cardTransition) {
         cardTransition.addKeyValue(
-                new KeyValue(expansionProperty, 0),
-                new KeyValue(arrowUp.opacityProperty(), 0),
-                new KeyValue(jsLogoPane.opacityProperty(), 0),
+                new KeyValue(expansionProperty,             0),
+                new KeyValue(jsLogoPane.opacityProperty(),  0),
                 new KeyValue(gwtLogoPane.opacityProperty(), 0),
-                new KeyValue(gwtTextPane.opacityProperty(), 0)
+                new KeyValue(gwtTextPane.opacityProperty(), 0),
+                new KeyValue(arrowUp.opacityProperty(),     0)
         );
     }
 
@@ -118,10 +118,10 @@ final class WebFxCloudAnimationPane extends LayoutPane {
             arrowUp.setOpacity(1);
         } else cardTransition.addOnFinished(() -> {
             cardTransition.addKeyValue(
-                    new KeyValue(arrowUp.opacityProperty(), 1),
-                    new KeyValue(jsLogoPane.opacityProperty(), 1),
+                    new KeyValue(jsLogoPane.opacityProperty(),  1),
                     new KeyValue(gwtLogoPane.opacityProperty(), 1),
-                    new KeyValue(gwtTextPane.opacityProperty(), 1)
+                    new KeyValue(gwtTextPane.opacityProperty(), 1),
+                    new KeyValue(arrowUp.opacityProperty(),     1)
             );
             cardTransition.run(true);
         });
