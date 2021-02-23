@@ -22,7 +22,7 @@ final class WebFxCard extends FlipCard {
             case 5: return "and transpile it only from time to time to check your web version is working as expected.";
             case 6: return "WebFX is just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
             case 7: return "With WebFX, JavaFX shall become the first major desktop toolkit that can be transpiled to the web!";
-            case 8: return "WebFX will soon be ready for beta testing. We hope you will love it, and receive great benefits from it.";
+            case 8: return "WebFX will soon be ready for testing.<br/> We hope you will love it.";
             default : return null;
         }
     }

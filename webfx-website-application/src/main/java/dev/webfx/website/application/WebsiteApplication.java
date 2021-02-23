@@ -121,7 +121,7 @@ public final class WebsiteApplication extends Application {
     }
 
     public static void updateTextFontSize(Text text, double fontSize) {
-        text.setFont(updateFontSize(text.getFont(), fontSize, true));
+        WebSiteShared.updateTextFontSize(text, fontSize, true);
         text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
     }
 

@@ -6,10 +6,7 @@ import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
 import javafx.scene.Node;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -35,6 +32,7 @@ public abstract class Card extends LayoutPane {
             new MagicalCard(),
     };
 
+    private final Rectangle clip = new Rectangle();
     private final String title;
     private boolean initialized;
     protected Node illustrationNode;
@@ -72,16 +70,9 @@ public abstract class Card extends LayoutPane {
         getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
         transitionToNextStep();
         WebSiteShared.runOnMouseClick(this, e -> doStepTransition(!e.isControlDown()));
-        setUpCardClip();
+        setClip(clip);
         initialized = true;
         cardWidth = 0;
-    }
-
-    void setUpCardClip() {
-        Rectangle clip = new Rectangle();
-        clip.widthProperty().bind(widthProperty());
-        clip.heightProperty().bind(heightProperty());
-        setClip(clip);
     }
 
     abstract Node createIllustrationNode();
@@ -161,6 +152,8 @@ public abstract class Card extends LayoutPane {
     protected void layoutChildren(double width, double height) {
         if (!initialized)
             return;
+        clip.setWidth(width);
+        clip.setHeight(height);
         double w = width, h = height, hgap = w * 0.02;
         w -= 2 * hgap;
         computeMaxTextHeights(w, h);

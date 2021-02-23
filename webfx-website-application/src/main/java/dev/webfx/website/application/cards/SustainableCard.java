@@ -41,7 +41,7 @@ final class SustainableCard extends FlipCard {
             case 6: return "Another requirement for your web application to grow successfully is a good refactoring support.";
             case 7: return "And one big advantage of a strict language like Java is to excel in refactoring.";
             case 8: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
-            case 9: return "This was the main motivation to build WebFX: make these sustainable technologies available for the web as an alternative to the short-lived web technologies.";
+            case 9: return "This is what has motivated us to build WebFX: make these sustainable technologies available for the web as an alternative to the short-lived web technologies.";
             default: return null;
         }
     }
@@ -87,8 +87,6 @@ final class SustainableCard extends FlipCard {
                             new KeyValue(years12.opacityProperty(), 1),
                             new KeyValue(years12.scaleXProperty(), 2, Interpolator.SPLINE(1, 0.5, 1, 1))
                     );
-                    //setClip(null);
-                    cardTransition.addOnFinished(this::setUpCardClip);
                 }
                 if (forwardingStep)
                     changeFlipContent(vBox);

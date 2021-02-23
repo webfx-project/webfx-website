@@ -79,15 +79,24 @@ public final class WebSiteShared {
 
     public static HtmlText setHtmlText(HtmlText htmlText, String text) {
         htmlText.setFont(htmlTextFont);
-        htmlText.setText(text == null ? null : "<center style='font-style: oblique; line-height: 1.5em; color:white'>" + text + "</center>");
+        htmlText.setText(text == null ? null : "<center style='font-style: oblique; line-height: 1.5em;'>" + text + "</center>");
+        htmlText.setFill(Color.WHITE);
         htmlText.setMouseTransparent(true);
         return htmlText;
     }
 
     public static Font updateFontSize(Font font, double fontSize, boolean bold) {
         if (font == null || font.getSize() != fontSize)
-            font = Font.font("Arial", bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize);
+            font = Font.font(font == null ?"Arial" : font.getFamily(), bold ? FontWeight.BOLD : FontWeight.NORMAL, fontSize);
         return font;
+    }
+
+    public static void updateTextFontSize(Text text, double fontSize, boolean bold) {
+        text.setFont(updateFontSize(text.getFont(), fontSize, bold));
+    }
+
+    public static void updateTextFontSize(HtmlText text, double fontSize, boolean bold) {
+        text.setFont(updateFontSize(text.getFont(), fontSize, bold));
     }
 
     public static LinearGradient createAngleGithubGradient(double angle) {
