@@ -21,7 +21,8 @@ import java.util.Arrays;
  */
 final class CirclePane extends LayoutPane {
 
-    private final double angle, lettersAngle;
+    private final double angle, lettersAngle, lettersAngleLength;
+    private final boolean showBorder;
     private double radius;
     private final Text[] circleLetters;
     private Paint stroke = Color.WHITE;
@@ -34,8 +35,14 @@ final class CirclePane extends LayoutPane {
     };
 
     CirclePane(String circleText, double angle, Paint fill, Node topNode, Node bottomNode) {
+        this(circleText, angle, -1 , fill, topNode, bottomNode, fill != Color.TRANSPARENT);
+    }
+
+    CirclePane(String circleText, double angle, double lettersAngleLength, Paint fill, Node topNode, Node bottomNode, boolean showBorder) {
         this.angle = angle;
         this.lettersAngle = angle;
+        this.lettersAngleLength = lettersAngleLength > 0 ? lettersAngleLength : 0.9 * 90 * (circleText.length() <= 9 ? 1 : circleText.length() / 6.);
+        this.showBorder = showBorder;
         topScalePane = createScalePane(topNode);
         bottomScalePane = createScalePane(bottomNode);
         circleLetters = circleText == null ? null : createLetters(circleText);
@@ -87,7 +94,7 @@ final class CirclePane extends LayoutPane {
     private void updateBackground(boolean updateBorder) {
         CornerRadii radii = new CornerRadii(radius);
         WebSiteShared.setRegionBackground(this, getFill(), radii);
-        if (updateBorder)
+        if (updateBorder && showBorder)
             setBorder(new Border(new BorderStroke(stroke, BorderStrokeStyle.SOLID, radii, new BorderWidths(radius * 0.05))));
     }
 
@@ -116,7 +123,7 @@ final class CirclePane extends LayoutPane {
             double length = Arrays.stream(circleLetters).mapToDouble(l -> getLetterBounds(l).getWidth()).sum();
             boolean top = lettersAngle < 0;
             double middleAngle = (top ? -1 : +1) * Math.PI / 2;  //lettersAngle * Math.PI / 180;
-            double anglePerLength = 0.9 * Math.PI / 2 / length * (top ? 1 : -1);
+            double anglePerLength = lettersAngleLength * Math.PI / 180 / length * (top ? 1 : -1);
             double angle = middleAngle - anglePerLength * length / 2;
             Font font = Font.font(r * 0.2);
             for (Text letter : circleLetters) {
@@ -124,6 +131,9 @@ final class CirclePane extends LayoutPane {
                 Bounds letterBounds = getLetterBounds(letter);
                 double lw = letterBounds.getWidth();
                 double lh = letterBounds.getHeight();
+                if (lw == 0 && lh == 0) { // this happens only in the browser (not OpenJFX) for the space character
+                    lw = 4; lh = 16; // Correcting the values to make the expected space between the letters
+                }
                 angle += anglePerLength * lw / 2;
                 if (letter.getRotate() != angle) {
                     letter.setRotate(angle / Math.PI * 180 + (top ? 90 : -90));

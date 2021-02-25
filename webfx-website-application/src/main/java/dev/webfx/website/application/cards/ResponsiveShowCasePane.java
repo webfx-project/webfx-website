@@ -28,14 +28,14 @@ final class ResponsiveShowCasePane extends Pane {
     protected void layoutChildren() {
         // Getting the width and height of this container
         double width = getWidth(), height = getHeight();
-        // Salmon region x, y, w, h => by default: left part of top
+        // Sand region x, y, w, h => by default: left part of top
         double sx = 0, sy = 0, sw = width / 2, sh = 50; // 50px height
         // Pink region x, y, w, h => by default: right part of top
         double px = sw, py = sy, pw = width - sw, ph = sh;
-        // But if the salmon region becomes too small, we stack the 2 regions vertically
-        if (sw < 50) { // Let's say 50px is the minimal salmon width
+        // But if the sand region becomes too small, we stack the 2 regions vertically
+        if (sw < 50) { // Let's say 50px is the minimal sand width
             sw = pw = width; // Finally allocating whole width for both regions
-            px = 0; py = sy + sh; // And moving the pink region below the salmon region
+            px = 0; py = sy + sh; // And moving the pink region below the sand region
         }
         double rh = height - py - ph; // Remaining height (under the pink region)
         // Green region x, y, w, h => by default: upper part of remaining space
