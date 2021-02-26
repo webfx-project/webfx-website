@@ -20,15 +20,15 @@ public final class DemoThumbnailsPane extends Pane {
 
     public DemoThumbnailsPane() {
         super(
-                new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true,  "https://colorfulcircles.webfx.dev", "https://github.com/webfx-project/webfx-demo-colorfulcircles"),
-                new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true,  "https://particles.webfx.dev",       "https://github.com/webfx-project/webfx-demo-particles"),
-                new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false, "https://tallycounter.webfx.dev",    "https://github.com/webfx-project/webfx-demo-tallycounter"),
-                new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false, "https://moderngauge.webfx.dev",     "https://github.com/webfx-project/webfx-demo-moderngauge"),
-                new DemoThumbnail("Enzo clocks",      CUSTOM_CONTROL, "EnzoClocks.png",      true,  "https://enzoclocks.webfx.dev",      "https://github.com/webfx-project/webfx-demo-enzoclocks"),
-                new DemoThumbnail("FX2048",           GAME,           "FX2048.png",          false, "https://fx2048.webfx.dev",          "https://github.com/webfx-project/webfx-demo-fx2048"),
-                new DemoThumbnail("SpaceFX",          GAME,           "SpaceFX.png",         false, "https://spacefx.webfx.dev",         "https://github.com/webfx-project/webfx-demo-spacefx"),
-                new DemoThumbnail("Ray tracer",       WEB_WORKER,     "RayTracer.png",       true,  "https://raytracer.webfx.dev",       "https://github.com/webfx-project/webfx-demo-raytracer"),
-                new DemoThumbnail("Mandelbrot",       WEBASSEMBLY,    "Mandelbrot.png",      true,  "https://mandelbrot.webfx.dev",      "https://github.com/webfx-project/webfx-demo-mandelbrot")
+                new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true),
+                new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
+                new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false),
+                new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false),
+                new DemoThumbnail("Enzo clocks",      CUSTOM_CONTROL, "EnzoClocks.png",      true),
+                new DemoThumbnail("FX2048",           GAME,           "FX2048.png",          false),
+                new DemoThumbnail("SpaceFX",          GAME,           "SpaceFX.png",         false),
+                new DemoThumbnail("Ray tracer",       WEB_WORKER,     "RayTracer.png",       true),
+                new DemoThumbnail("Mandelbrot",       WEBASSEMBLY,    "Mandelbrot.png",      true)
         );
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));

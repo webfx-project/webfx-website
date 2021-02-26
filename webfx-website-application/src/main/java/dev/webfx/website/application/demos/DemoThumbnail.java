@@ -46,6 +46,14 @@ final class DemoThumbnail extends Pane {
     private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
 
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop) {
+        this(demoName, demoCategory, imageName, crop, imageName.substring(0, imageName.indexOf('.')).toLowerCase());
+    }
+
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String token) {
+        this(demoName, demoCategory, imageName, crop, "https://" + token + ".webfx.dev", "https://github.com/webfx-demos/webfx-demo-" + token);
+    }
+
     public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String demoLink, String repositoryLink) {
         this.demoLink = demoLink;
         setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
