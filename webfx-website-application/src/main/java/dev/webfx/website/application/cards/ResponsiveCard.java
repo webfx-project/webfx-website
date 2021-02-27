@@ -30,15 +30,16 @@ final class ResponsiveCard extends FlipCard {
         super("Responsive");
     }
 
-    private static Pane createScreen(Node content, double scale) {
+    private static Pane createDeviceScreen(Node content, double screenDeviceWidth) {
         Rectangle contentClip = new Rectangle();
         content.setClip(contentClip);
-        content.setScaleX(scale);
-        content.setScaleY(scale);
         return new LayoutPane(content) {
             @Override
             protected void layoutChildren(double width, double height) {
-                double borderWidth = 0.06 * Math.min(width, height), borderHeight = borderWidth * (scale < 0.5 ? 4 : 1);
+                double borderWidthPercent = 0.05, scale = screenDeviceWidth < 0 ? 1 : width * (1 - 2 * borderWidthPercent) / screenDeviceWidth;
+                content.setScaleX(scale);
+                content.setScaleY(scale);
+                double borderWidth = borderWidthPercent * width, borderHeight = borderWidth * (screenDeviceWidth > 0 && screenDeviceWidth < 400 ? 4 : 1);
                 WebSiteShared.setRegionBackground(this, Color.gray(0.1), new CornerRadii(borderWidth));
                 double cw = (width - 2 * borderWidth) / scale, ch = (height - 2 * borderHeight) / scale, cx = borderWidth - cw * (1 - scale) / 2, cy = borderHeight -ch * (1 - scale) / 2;
                 layoutInArea(content, cx, cy, cw, ch);
@@ -48,8 +49,12 @@ final class ResponsiveCard extends FlipCard {
         };
     }
 
-    private static Pane createScreen(double scale) {
-        return createScreen(new ResponsiveShowCasePane(), scale);
+    private static Pane createShowCaseDeviceScreen(double screenDeviceWidth) {
+        return createDeviceScreen(new ResponsiveShowCasePane(), screenDeviceWidth);
+    }
+
+    private static Pane createSplitBarShowCaseDeviceScreen() {
+        return createDeviceScreen(ResponsiveShowCasePane.createSplitPanes(), -1);
     }
 
     @Override
@@ -71,7 +76,7 @@ final class ResponsiveCard extends FlipCard {
         switch (step) {
             case 1:
                 if (desktopTabletMobilePane == null) {
-                    Pane desktopScreen = createScreen(1), tabletScreen = createScreen(0.7), mobileScreen = createScreen(0.3);
+                    Pane desktopScreen = createShowCaseDeviceScreen(1024), tabletScreen = createShowCaseDeviceScreen(768), mobileScreen = createShowCaseDeviceScreen(360);
                     Pane thumbUpPane = new ScalePane(thumbUp = WebSiteShared.createThumbUp());
                     thumbUp.setFill(Color.WHITE);
                     thumbUp.setEffect(WebSiteShared.dropShadow);
@@ -80,8 +85,8 @@ final class ResponsiveCard extends FlipCard {
                         protected void layoutChildren(double width, double height) {
                             height -= getTitleSpace();
                             double dx = 0, dy = 0.1 * height, dw = width, dh = 0.7 * height;
-                            double th = 0.5 * height, tw = th * 3 / 4, tx = 0.65 * width - tw / 2, ty = 0.7 * height - th / 2;
-                            double mh = 0.25 * height, mw = mh * 414 / 736 , mx = 0.25 * width - mw / 2, my = ty + th - mh;
+                            double th = 0.5 * height, tw = th * 0.75, tx = 0.65 * width - tw / 2, ty = 0.7 * height - th / 2;
+                            double mh = 0.25 * height, mw = mh * 0.6 , mx = 0.25 * width - mw / 2, my = ty + th - mh;
                             double uw = width / 3, uh = height / 3, ux = width / 2 - uw / 2, uy = height / 2 - uh / 2;
                             layoutInArea(desktopScreen, dx, dy, dw, dh);
                             layoutInArea(tabletScreen,  tx, ty, tw, th);
@@ -95,19 +100,19 @@ final class ResponsiveCard extends FlipCard {
                 break;
             case 2:
             case 3:
-                Pane screen = createScreen(1);
+                Pane screen = createShowCaseDeviceScreen(-1);
                 HtmlText codeText = new HtmlText();
                 if (step == 2)
-                    codeText.setText("<div style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
+                    codeText.setText("<pre style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
                             "<span style=\"color: #676773;\">// A typical JavaFX container with custom layout code:<br></span>Pane container = <span style=\"color: #e0957b;\">new </span>Pane(node1<span style=\"color: #e0957b; font-weight: bold;\">, </span>node2<span style=\"color: #e0957b; font-weight: bold;\">, </span>node3<span style=\"color: #e0957b; font-weight: bold;\">, </span>..., nodeN) {<br><span style=\"color: #85a658;\">&nbsp; &nbsp; @Override </span><span style=\"color: #e0957b;\">protected void </span><span style=\"color: #c7a65d;\">layoutChildren</span>() {<br><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // Your layout code here. It will be automatically<br></span><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // called by JavaFX at appropriate times!<br></span>&nbsp; &nbsp; }<br>}<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>\n" +
-                            "</div>");
+                            "</pre>");
                 else
-                    codeText.setText("<div style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
+                    codeText.setText("<pre style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
                             "<span style=\"color: #676773;\">// Example of a simple responsive design implementation:<br></span>Pane container = <span style=\"color: #e0957b;\">new </span>Pane(node1<span style=\"color: #e0957b; font-weight: bold;\">, </span>node2<span style=\"color: #e0957b; font-weight: bold;\">, </span>node3<span style=\"color: #e0957b; font-weight: bold;\">, </span>..., nodeN) {<br><span style=\"color: #85a658;\">&nbsp; &nbsp; @Override </span><span style=\"color: #e0957b;\">protected void </span><span style=\"color: #c7a65d;\">layoutChildren</span>() {<br><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // Getting the dimensions of the container<br></span><span style=\"color: #e0957b;\">&nbsp; &nbsp; &nbsp; &nbsp; double </span>width = getWidth()<span style=\"color: #e0957b; font-weight: bold;\">, </span>height = getHeight()<span style=\"color: #e0957b; font-weight: bold;\">;<br></span><span style=\"color: #e0957b;\"><span style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\"><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // Your responsive rules can look like this:<br></span></span>&nbsp; &nbsp; &nbsp; &nbsp; double </span>x1<span style=\"color: #e0957b; font-weight: bold;\">, </span>y1<span style=\"color: #e0957b; font-weight: bold;\">, </span>h1<span style=\"color: #e0957b; font-weight: bold;\">, </span>w1<span style=\"color: #e0957b; font-weight: bold;\">, </span>x2<span style=\"color: #e0957b; font-weight: bold;\">, </span>y2<span style=\"color: #e0957b; font-weight: bold;\">,</span> etc...<span style=\"color: #e0957b; font-weight: bold;\">;<br></span><span style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\"><span style=\"color: #e0957b;\">&nbsp; &nbsp; &nbsp; &nbsp; if </span>(width &gt; <span style=\"color: #4dacf0;\">1024</span>) {<br>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; x1 = ...<span style=\"color: #e0957b; font-weight: bold;\">; </span>y1 = ...<span style=\"color: #e0957b; font-weight: bold;\">;</span> etc...<span style=\"color: #e0957b; font-weight: bold;\"><br></span>&nbsp; &nbsp; &nbsp; &nbsp; } <span style=\"color: #e0957b;\">else if </span>(width &gt; <span style=\"color: #4dacf0;\">800</span>) {...} <span style=\"color: #e0957b;\">else </span>etc...</span>\n" +
                             "</div>\n" +
                             "<div style=\"background-color: #1d1d26; color: #c9c9d1; font-family: monospace; font-size: 9.8pt;\">\n" +
                             "<span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // You have direct access to your nodes and<br></span><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; // can finally position them all in one go:<br></span> &nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node1</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x1<span style=\"color: #e0957b; font-weight: bold;\">, </span>y1<span style=\"color: #e0957b; font-weight: bold;\">, </span>w1<span style=\"color: #e0957b; font-weight: bold;\">, </span>h1<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node2</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x2<span style=\"color: #e0957b; font-weight: bold;\">, </span>y2<span style=\"color: #e0957b; font-weight: bold;\">, </span>w2<span style=\"color: #e0957b; font-weight: bold;\">, </span>h2<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">node3</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>x3<span style=\"color: #e0957b; font-weight: bold;\">, </span>y3<span style=\"color: #e0957b; font-weight: bold;\">, </span>w3<span style=\"color: #e0957b; font-weight: bold;\">, </span>h3<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span><span style=\"color: #676773;\">&nbsp; &nbsp; &nbsp; &nbsp; ...<br></span>&nbsp; &nbsp; &nbsp; &nbsp; layoutInArea(<span style=\"color: #93a6f5;\">nodeN</span><span style=\"color: #e0957b; font-weight: bold;\">, </span>xN<span style=\"color: #e0957b; font-weight: bold;\">, </span>yN<span style=\"color: #e0957b; font-weight: bold;\">, </span>wN<span style=\"color: #e0957b; font-weight: bold;\">, </span>hN<span style=\"color: #e0957b; font-weight: bold;\">, </span>...)<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>&nbsp; &nbsp; }<br>}<span style=\"color: #e0957b; font-weight: bold;\">;<br></span>\n" +
-                            "</div>");
+                            "</pre>");
                 flipToNewContent(new LayoutPane(screen, codeText) {
                     @Override
                     protected void layoutChildren(double width, double height) {
@@ -132,7 +137,7 @@ final class ResponsiveCard extends FlipCard {
                 text.setFill(Color.BLACK);
                 text.setMouseTransparent(true);
                 StackPane stackPane = new StackPane(
-                        createScreen(ResponsiveShowCasePane.createSplitPanes(), 1),
+                        createSplitBarShowCaseDeviceScreen(),
                         text
                 );
                 stackPane.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {

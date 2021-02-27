@@ -44,17 +44,16 @@ final class ResponsiveShowCasePane extends Pane {
         double ow = Math.sqrt(rh * width) / 2, oh = ow, ox = width / 2 - ow / 2, oy = gy + rh / 2 - oh / 2;
         // Yellow region x, y, w, h => by default: lower part of remaining space
         double yx = gx, yy = gy + gh, yw = gw, yh = gh;
-        if (oy < py + ph) {
+        if (width / height >= 1) {
             gw = ow = yw = width / 3;
             gh = oh = yh = rh;
             ox = gx + gw;
             yx = ox + ow;
             oy = yy = gy;
-        }
-        if (ow * oh < 60 * 60) {
+        } else if (width / height < 0.72 ) {
             gw = ow = yw = width;
+            oh = 0.72 / 4 * rh * rh / ow;
             gx = ox = yx = 0;
-            oh = 60 * 60 / ow;
             oy = gy + gh; yy = oy + oh;
         }
         // Finally applying the layout with all the above calculations
