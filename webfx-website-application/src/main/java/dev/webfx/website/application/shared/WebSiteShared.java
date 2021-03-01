@@ -208,13 +208,8 @@ public final class WebSiteShared {
     }
 
     public static Pane createJSLogo() {
-        SVGPath jsPath = new SVGPath();
-        jsPath.setContent(SvgLogoPaths.getJSLogoPath());
-        jsPath.setFill(Color.web("#323330"));
-        Pane jsPane = new StackPane(jsPath);
-        jsPane.setMinSize(64, 64);
-        jsPane.setPrefSize(64, 64);
-        jsPane.setMaxSize(64, 64);
+        SVGPath jsPath = createLogoSVGPath(SvgLogoPaths.getJSLogoPath(), Color.web("#323330"), null);
+        Pane jsPane = WebSiteShared.setFixedSize(new StackPane(jsPath), 64);
         setRegionBackground(jsPane, jsYellowColor);
         return setLogoId(jsPane, "JS");
     }
@@ -291,6 +286,10 @@ public final class WebSiteShared {
         arrowUpSVGPath.setStrokeWidth(4);
         arrowUpSVGPath.setFill(Color.WHITE);
         return arrowUpSVGPath;
+    }
+
+    public static SVGPath createMedal() {
+        return createLogoSVGPath(SvgLogoPaths.getMedalPath(), Color.GOLD);
     }
 
     public static SVGPath createThumbUp() {

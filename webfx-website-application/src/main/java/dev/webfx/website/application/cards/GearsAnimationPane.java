@@ -75,7 +75,7 @@ final class GearsAnimationPane extends LayoutPane {
     protected void layoutChildren(double width, double height) {
         double javaFxHeight = javaFxLogo.prefHeight(width);
         centerInArea(javaFxLogo, 0, 0, width, javaFxHeight);
-        WebSiteShared.updateTextFontSize(noteText, 0.035 * width, false);
+        WebSiteShared.updateTextFontSize(noteText, Math.min(0.035 * width, 16), false);
         double noteHeight = noteText.prefHeight(width), gap = 10;
         centerInArea(noteText, 0, javaFxHeight + gap, width, noteHeight);
         double y0 = javaFxHeight + noteHeight + gap;
@@ -106,7 +106,7 @@ final class GearsAnimationPane extends LayoutPane {
         layoutInArea(circle1, x1 + dr, dy + y1 + dr, cd, cd);
         layoutInArea(circle2, x2 + dr, dy + y2 + dr, cd, cd);
         layoutInArea(circle3, x3 + dr, dy + y3 + dr, cd, cd);
-        double rw = 0.1 * width, rh = 0.5 * height, rx = width / 2 - rw / 2, ry = height / 2 - rh / 2 + y0;
+        double rw = 0.1 * h, rh = 0.5 * height, rx = width / 2 - rw / 2, ry = height / 2 - rh / 2 + y0;
         centerInArea(redCross1, rx, ry, rw, rh);
         centerInArea(redCross2, rx, ry, rw, rh);
     }

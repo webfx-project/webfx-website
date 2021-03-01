@@ -79,20 +79,19 @@ public class ScalePane extends Pane {
         double width = getWidth();
         double height = getHeight();
         boolean tryRescale = !node.isResizable() || alwaysTry;
+        double scale = 1;
         if (!tryRescale && node instanceof Region) {
             Region region = (Region) this.node;
             tryRescale = region.minWidth(height) > width || region.maxWidth(height) < width || region.minHeight(width) > height || region.maxHeight(width) < height;
         }
         if (tryRescale) {
             double w = node.prefWidth(height), h = node.prefHeight(width);
-            double scale = scaleMode == ScaleMode.HEIGHT ? height / h : scaleMode == ScaleMode.WIDTH ? width / w : scaleMode == ScaleMode.MIN_WIDTH_HEIGHT ? Math.min(height / h, width / w) : Math.max(height / h, width / w);
-            if (scale == 1 || scale < 1 && canShrink || scale > 1 && canGrow) {
-                if (canScaleX)
-                    node.setScaleX(scale);
-                if (canScaleY)
-                    node.setScaleY(scale);
-            }
+            scale = scaleMode == ScaleMode.HEIGHT ? height / h : scaleMode == ScaleMode.WIDTH ? width / w : scaleMode == ScaleMode.MIN_WIDTH_HEIGHT ? Math.min(height / h, width / w) : Math.max(height / h, width / w);
+            if (!canShrink && scale < 1 || !canGrow && scale > 1)
+                scale = 1;
         }
+        node.setScaleX(canScaleX ? scale : 1);
+        node.setScaleY(canScaleY ? scale : 1);
         layoutInArea(node, 0, 0, width, height, 0, HPos.CENTER, VPos.CENTER);
     }
 }

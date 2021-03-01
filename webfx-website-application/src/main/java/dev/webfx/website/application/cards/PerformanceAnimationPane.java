@@ -45,11 +45,11 @@ final class PerformanceAnimationPane extends LayoutPane {
 
     @Override
     protected void layoutChildren(double width, double height) {
-        WebSiteShared.updateTextFontSize(noteText, 0.03 * width, false);
+        WebSiteShared.updateTextFontSize(noteText, Math.min(16, 0.03 * Math.min(width, height)), false);
         double h = noteText.prefHeight(width);
         bottomInArea(noteText,0, height - h, width, h);
         height -= h;
-        WebSiteShared.updateTextFontSize(performanceText, 0.15 * width, false);
+        WebSiteShared.updateTextFontSize(performanceText, 0.15 * Math.min(width, height), false);
         bottomInArea(performanceText,0, 0, width, height);
         height -= performanceText.getLayoutBounds().getHeight();
         canvas.setWidth(width);

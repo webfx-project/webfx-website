@@ -8,6 +8,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -33,6 +34,7 @@ final class WebFxCloudAnimationPane extends LayoutPane {
     private final ScalePane cloudPane = new ScalePane(createCloud());
     private final FxWreathPane fxWreathPane = new FxWreathPane();
     private final SVGPath wreath = fxWreathPane.getWreathSVGPath();
+    private final ScalePane medalPane = new ScalePane(WebSiteShared.createMedal());
     private final ScalePane jsLogoPane = new ScalePane(WebSiteShared.createJSLogo());
     private final SVGPath gwtLogo = WebSiteShared.createGwtLogo();
     private final SVGPath gwtText = WebSiteShared.createGwtText();
@@ -58,10 +60,11 @@ final class WebFxCloudAnimationPane extends LayoutPane {
     private boolean playing;
 
     public WebFxCloudAnimationPane() {
-        getChildren().setAll(canvas, cloudPane, jsLogoPane, arrowUpScalePane, gwtLogoPane, gwtTextPane, fxWreathPane);
+        getChildren().setAll(canvas, cloudPane, jsLogoPane, arrowUpScalePane, gwtLogoPane, gwtTextPane, fxWreathPane, medalPane);
         fxWreathPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         gwtLogo.setEffect(WebSiteShared.dropShadow);
         gwtText.setEffect(WebSiteShared.dropShadow);
+        medalPane.setRotate(20);
         updateVisibilities();
     }
 
@@ -81,16 +84,18 @@ final class WebFxCloudAnimationPane extends LayoutPane {
         double w = width, h = height, hd2 = h / 2, hd4 = h / 4, expansion = expansionProperty.get();
         double sc = (0.5 - 0.1 * expansion) * h, scd2 = sc / 2, yc = 0.85 * hd2 - expansion * (hd4 * 1.2 - 0.15 * hd2);
         layoutInArea(cloudPane,0,yc - scd2, w,  sc);
-        double sa = playing ? 1.3 * hd4 : 1.6 * hd4, ya = playing ? hd4 : yc + sc * 0.3;
+        double sa = playing || medalPane.getOpacity() > 0 ? 1.3 * hd4 : 1.6 * hd4, ya = playing ? hd4 : yc + sc * 0.3;
         layoutInArea(arrowUpScalePane, 0, ya, w,  sa);
-        double sjs = sc * 0.24, yjs = ya - sjs * 1.5;
+        double sjs = sc * 0.5, yjs = ya - sjs;
         layoutInArea(jsLogoPane, 0, yjs, w, sjs);
         double sg = sa * 0.3, yg = ya + sa * 0.6 - sg / 2;
         layoutInArea(gwtLogoPane,0, yg, w, sg);
         layoutInArea(gwtTextPane,0, yg + sg * 1.1, w, sg / 2);
-        double sfx = (playing ? 0.875 : 1.7 - 0.2 * expansion) * sc, sfxd2 = sfx / 2, yfx = playing ? hd2 + hd4 : 0.85 * hd2 * 1.1 + expansion * (hd4 * 1.1 + 0.15 * hd2 * 1.1);
+        double sfx = (playing ? 0.875 : 1.7 - 0.2 * expansion) * sc, sfxd2 = sfx / 2, yfx = playing || medalPane.getOpacity() > 0 ? hd2 + hd4 : 0.85 * hd2 * 1.1 + expansion * (hd4 * 1.1 + 0.15 * hd2 * 1.1);
         layoutInArea(fxWreathPane,0, yfx - sfxd2, w, sfx);
-        if (playing) {
+        double sm = sfx / 5;
+        centerInArea(medalPane,width / 2 - 1.3 * sm, yfx - 0.9 * sm, sm, sm);
+        if (playing || medalPane.getOpacity() > 0) {
             canvas.setWidth(w);
             canvas.setHeight(h);
             long animationTimeMillis = animationTimeMillis(UiScheduler.nanoTime());
@@ -100,12 +105,14 @@ final class WebFxCloudAnimationPane extends LayoutPane {
     }
 
     void playContractionAnimation(CardTransition cardTransition) {
+        medalPane.setOpacity(0);
+        arrowUp.setOpacity(0);
         cardTransition.addKeyValue(
                 new KeyValue(expansionProperty,             0),
                 new KeyValue(jsLogoPane.opacityProperty(),  0),
                 new KeyValue(gwtLogoPane.opacityProperty(), 0),
                 new KeyValue(gwtTextPane.opacityProperty(), 0),
-                new KeyValue(arrowUp.opacityProperty(),     0)
+                new KeyValue(canvas.opacityProperty(),      0)
         );
     }
 
@@ -116,7 +123,12 @@ final class WebFxCloudAnimationPane extends LayoutPane {
             gwtLogoPane.setOpacity(0);
             gwtTextPane.setOpacity(0);
             arrowUp.setOpacity(1);
+            medalPane.setOpacity(1);
+            canvas.setVisible(true);
+            canvas.setOpacity(1);
+            forceLayoutChildren();
         } else cardTransition.addOnFinished(() -> {
+            canvas.setOpacity(0);
             cardTransition.addKeyValue(
                     new KeyValue(jsLogoPane.opacityProperty(),  1),
                     new KeyValue(gwtLogoPane.opacityProperty(), 1),
@@ -159,6 +171,7 @@ final class WebFxCloudAnimationPane extends LayoutPane {
         jsLogoPane.setVisible(!playing);
         gwtLogoPane.setVisible(!playing);
         gwtTextPane.setVisible(!playing);
+        medalPane.setVisible(!playing);
     }
 
     private long animationTimeMillis(long nowNanos) {
@@ -182,19 +195,22 @@ final class WebFxCloudAnimationPane extends LayoutPane {
             bubble.draw(w, hd2, animationTimeMillis, ctx);
 
         ctx.setFill(Color.WHITE);
-        ctx.setFont(Font.font(14));
+        ctx.setFont(Font.font(0.03 * w));
         ctx.setTextAlign(TextAlignment.CENTER);
-        double x = 50;
-        ctx.fillText("Web", x, hd4 - 10);
-        ctx.fillText("ecosystem", x, hd4 + 10);
-        ctx.fillText("Java Desktop", x, hd2 + hd4 - 10);
-        ctx.fillText("ecosystem", x, hd2 + hd4 + 10);
+        ctx.setTextBaseline(VPos.CENTER);
+        double x = 0.1 * w, y1 = hd2 - 0.1 * h, y2 = y1 + 20, y3 = hd2 + 0.1 * h - 20, y4 = y3 + 20;
+        ctx.fillText("Web", x, y1);
+        ctx.fillText("ecosystem", x, y2);
+        ctx.fillText(playing ? "Java Desktop" : "Desktop", x, y3);
+        ctx.fillText("ecosystem", x, y4);
 
-        x = w - x;
-        ctx.fillText("Volatile", x, hd4 - 10);
-        ctx.fillText("technologies", x, hd4 + 10);
-        ctx.fillText("Sustainable", x, hd2 + hd4 - 10);
-        ctx.fillText("technology", x, hd2 + hd4 + 10);
+        if (playing) {
+            x = w - x;
+            ctx.fillText("Volatile", x, y1);
+            ctx.fillText("technologies", x, y2);
+            ctx.fillText("Sustainable", x, y3);
+            ctx.fillText("technology", x, y4);
+        }
 
         ctx.save();
         ctx.setStroke(Color.grayRgb(255, 0.5));

@@ -41,10 +41,10 @@ public abstract class LayoutPane extends Pane {
             layoutCount++;
             //  if (layoutCount > 1) dev.webfx.platform.shared.services.log.Logger.log("Layout count = " + layoutCount + " for " + getClass() + (lastWidth == width ? "" : ", width: " + lastWidth + " -> " + width) + (lastHeight == height ? "" : ", height: " + lastHeight + " -> " + height) + (!force ? "" : ", force: true"));
             layoutChildren(width, height);
+            lastWidth = width;
+            lastHeight = height;
+            force = false;
         }
-        lastWidth = width;
-        lastHeight = height;
-        force = false;
     }
 
     protected abstract void layoutChildren(double width, double height);

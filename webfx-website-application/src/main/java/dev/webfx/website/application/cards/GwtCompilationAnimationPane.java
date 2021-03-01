@@ -131,7 +131,7 @@ final class GwtCompilationAnimationPane extends LayoutPane {
             // JS logo pane layout
             double lx = 0, ly = gy + gh + height / 20, lw = width, lh = height - ly;
             // JS flow layout
-            double fw = width / 15, fx = width / 2 - fw / 2, fy = gy + gh / 2, fh = height - fy;
+            double fw = Math.min(lw, lh) * 0.25, fx = width / 2 - fw / 2, fy = gy + gh / 2, fh = height - fy;
             layoutInArea(appClipPane, ax, ay, aw, ah);
             layoutInArea(gwtLogoPane, gx, gy, gw, gh);
             layoutInArea(jsLogoPane,  lx, ly, lw, lh);

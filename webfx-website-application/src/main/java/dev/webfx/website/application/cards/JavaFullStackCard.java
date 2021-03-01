@@ -77,8 +77,8 @@ final class JavaFullStackCard extends Card {
         CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
         // Note: HTML & JavaFX implementation differs, so the rendering is different
         frontendCirclePane.setBlendMode(BlendMode.SCREEN);
-        backendCirclePane.setBlendMode(BlendMode.SCREEN);
-        serverCirclePane.setBlendMode(BlendMode.SCREEN);
+        backendCirclePane .setBlendMode(BlendMode.SCREEN);
+        serverCirclePane  .setBlendMode(BlendMode.SCREEN);
         pane = new LayoutPane(frontendCirclePane, backendCirclePane, serverCirclePane) {
             @Override
             protected void layoutChildren(double width, double height) {
@@ -94,7 +94,7 @@ final class JavaFullStackCard extends Card {
                 layoutInArea(backendCirclePane,  wd2 + Rcos - r, yClients,   d, d);
                 serverCirclePane.setRadius(r);
                 layoutInArea(serverCirclePane,   wd2 - r, yc + R - r,  d, d);
-                if (currentAnimationStep == 7) {
+                if (puzzles != null) {
                     double pd = 0.3 * r, pr = pd / 2;
                     layoutInArea(puzzles[0], wd2 - pr, yc - r * 0.0 - pr, pd, pd);
                     layoutInArea(puzzles[1], wd2 - pr, yc - r * 0.7 - pr, pd, pd);
@@ -146,19 +146,21 @@ final class JavaFullStackCard extends Card {
     @Override
     void prepareCardTransition(int step, CardTransition cardTransition) {
         super.prepareCardTransition(step, cardTransition);
-        updateFlipPanels(toolkitFlipPanels,  stepToolkitLogos,  step, cardTransition);
-        updateFlipPanels(languageFlipPanels, stepLanguageLogos, step, cardTransition);
-        cardTransition.addKeyValue(new KeyValue(expansionProperty, step == 1 || step >= 6 ? 0 : 1));
-        if (step == 7 && puzzles == null)
-            pane.getChildren().addAll(puzzles = new Node[] {
-                    createPuzzle(Color.RED),
-                    createPuzzle(Color.YELLOW),
-                    createPuzzle(Color.BLUE),
-                    createPuzzle(Color.GREEN)
+        if (step > 1 || puzzles != null) {
+            updateFlipPanels(toolkitFlipPanels,  stepToolkitLogos,  step, cardTransition);
+            updateFlipPanels(languageFlipPanels, stepLanguageLogos, step, cardTransition);
+            cardTransition.addKeyValue(new KeyValue(expansionProperty, step == 1 || step >= 6 ? 0 : 1));
+            if (puzzles == null)
+                pane.getChildren().addAll(puzzles = new Node[] {
+                        createPuzzle(Color.RED),
+                        createPuzzle(Color.YELLOW),
+                        createPuzzle(Color.BLUE),
+                        createPuzzle(Color.GREEN)
                 });
-        if (puzzles != null)
-            for (Node puzzle : puzzles)
-                cardTransition.addKeyValue(new KeyValue(puzzle.opacityProperty(), step == 7 ? 1 : 0));
+            if (puzzles != null)
+                for (Node puzzle : puzzles)
+                    cardTransition.addKeyValue(new KeyValue(puzzle.opacityProperty(), step == 7 ? 1 : 0));
+        }
     }
 
     private void updateFlipPanels(FlipPanel[] flipPanels, Node[] logos, int step, CardTransition cardTransition) {

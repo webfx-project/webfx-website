@@ -1,8 +1,8 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -115,7 +114,24 @@ final class CirclePane extends LayoutPane {
         return letter;
     }
 
-    @Override
+    protected void layoutChildren() {
+        super.layoutChildren();
+        if (topScalePane != null || bottomScalePane != null) {
+            double width = getWidth(), height = getHeight(), h = 0.3 * height;
+            if (bottomScalePane == null) {
+                double dy = -0.04 * height;
+                layoutInArea(topScalePane, 0, height / 2 - h / 2 + dy, width, h);
+            } else {
+                double dy = 0.06 * height, gap = 0.03 * height;
+                if (topScalePane != null)
+                    layoutInArea(topScalePane, 0, height / 2 - h + dy - gap / 2, width, h);
+                layoutInArea(bottomScalePane, 0, height / 2 + dy + gap / 2, width, h);
+            }
+        }
+    }
+
+
+        @Override
     protected void layoutChildren(double width, double height) {
         double size = Math.min(width, height);
         if (circleLetters != null) {
@@ -125,33 +141,18 @@ final class CirclePane extends LayoutPane {
             double middleAngle = (top ? -1 : +1) * Math.PI / 2;  //lettersAngle * Math.PI / 180;
             double anglePerLength = lettersAngleLength * Math.PI / 180 / length * (top ? 1 : -1);
             double angle = middleAngle - anglePerLength * length / 2;
-            Font font = Font.font(r * 0.2);
+            double fontSize = r * 0.2;
             for (Text letter : circleLetters) {
-                letter.setFont(font);
-                Bounds letterBounds = getLetterBounds(letter);
-                double lw = letterBounds.getWidth();
-                double lh = letterBounds.getHeight();
-                if (lw == 0 && lh == 0) { // this happens only in the browser (not OpenJFX) for the space character
-                    lw = 4; lh = 16; // Correcting the values to make the expected space between the letters
-                }
+                WebSiteShared.updateTextFontSize(letter, fontSize, false);
+                double lw = getLetterBounds(letter).getWidth();
+                if (lw == 0) // this happens only in the browser (not OpenJFX) for the space character
+                    lw = 4; // Correcting the values to make the expected space between the letters
                 angle += anglePerLength * lw / 2;
                 if (letter.getRotate() != angle) {
                     letter.setRotate(angle / Math.PI * 180 + (top ? 90 : -90));
-                    layoutInArea(letter, r + 0.75 * r * Math.cos(angle) - lw / 2, r + 0.75 * r * Math.sin(angle) - lh / 2, lw, lh);
+                    centerInArea(letter, width / 2 + 0.75 * r * Math.cos(angle), height / 2 + 0.75 * r * Math.sin(angle), 0, 0);
                 }
                 angle += anglePerLength * lw / 2;
-            }
-        }
-        if (topScalePane != null || bottomScalePane != null) {
-            double h = 0.3 * height;
-            if (bottomScalePane == null) {
-                double dy = -0.04 * height;
-                layoutInArea(topScalePane, 0, height / 2 - h / 2 + dy, width, h);
-            } else {
-                double dy = 0.06 * height, gap = 0.03 * height;
-                if (topScalePane != null)
-                    layoutInArea(topScalePane, 0, height / 2 - h + dy - gap / 2, width, h);
-                layoutInArea(bottomScalePane, 0, height / 2 + dy + gap / 2, width, h);
             }
         }
     }
