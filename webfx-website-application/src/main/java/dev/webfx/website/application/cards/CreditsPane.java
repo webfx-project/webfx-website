@@ -15,9 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 import java.util.Arrays;
+
+import static dev.webfx.website.application.shared.WebSiteShared.setUpText;
 
 /**
  * @author Bruno Salmon
@@ -80,7 +83,7 @@ final class CreditsPane extends LayoutPane {
     private final int cardStep;
     private final HBox javaFxLogo = WebSiteShared.createJavaFxLogo();
     private final ImageView ltsImageView = ImageLoader.loadImage("LTS.png");
-    private final VBox creditsBox = new VBox(10, Arrays.stream(credits).map(SustainableCard::createText).toArray(Node[]::new));
+    private final VBox creditsBox = new VBox(10, Arrays.stream(credits).map(CreditsPane::createText).toArray(Node[]::new));
     private final DoubleProperty creditsBottomDistanceProperty = new SimpleDoubleProperty() {
         @Override
         protected void invalidated() {
@@ -88,6 +91,11 @@ final class CreditsPane extends LayoutPane {
                 forceLayoutChildren();
         }
     };
+
+    private static Text createText(String text) {
+        return setUpText(new Text(text), 20, false, true, false, false);
+    }
+
 
     public CreditsPane(Card card) {
         this.card = card;

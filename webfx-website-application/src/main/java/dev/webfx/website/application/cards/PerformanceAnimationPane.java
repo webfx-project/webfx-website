@@ -1,6 +1,7 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.controls.HtmlText;
+import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.Interpolator;
@@ -41,6 +42,7 @@ final class PerformanceAnimationPane extends LayoutPane {
         performanceText.setFill(strokeCircleColor);
         noteText.setFill(backgroundCircleColor);
         noteText.setMouseTransparent(false);
+        WebSiteShared.runOnMouseClick(noteText, () -> WebSiteShared.openUrl(ImageLoader.toImageUrl("Performance.png")));
     }
 
     @Override

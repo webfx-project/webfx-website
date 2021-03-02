@@ -10,13 +10,13 @@ import javafx.scene.image.ImageView;
 public final class ImageLoader {
 
     public static ImageView loadImage(String resourcePath) {
-        return loadImage(resourcePath, ImageLoader.class);
+        return new ImageView(toImageUrl(resourcePath));
     }
 
-    public static ImageView loadImage(String resourcePath, Class packageClass) {
+    public static String toImageUrl(String resourcePath) {
         if (WebFxKitLauncher.supportsWebP())
             resourcePath = resourcePath.replace(".png", ".webp");
-        return new ImageView(ResourceService.toUrl(resourcePath, packageClass));
+        return ResourceService.toUrl(resourcePath, ImageLoader.class);
     }
 
 }

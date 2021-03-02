@@ -43,7 +43,7 @@ public final class WebSiteShared {
     );
     public static final LinearGradient GITHUB_GRADIENT = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
     private static final List<Stop> GRADIENT_STOPS = GITHUB_GRADIENT.getStops();
-    public static final Color FIRST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(0).getColor(), lastGithubGradientColor = GRADIENT_STOPS.get(GRADIENT_STOPS.size() - 1).getColor();
+    public static final Color FIRST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(0).getColor(), LAST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(GRADIENT_STOPS.size() - 1).getColor();
 
     public static final DropShadow dropShadow  = new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 10, 0, 8, 8);
     public static final Color javaColor        = Color.rgb(244, 175, 103);

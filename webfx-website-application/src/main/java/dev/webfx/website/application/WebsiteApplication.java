@@ -14,7 +14,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -94,14 +93,14 @@ public final class WebsiteApplication extends Application {
                             cy += h + gap;
                     }
                 }
-                scrollToFocusedCard();
+                scrollToFocusedCard(false);
                 sizeChangedDuringScroll = false;
             }
         };
         cardsPane.setBackground(null);
         for (Card card : Card.cards)
-            card.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> scrollHorizontallyToCard(Arrays.asList(Card.cards).indexOf(card)));
-        cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX())));
+            WebSiteShared.runOnMouseClick(card, () -> scrollHorizontallyToCard(Arrays.asList(Card.cards).indexOf(card), true));
+        cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX()), false));
         cardsPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
         cardsPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
         cardsPane.setOnSwipeLeft(   e -> Card.cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
@@ -110,12 +109,12 @@ public final class WebsiteApplication extends Application {
         runOnMouseClick(demosText,  () -> showDemos(true));
         runOnMouseClick(webFxText,  () -> { if (demoThumbnailsPane.isVisible()) showDemos(false); });
         runOnMouseClick(githubLogo, () -> openUrl("https://github.com/webfx-project/webfx"));
-        WebSiteShared.setHostServices(getHostServices()); // To make openUrl() work
+        setHostServices(getHostServices()); // Necessary to make openUrl() work
 
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
-        setShapeHoverAnimationColor(githubLogo, lastGithubGradientColor.darker());
+        setShapeHoverAnimationColor(githubLogo, LAST_GITHUB_GRADIENT_COLOR.darker());
         setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
@@ -155,11 +154,11 @@ public final class WebsiteApplication extends Application {
         return cardIndex;
     }
 
-    private void scrollHorizontallyToCard(int cardIndex) {
+    private void scrollHorizontallyToCard(int cardIndex, boolean playCard) {
         if (!verticalCards) {
             cardIndex = Math.min(cardIndex, Card.cards.length - 1);
             focusedCardIndex = cardIndex;
-            scrollToFocusedCard();
+            scrollToFocusedCard(playCard);
         }
     }
 
@@ -171,28 +170,25 @@ public final class WebsiteApplication extends Application {
         } else if (verticalCards && cardIndex == 0)
             cardIndex = focusedCardIndex == -1 ? 1 : -1;
         focusedCardIndex = cardIndex;
-        scrollToFocusedCard();
+        scrollToFocusedCard(false);
     }
 
-    private void scrollToFocusedCard() {
+    private void scrollToFocusedCard(boolean playCard) {
+        Timeline timeline = scrollTimeline;
         if (!verticalCards) {
             cardsPane.setTranslateY(0);
             int leftCardIndex = Math.max(0, Math.min(Card.cards.length - visibleCardsCount, focusedCardIndex - 1));
             if (!Card.cards[Math.min(Card.cards.length - 1, leftCardIndex + visibleCardsCount - 1)].checkInitialized())
                 cardsPane.forceLayoutChildren();
             double translateX = -leftCardIndex * (cardsPane.getWidth() - gap) / visibleCardsCount;
-            if (Card.cards[0].getTranslateX() != translateX && (scrollTimeline == null || translateX != scrollTimelineEndValue)) {
+            if (Card.cards[0].getTranslateX() == translateX)
+                playCard(playCard);
+            else if (scrollTimeline == null || translateX != scrollTimelineEndValue) {
                 stopScrollTimeline();
                 scrollTimelineEndValue = translateX;
                 scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500),
                         Arrays.stream(Card.cards).map(c -> new KeyValue(c.translateXProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)).toArray(KeyValue[]::new))
                 );
-                scrollTimeline.setOnFinished(e -> {
-                    scrollTimeline = null;
-                    if (sizeChangedDuringScroll)
-                        cardsPane.forceLayoutChildren();
-                });
-                scrollTimeline.play();
             }
         } else {
             cardsPane.setTranslateX(0);
@@ -200,22 +196,26 @@ public final class WebsiteApplication extends Application {
             if (sizeChangedDuringScroll) {
                 cardsPane.setTranslateY(translateY);
                 Card.cards[focusedCardIndex].forceLayoutChildren();
-            }
-            else if (cardsPane.getTranslateY() != translateY && (scrollTimeline == null || translateY != scrollTimelineEndValue)) {
+            } else if (cardsPane.getTranslateY() == translateY)
+                playCard(playCard);
+            else if (scrollTimeline == null || translateY != scrollTimelineEndValue) {
                 if (focusedCardIndex > 0 && !Card.cards[focusedCardIndex].checkInitialized())
-                    Platform.runLater(this::scrollToFocusedCard);
+                    Platform.runLater(() -> scrollToFocusedCard(playCard));
                 else {
                     stopScrollTimeline();
                     scrollTimelineEndValue = translateY;
                     scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500), new KeyValue(cardsPane.translateYProperty(), scrollTimelineEndValue, EASE_OUT_INTERPOLATOR)));
-                    scrollTimeline.setOnFinished(e -> {
-                        scrollTimeline = null;
-                        if (sizeChangedDuringScroll)
-                            cardsPane.forceLayoutChildren();
-                    });
-                    scrollTimeline.play();
                 }
             }
+        }
+        if (timeline != scrollTimeline) {
+            scrollTimeline.setOnFinished(e -> {
+                scrollTimeline = null;
+                if (sizeChangedDuringScroll)
+                    cardsPane.forceLayoutChildren();
+                playCard(playCard);
+            });
+            scrollTimeline.play();
         }
     }
 
@@ -223,6 +223,11 @@ public final class WebsiteApplication extends Application {
         if (scrollTimeline != null)
             scrollTimeline.stop();
         scrollTimelineEndValue = -1;
+    }
+
+    private void playCard(boolean play) {
+        if (play)
+            Card.cards[focusedCardIndex].transitionToNextStep();
     }
 
     private void startWebFxFillAnimation() {

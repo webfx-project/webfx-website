@@ -65,11 +65,11 @@ public abstract class Card extends LayoutPane {
         }
         titleText = WebSiteShared.setUpText(new Text(title + " \u2192"), 30, true, true, false, true);
         illustrationNode = createIllustrationNode();
+        titleText.setMouseTransparent(true);
         captionText1.setMouseTransparent(true);
         captionText2.setMouseTransparent(true);
         getChildren().setAll(illustrationNode, titleText, captionText1, captionText2);
         transitionToNextStep();
-        WebSiteShared.runOnMouseClick(this, e -> doStepTransition(!e.isControlDown()));
         setClip(clip);
         initialized = true;
         cardWidth = 0;

@@ -12,7 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.SVGPath;
-import javafx.scene.text.Text;
+
+import static dev.webfx.website.application.shared.WebSiteShared.*;
 
 /**
  * @author Bruno Salmon
@@ -64,13 +65,12 @@ final class SustainableCard extends FlipCard {
                 }
                 longevityAnimationPane.startBackToOriginalAnimation(cardTransition);
                 changeFlipContent(longevityAnimationEnclosingPane);
-                //setUpCardClip();
                 break;
             case 2:
-                HBox javaFxLogo = WebSiteShared.createJavaFxLogo();
-                SVGPath years12 = WebSiteShared.createLogoSVGPath(SvgLogoPaths.get12YearsPath(), WebSiteShared.createVerticalGithubGradiant(200, 0));
+                HBox javaFxLogo = createJavaFxLogo();
+                SVGPath years12 = createLogoSVGPath(SvgLogoPaths.get12YearsPath(), WebSiteShared.createVerticalGithubGradiant(200, 0));
                 VBox.setMargin(years12, new Insets(50));
-                HtmlText htmlText = WebSiteShared.setHtmlText(new HtmlText(), "JavaFX has a great quality: it lasts!<br/>And is still relevant today!");
+                HtmlText htmlText = createHtmlText("JavaFX has a great quality: it lasts!<br/>And is still relevant today!");
                 VBox vBox = new VBox(10,
                         javaFxLogo,
                         years12,
@@ -119,7 +119,7 @@ final class SustainableCard extends FlipCard {
                 webFxCloudAnimationPane.playBubblesAnimation();
                 break;
             case 6:
-                htmlText = WebSiteShared.setHtmlText(new HtmlText(), "Refactoring is essential to avoid the pitfall of regular rewrites in your development cycle, a common point of failure in applications longevity.");
+                htmlText = createHtmlText("Refactoring is essential to avoid the pitfall of regular rewrites in your development cycle, a common point of failure in applications longevity.");
                 StackPane.setAlignment(htmlText, Pos.TOP_CENTER);
                 StackPane.setMargin(htmlText, new Insets(50, 0, 0, 0));
                 htmlText.setMaxHeight(0);
@@ -133,7 +133,7 @@ final class SustainableCard extends FlipCard {
                 cardTransition.addOnFinished(webFxCloudAnimationPane::stopAnimation);
                 break;
             case 7:
-                htmlText = WebSiteShared.setHtmlText(new HtmlText(), "Java has a prime refactoring support, a big force to clean, correct and make your code grow successfully.");
+                htmlText = createHtmlText("Java has a prime refactoring support, a big force to clean, correct and make your code grow successfully.");
                 StackPane.setAlignment(htmlText, Pos.TOP_CENTER);
                 StackPane.setMargin(htmlText, new Insets(50, 0, 0, 0));
                 htmlText.setOpacity(0);
@@ -158,7 +158,9 @@ final class SustainableCard extends FlipCard {
         }
     }
 
-    static Text createText(String text) {
-        return WebSiteShared.setUpText(new Text(text), 20, false, true, false, false);
+    private HtmlText createHtmlText(String text) {
+        HtmlText htmlText = setHtmlText(new HtmlText(), text);
+        updateTextFontSize(htmlText, getWidth() * 0.04, false);
+        return htmlText;
     }
 }

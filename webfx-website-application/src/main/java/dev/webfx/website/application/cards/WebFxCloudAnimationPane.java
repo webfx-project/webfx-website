@@ -185,31 +185,30 @@ final class WebFxCloudAnimationPane extends LayoutPane {
     private long startMillis;
 
     private void paintCanvas(long animationTimeMillis) {
-        double w = getWidth(), h = getHeight(), hd2 = snapPositionY(h / 2), hd4 = snapPositionY(h / 4);
+        double w = getWidth(), h = getHeight(), hd2 = snapPositionY(h / 2);
         if (w == 0)
             return;
         GraphicsContext ctx = canvas.getGraphicsContext2D();
         ctx.clearRect(0, 0, w, h);
-
-        for (Bubble bubble : bubbles)
-            bubble.draw(w, hd2, animationTimeMillis, ctx);
 
         ctx.setFill(Color.WHITE);
         ctx.setFont(Font.font(0.03 * w));
         ctx.setTextAlign(TextAlignment.CENTER);
         ctx.setTextBaseline(VPos.CENTER);
         double x = 0.1 * w, y1 = hd2 - 0.1 * h, y2 = y1 + 20, y3 = hd2 + 0.1 * h - 20, y4 = y3 + 20;
-        ctx.fillText("Web", x, y1);
-        ctx.fillText("ecosystem", x, y2);
+        ctx.fillText("Web", x, playing ? y1 : y2);
         ctx.fillText(playing ? "Java Desktop" : "Desktop", x, y3);
-        ctx.fillText("ecosystem", x, y4);
-
         if (playing) {
+            ctx.fillText("ecosystem", x, y2);
+            ctx.fillText("ecosystem", x, y4);
             x = w - x;
             ctx.fillText("Volatile", x, y1);
             ctx.fillText("technologies", x, y2);
             ctx.fillText("Sustainable", x, y3);
             ctx.fillText("technology", x, y4);
+
+            for (Bubble bubble : bubbles)
+                bubble.draw(w, hd2, animationTimeMillis, ctx);
         }
 
         ctx.save();

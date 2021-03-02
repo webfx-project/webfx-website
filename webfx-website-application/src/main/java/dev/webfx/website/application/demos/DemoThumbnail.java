@@ -64,7 +64,7 @@ final class DemoThumbnail extends Pane {
         demoImageScalePane.setCanGrow(false);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
-        setShapeHoverAnimationColor(githubLogo, lastGithubGradientColor.darker());
+        setShapeHoverAnimationColor(githubLogo, LAST_GITHUB_GRADIENT_COLOR.darker());
         setOnMouseEntered(e -> githubLogo.setVisible(true));
         setOnMouseExited( e -> githubLogo.setVisible(false));
         githubLogo.setVisible(false);
