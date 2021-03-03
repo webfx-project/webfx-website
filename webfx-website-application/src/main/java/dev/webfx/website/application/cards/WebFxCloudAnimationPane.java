@@ -64,7 +64,6 @@ final class WebFxCloudAnimationPane extends LayoutPane {
         fxWreathPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         gwtLogo.setEffect(WebSiteShared.dropShadow);
         gwtText.setEffect(WebSiteShared.dropShadow);
-        medalPane.setRotate(20);
         updateVisibilities();
     }
 
@@ -93,8 +92,8 @@ final class WebFxCloudAnimationPane extends LayoutPane {
         layoutInArea(gwtTextPane,0, yg + sg * 1.1, w, sg / 2);
         double sfx = (playing ? 0.875 : 1.7 - 0.2 * expansion) * sc, sfxd2 = sfx / 2, yfx = playing || medalPane.getOpacity() > 0 ? hd2 + hd4 : 0.85 * hd2 * 1.1 + expansion * (hd4 * 1.1 + 0.15 * hd2 * 1.1);
         layoutInArea(fxWreathPane,0, yfx - sfxd2, w, sfx);
-        double sm = sfx / 5;
-        centerInArea(medalPane,width / 2 - 1.3 * sm, yfx - 0.9 * sm, sm, sm);
+        double sm = 0.35 * sfx;
+        centerInArea(medalPane,width / 2 - 0.5 * sm, yfx + 0.3 * sm, sm, sm);
         if (playing || medalPane.getOpacity() > 0) {
             canvas.setWidth(w);
             canvas.setHeight(h);
