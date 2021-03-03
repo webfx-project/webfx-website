@@ -67,8 +67,9 @@ public final class WebsiteApplication extends Application {
                 if (demoThumbnailsPane != null)
                     layoutInArea(demoThumbnailsPane, 0, vh, w, h - vh);
                 visibleCardsCount = w * h < 640 * 360 ? 1 : Math.max(1, Math.min(Card.cards.length, (int) (1.8 * w / h)));
-                int firstVisibleCardIndex = Math.max(0, focusedCardIndex);
-                for (int i = firstVisibleCardIndex; i < Math.min(Card.cards.length, firstVisibleCardIndex + visibleCardsCount); i++)
+                verticalCards = visibleCardsCount == 1;
+                int leftCardIndex = Math.max(0, verticalCards ? focusedCardIndex : Math.min(Card.cards.length - visibleCardsCount, focusedCardIndex - 1));
+                for (int i = leftCardIndex; i < Math.min(Card.cards.length, leftCardIndex + visibleCardsCount); i++)
                     Card.cards[i].checkInitialized();
                 gap = Math.max(5, w * 0.01);
                 w -= (visibleCardsCount + 1) * gap; h -= gap;
@@ -77,7 +78,6 @@ public final class WebsiteApplication extends Application {
                     cy += gap;
                     ch -= gap;
                 }
-                verticalCards = visibleCardsCount == 1;
                 if (!verticalCards) {
                     for (Card card : Card.cards) {
                         layoutInArea(card, cx, cy, cw, ch);
@@ -99,10 +99,10 @@ public final class WebsiteApplication extends Application {
         };
         cardsPane.setBackground(null);
         for (Card card : Card.cards)
-            WebSiteShared.runOnMouseClick(card, () -> scrollHorizontallyToCard(Arrays.asList(Card.cards).indexOf(card), true));
-        cardsPane.setOnMouseClicked(e -> scrollHorizontallyToCard(clickedCardIndex(e.getX()), false));
-        cardsPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1));
-        cardsPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1));
+            WebSiteShared.runOnMouseClick(card, () -> scrollToCard(Arrays.asList(Card.cards).indexOf(card), true));
+        cardsPane.setOnMouseClicked(e -> scrollToCard(clickedCardIndex(e.getX()), false));
+        cardsPane.setOnSwipeUp(     e -> scrollVerticallyToCard(focusedCardIndex + 1, false));
+        cardsPane.setOnSwipeDown(   e -> scrollVerticallyToCard(focusedCardIndex - 1, false));
         cardsPane.setOnSwipeLeft(   e -> Card.cards[Math.max(0, focusedCardIndex)].transitionToNextStep());
         cardsPane.setOnSwipeRight(  e -> Card.cards[Math.max(0, focusedCardIndex)].transitionToPreviousStep());
 
@@ -154,6 +154,13 @@ public final class WebsiteApplication extends Application {
         return cardIndex;
     }
 
+    private void scrollToCard(int cardIndex, boolean playCard) {
+        if (verticalCards)
+            scrollVerticallyToCard(cardIndex, playCard);
+        else
+            scrollHorizontallyToCard(cardIndex, playCard);
+    }
+
     private void scrollHorizontallyToCard(int cardIndex, boolean playCard) {
         if (!verticalCards) {
             cardIndex = Math.min(cardIndex, Card.cards.length - 1);
@@ -162,7 +169,7 @@ public final class WebsiteApplication extends Application {
         }
     }
 
-    private void scrollVerticallyToCard(int cardIndex) {
+    private void scrollVerticallyToCard(int cardIndex, boolean playCard) {
         cardIndex = Math.min(cardIndex, Card.cards.length - 1);
         if (showMenu != (!verticalCards || cardsPane.getHeight() > cardsPane.getWidth() || cardIndex < 0)) {
             showMenu = !showMenu;
@@ -170,7 +177,7 @@ public final class WebsiteApplication extends Application {
         } else if (verticalCards && cardIndex == 0)
             cardIndex = focusedCardIndex == -1 ? 1 : -1;
         focusedCardIndex = cardIndex;
-        scrollToFocusedCard(false);
+        scrollToFocusedCard(playCard);
     }
 
     private void scrollToFocusedCard(boolean playCard) {
