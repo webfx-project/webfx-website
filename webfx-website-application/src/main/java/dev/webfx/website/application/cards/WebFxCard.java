@@ -21,8 +21,9 @@ final class WebFxCard extends FlipCard {
             case 4: return "You don't need to transpile each code change, you can use the OpenJFX runtime to develop, test and debug your application as usual in your Java IDE,";
             case 5: return "and transpile it only from time to time to check your web version is working as expected.";
             case 6: return "WebFX is just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
-            case 7: return "With WebFX, JavaFX shall become the first major desktop toolkit that can be transpiled to the web!";
-            case 8: return "WebFX will soon be ready for testing.<br/> We hope you will love it.";
+            // Removed this step as it may be controversial (advise from Dukke and Ivan)
+            //case 7: return "With WebFX, JavaFX shall become the first major desktop toolkit that can be transpiled to the web!";
+            case 7: return "WebFX will soon be ready for testing.<br/> We hope you will love it.";
             default : return null;
         }
     }
@@ -63,12 +64,15 @@ final class WebFxCard extends FlipCard {
                 webFxDevAnimationPane.playArcs(cardTransition);
                 flipToNewContent(webFxDevAnimationPane); // In case of reward
                 break;
+/*
             case 7:
                 flipToNewContent(webFxCloudAnimationPane);
                 webFxCloudAnimationPane.playExpansionAnimation(cardTransition, false);  // In case of reward
                 webFxCloudAnimationPane.flipFx(); // In case of reward
                 break;
-            case 8:
+*/
+            case 7:
+                flipToNewContent(webFxCloudAnimationPane);
                 webFxCloudAnimationPane.playContractionAnimation(cardTransition);
                 webFxCloudAnimationPane.flipThumbUp();
                 break;
