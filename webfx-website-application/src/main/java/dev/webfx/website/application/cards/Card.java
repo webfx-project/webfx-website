@@ -28,7 +28,7 @@ public abstract class Card extends LayoutPane {
             new JavaFullStackCard(),
             new CrossPlatformCard(),
             new SustainableCard(),
-            new ResponsiveCard(),
+            //new ResponsiveCard(), // Removed as advised by Duke and Ivan
             new MagicalCard(),
     };
 
