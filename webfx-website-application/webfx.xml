@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <module>
 
-    <packages exports="true"/>
+    <packages exports="true">
+        <package resource="true">dev.webfx.website.application.images</package>
+    </packages>
+
 
     <dependencies>
 
@@ -10,10 +13,6 @@
         </source-modules>
 
     </dependencies>
-
-    <resource-packages>
-        <package>dev.webfx.website.application.images</package>
-    </resource-packages>
 
     <providers>
         <provider spi="javafx.application.Application">dev.webfx.website.application.WebsiteApplication</provider>
