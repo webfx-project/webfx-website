@@ -18,6 +18,7 @@ module webfx.website.application {
     exports dev.webfx.website.application.cards;
     exports dev.webfx.website.application.demos;
     exports dev.webfx.website.application.images;
+    exports dev.webfx.website.application.shared;
 
     // Resources packages
     opens dev.webfx.website.application.images;
