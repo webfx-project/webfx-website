@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <module executable="true">
 
+    <dependencies>
+        <source-modules/>
+    </dependencies>
+
     <html lang="en">
         <head>
             <meta name="description" content="WebFX is a JavaFX to JavaScript transpiler powered by GWT. You write your Web application in JavaFX and GWT will transpile it in pure JS."/>
