@@ -7,7 +7,7 @@
     </packages>
 
     <providers>
-        <provider spi="javafx.application.Application">dev.webfx.website.application.WebsiteApplication</provider>
+        <javafx.application.Application>dev.webfx.website.application.WebsiteApplication</javafx.application.Application>
     </providers>
 
     <dependencies>
