@@ -32,66 +32,66 @@ final class JavaFullStackCard extends Card {
     @Override
     Node createIllustrationNode() {
         stepToolkitLogos = new Node[] {
-                // Step 1 - Frontend, backend
+                // Step 1 - Front office, back office
                 createNoLogo(), createNoLogo(),
-                // Step 2 - Frontend, backend
+                // Step 2 - Front office, back office
                 createAngularLogo(), createFxLogo(),
-                // Step 3 - Frontend, backend
+                // Step 3 - Front office, back office
                 createVueLogo(), createVueLogo(),
-                // Step 4 - Frontend, backend
+                // Step 4 - Front office, back office
                 createReactLogo(), createReactLogo(),
-                // Step 5 - Frontend, backend
+                // Step 5 - Front office, back office
                 createWebFxLogo(), createWebFxLogo(),
-                // Step 6 - Frontend, backend
+                // Step 6 - Front office, back office
                 createWebFxLogo(), createWebFxLogo(),
-                // Step 7 - Frontend, backend
+                // Step 7 - Front office, back office
                 createNoLogo(), createNoLogo()
         };
         stepLanguageLogos = new Node[] {
-                // Step 1 - Frontend, backend, server
+                // Step 1 - Front office, back office, server
                 createNoLogo(), createNoLogo(), createNoLogo(),
-                // Step 2 - Frontend, backend, server
+                // Step 2 - Front office, back office, server
                 createJSLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 3 - Frontend, backend, server
+                // Step 3 - Front office, back office, server
                 createJSLogo(), createJSLogo(), createJavaLogo(),
-                // Step 4 - Frontend, backend, server
+                // Step 4 - Front office, back office, server
                 createJSLogo(), createJSLogo(), createJSLogo(),
-                // Step 5 - Frontend, backend, server
+                // Step 5 - Front office, back office, server
                 createJavaLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 6 - Frontend, backend, server
+                // Step 6 - Front office, back office, server
                 createJavaLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 7 - Frontend, backend, server
+                // Step 7 - Front office, back office, server
                 createNoLogo(), createNoLogo(), createNoLogo()
         };
         toolkitFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For frontend toolkit
-                new FlipPanel()  // For backend toolkit
+                new FlipPanel(), // For front office toolkit
+                new FlipPanel()  // For back office toolkit
         };
         languageFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For frontend language
-                new FlipPanel(), // For backend language
+                new FlipPanel(), // For front office language
+                new FlipPanel(), // For back office language
                 new FlipPanel()  // For server language
         };
-        CirclePane frontendCirclePane = new CirclePane("Front-end", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
-        CirclePane backendCirclePane  = new CirclePane("Back-end",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
+        CirclePane frontOfficeCirclePane = new CirclePane("Front office", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
+        CirclePane backOfficeCirclePane  = new CirclePane("Back office",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
         CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
         // Note: HTML & JavaFX implementation differs, so the rendering is different
-        frontendCirclePane.setBlendMode(BlendMode.SCREEN);
-        backendCirclePane .setBlendMode(BlendMode.SCREEN);
+        frontOfficeCirclePane.setBlendMode(BlendMode.SCREEN);
+        backOfficeCirclePane .setBlendMode(BlendMode.SCREEN);
         serverCirclePane  .setBlendMode(BlendMode.SCREEN);
-        pane = new LayoutPane(frontendCirclePane, backendCirclePane, serverCirclePane) {
+        pane = new LayoutPane(frontOfficeCirclePane, backOfficeCirclePane, serverCirclePane) {
             @Override
             protected void layoutChildren(double width, double height) {
                 double w = width, h = height, s = Math.min(w, h), wd2 = w / 2, hd2 = h / 2, sd2 = s / 2, r = sd2 * 0.49, d = 2 * r;
                 double R = (s - d) / (2 * Math.cos(Math.PI/6)) * (0.5 + 0.5 * expansionProperty.get());
                 double yc = 0.8 * hd2, yClients = yc - R * Math.sin(Math.PI/6) - r;
                 double Rcos = R * Math.cos(Math.PI/6);
-                frontendCirclePane.setRadius(r);
-                frontendCirclePane.setRotate((frontendCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
-                layoutInArea(frontendCirclePane, wd2 - Rcos - r, yClients,   d, d);
-                backendCirclePane.setRadius(r);
-                backendCirclePane.setRotate((backendCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
-                layoutInArea(backendCirclePane,  wd2 + Rcos - r, yClients,   d, d);
+                frontOfficeCirclePane.setRadius(r);
+                frontOfficeCirclePane.setRotate((frontOfficeCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
+                layoutInArea(frontOfficeCirclePane, wd2 - Rcos - r, yClients,   d, d);
+                backOfficeCirclePane.setRadius(r);
+                backOfficeCirclePane.setRotate((backOfficeCirclePane.getAngle() + 90) * (1 - expansionProperty.get()));
+                layoutInArea(backOfficeCirclePane,  wd2 + Rcos - r, yClients,   d, d);
                 serverCirclePane.setRadius(r);
                 layoutInArea(serverCirclePane,   wd2 - r, yc + R - r,  d, d);
                 if (puzzles != null) {
@@ -134,11 +134,11 @@ final class JavaFullStackCard extends Card {
         switch (step) {
             case 1: return "WebFX opens the door to a 100% java full-stack web development with JavaFX as client-side technology.";
             case 2: return "Web development is transitioning to client-side technologies, and this often introduces heterogeneity in java-based environments.";
-            case 3: return "Standardizing your client stack with a web back-end may be an option to share the common client code, but your stack is still heterogeneous.";
+            case 3: return "Standardizing your client stack with a JS back office may be an option to share the common client code, but your stack is still heterogeneous.";
             case 4: return "Switching to a pure JS stack may be a solution, but you would prefer to stay with Java?";
             case 5: return "WebFX offers you JavaFX for your client-side web technology, and let you stay with Java all along your stack.";
-            case 6: return "Same language for all your stack. Same UI toolkit for your back-end & front-end. Same IDE for all your code. The ideal solution for java-based environments.";
-            case 7: return "And simply share the common code between your back-end, front-end and server with the Java module system.";
+            case 6: return "Same language for all your stack. Same UI toolkit for your front & back office. Same IDE for all your code. The ideal solution for java-based environments.";
+            case 7: return "And simply share the common code between your front office, back office and server with the Java module system.";
             default: return null;
         }
     }
