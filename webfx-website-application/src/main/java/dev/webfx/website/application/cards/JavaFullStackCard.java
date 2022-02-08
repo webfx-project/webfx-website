@@ -32,48 +32,48 @@ final class JavaFullStackCard extends Card {
     @Override
     Node createIllustrationNode() {
         stepToolkitLogos = new Node[] {
-                // Step 1 - Front office, back office
+                // Step 1 - Front-office, back-office
                 createNoLogo(), createNoLogo(),
-                // Step 2 - Front office, back office
+                // Step 2 - Front-office, back-office
                 createAngularLogo(), createFxLogo(),
-                // Step 3 - Front office, back office
+                // Step 3 - Front-office, back-office
                 createVueLogo(), createVueLogo(),
-                // Step 4 - Front office, back office
+                // Step 4 - Front-office, back-office
                 createReactLogo(), createReactLogo(),
-                // Step 5 - Front office, back office
+                // Step 5 - Front-office, back-office
                 createWebFxLogo(), createWebFxLogo(),
-                // Step 6 - Front office, back office
+                // Step 6 - Front-office, back-office
                 createWebFxLogo(), createWebFxLogo(),
-                // Step 7 - Front office, back office
+                // Step 7 - Front-office, back-office
                 createNoLogo(), createNoLogo()
         };
         stepLanguageLogos = new Node[] {
-                // Step 1 - Front office, back office, server
+                // Step 1 - Front-office, back-office, server
                 createNoLogo(), createNoLogo(), createNoLogo(),
-                // Step 2 - Front office, back office, server
+                // Step 2 - Front-office, back-office, server
                 createJSLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 3 - Front office, back office, server
+                // Step 3 - Front-office, back-office, server
                 createJSLogo(), createJSLogo(), createJavaLogo(),
-                // Step 4 - Front office, back office, server
+                // Step 4 - Front-office, back-office, server
                 createJSLogo(), createJSLogo(), createJSLogo(),
-                // Step 5 - Front office, back office, server
+                // Step 5 - Front-office, back-office, server
                 createJavaLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 6 - Front office, back office, server
+                // Step 6 - Front-office, back-office, server
                 createJavaLogo(), createJavaLogo(), createJavaLogo(),
-                // Step 7 - Front office, back office, server
+                // Step 7 - Front-office, back-office, server
                 createNoLogo(), createNoLogo(), createNoLogo()
         };
         toolkitFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For front office toolkit
-                new FlipPanel()  // For back office toolkit
+                new FlipPanel(), // For front-office toolkit
+                new FlipPanel()  // For back-office toolkit
         };
         languageFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For front office language
-                new FlipPanel(), // For back office language
+                new FlipPanel(), // For front-office language
+                new FlipPanel(), // For back-office language
                 new FlipPanel()  // For server language
         };
-        CirclePane frontOfficeCirclePane = new CirclePane("Front office", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
-        CirclePane backOfficeCirclePane  = new CirclePane("Back office",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
+        CirclePane frontOfficeCirclePane = new CirclePane("Front-office", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
+        CirclePane backOfficeCirclePane  = new CirclePane("Back-office",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
         CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
         // Note: HTML & JavaFX implementation differs, so the rendering is different
         frontOfficeCirclePane.setBlendMode(BlendMode.SCREEN);
@@ -134,11 +134,11 @@ final class JavaFullStackCard extends Card {
         switch (step) {
             case 1: return "WebFX opens the door to a 100% java full-stack web development with JavaFX as client-side technology.";
             case 2: return "Web development is transitioning to client-side technologies, and this often introduces heterogeneity in java-based environments.";
-            case 3: return "Standardizing your client stack with a JS back office may be an option to share the common client code, but your stack is still heterogeneous.";
+            case 3: return "Standardizing your client stack with a JS back-office may be an option to share the common client code, but your stack is still heterogeneous.";
             case 4: return "Switching to a pure JS stack may be a solution, but you would prefer to stay with Java?";
             case 5: return "WebFX offers you JavaFX for your client-side web technology, and let you stay with Java all along your stack.";
-            case 6: return "Same language for all your stack. Same UI toolkit for your front & back office. Same IDE for all your code. The ideal solution for java-based environments.";
-            case 7: return "And simply share the common code between your front office, back office and server with the Java module system.";
+            case 6: return "Same language for all your stack. Same UI toolkit for your front & back-office. Same IDE for all your code. The ideal solution for java-based environments.";
+            case 7: return "And simply share the common code between your front-office, back-office and server with the Java module system.";
             default: return null;
         }
     }
