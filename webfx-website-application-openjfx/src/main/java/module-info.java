@@ -1,9 +1,9 @@
 // File managed by WebFX (DO NOT EDIT MANUALLY)
 
-module webfx.website.application.javafx {
+module webfx.website.application.openjfx {
 
     // Direct dependencies modules
-    requires webfx.kit.javafx;
+    requires webfx.kit.openjfx;
     requires webfx.platform.java.appcontainer.impl;
     requires webfx.platform.java.resource.impl;
     requires webfx.platform.java.scheduler.impl;

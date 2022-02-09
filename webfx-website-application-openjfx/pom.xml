@@ -7,13 +7,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>webfx-website-application-javafx</artifactId>
+    <artifactId>webfx-website-application-openjfx</artifactId>
 
     <dependencies> <!-- Dependencies managed by WebFX (DO NOT EDIT MANUALLY) -->
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-extras-webtext-controls-peers-javafx</artifactId>
+            <artifactId>webfx-extras-webtext-controls-peers-openjfx</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
     
@@ -25,7 +25,7 @@
     
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-kit-javafx</artifactId>
+            <artifactId>webfx-kit-openjfx</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
     
