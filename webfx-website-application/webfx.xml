@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project>
 
-    <packages>
+    <exported-packages>
         <source-packages/>
         <resource-package>dev.webfx.website.application.images</resource-package>
-    </packages>
+    </exported-packages>
 
     <providers>
         <javafx.application.Application>dev.webfx.website.application.WebsiteApplication</javafx.application.Application>
