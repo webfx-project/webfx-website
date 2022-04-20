@@ -9,9 +9,9 @@
         <group>
             <groupId>dev.webfx</groupId>
             <version>0.1.0-SNAPSHOT</version>
-            <library name="webfx"/>
-            <library name="webfx-extras-webtext"/>
-            <library name="webfx-lib-enzo"/>
+            <webfx-library name="webfx"/>
+            <webfx-library name="webfx-extras-webtext"/>
+            <webfx-library name="webfx-lib-enzo"/>
         </group>
     </required-libraries>
 
