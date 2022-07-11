@@ -7,7 +7,7 @@
     </exported-packages>
 
     <providers>
-        <javafx.application.Application>dev.webfx.website.application.WebsiteApplication</javafx.application.Application>
+        <provider interface="javafx.application.Application">dev.webfx.website.application.WebsiteApplication</provider>
     </providers>
 
     <dependencies>
