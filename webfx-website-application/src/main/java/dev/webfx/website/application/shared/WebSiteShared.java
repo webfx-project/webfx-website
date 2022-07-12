@@ -1,7 +1,7 @@
 package dev.webfx.website.application.shared;
 
-import dev.webfx.extras.webtext.controls.HtmlText;
-import dev.webfx.extras.webtext.controls.SvgText;
+import dev.webfx.extras.webtext.HtmlText;
+import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.cards.FxWreathPane;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;

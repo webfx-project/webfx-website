@@ -1,6 +1,6 @@
 package dev.webfx.website.application;
 
-import dev.webfx.extras.webtext.controls.SvgText;
+import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.cards.Card;
 import dev.webfx.website.application.demos.DemoThumbnailsPane;
 import dev.webfx.website.application.shared.LayoutPane;

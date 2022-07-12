@@ -1,6 +1,6 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.webtext.controls.SvgText;
+import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;

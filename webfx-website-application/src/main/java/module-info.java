@@ -7,7 +7,7 @@ module webfx.website.application {
     requires javafx.base;
     requires javafx.controls;
     requires javafx.graphics;
-    requires webfx.extras.webtext.controls;
+    requires webfx.extras.webtext;
     requires webfx.kit.launcher;
     requires webfx.lib.enzo;
     requires webfx.platform.resource;
