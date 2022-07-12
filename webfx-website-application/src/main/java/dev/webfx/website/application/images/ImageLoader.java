@@ -1,7 +1,7 @@
 package dev.webfx.website.application.images;
 
 import dev.webfx.kit.launcher.WebFxKitLauncher;
-import dev.webfx.platform.shared.services.resource.ResourceService;
+import dev.webfx.platform.resource.Resource;
 import javafx.scene.image.ImageView;
 
 /**
@@ -16,7 +16,7 @@ public final class ImageLoader {
     public static String toImageUrl(String resourcePath) {
         if (WebFxKitLauncher.supportsWebP())
             resourcePath = resourcePath.replace(".png", ".webp");
-        return ResourceService.toUrl(resourcePath, ImageLoader.class);
+        return Resource.toUrl(resourcePath, ImageLoader.class);
     }
 
 }

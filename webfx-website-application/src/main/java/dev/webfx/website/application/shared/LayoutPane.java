@@ -1,7 +1,7 @@
 package dev.webfx.website.application.shared;
 
-import dev.webfx.platform.client.services.uischeduler.AnimationFramePass;
-import dev.webfx.platform.client.services.uischeduler.UiScheduler;
+import dev.webfx.platform.uischeduler.AnimationFramePass;
+import dev.webfx.platform.uischeduler.UiScheduler;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -39,7 +39,7 @@ public abstract class LayoutPane extends Pane {
         double width = getWidth(), height = getHeight();
         if (force || lastWidth != width || lastHeight != height) {
             layoutCount++;
-            //  if (layoutCount > 1) dev.webfx.platform.shared.services.log.Logger.log("Layout count = " + layoutCount + " for " + getClass() + (lastWidth == width ? "" : ", width: " + lastWidth + " -> " + width) + (lastHeight == height ? "" : ", height: " + lastHeight + " -> " + height) + (!force ? "" : ", force: true"));
+            //  if (layoutCount > 1) dev.webfx.platform.log.Logger.log("Layout count = " + layoutCount + " for " + getClass() + (lastWidth == width ? "" : ", width: " + lastWidth + " -> " + width) + (lastHeight == height ? "" : ", height: " + lastHeight + " -> " + height) + (!force ? "" : ", force: true"));
             layoutChildren(width, height);
             lastWidth = width;
             lastHeight = height;

@@ -1,6 +1,6 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.platform.client.services.uischeduler.UiScheduler;
+import dev.webfx.platform.uischeduler.UiScheduler;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.ScalePane;
