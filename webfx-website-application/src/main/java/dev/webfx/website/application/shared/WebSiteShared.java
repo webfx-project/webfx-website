@@ -56,7 +56,7 @@ public final class WebSiteShared {
     public static final Color gwtColor         = Color.rgb(249,  53, 53);
     public static final Color jsYellowColor    = Color.web("#F0DB4F");
 
-    // Ease out interpolator closer to the web standard than the one proposed in JavaFx (ie Interpolator.EASE_OUT)
+    // Ease out interpolator closer to the web standard than the one proposed in JavaFX (ie Interpolator.EASE_OUT)
     public final static Interpolator EASE_OUT_INTERPOLATOR = Interpolator.SPLINE(0, .75, .25, 1);
 
     public static SvgText createWebFxSvgText() {
