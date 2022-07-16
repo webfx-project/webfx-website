@@ -17,7 +17,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-final class JavaFullStackCard extends Card {
+public final class JavaFullStackCard extends Card {
 
     private LayoutPane pane;
     private Node[] stepToolkitLogos, stepLanguageLogos;
@@ -25,7 +25,7 @@ final class JavaFullStackCard extends Card {
     private Node[] puzzles;
     private DoubleProperty expansionProperty;
 
-    JavaFullStackCard() {
+    public JavaFullStackCard() {
         super("Java full-stack");
     }
 

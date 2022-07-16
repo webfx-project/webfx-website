@@ -15,10 +15,10 @@ import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
 /**
  * @author Bruno Salmon
  */
-public final class DemoThumbnailsPane extends Pane {
+public final class DemosThumbnailsPane extends Pane {
 
 
-    public DemoThumbnailsPane() {
+    public DemosThumbnailsPane() {
         super(
                 new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true),
                 new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),

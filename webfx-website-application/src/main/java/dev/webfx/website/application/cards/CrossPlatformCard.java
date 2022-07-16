@@ -20,7 +20,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-final class CrossPlatformCard extends Card {
+public final class CrossPlatformCard extends Card {
 
     private Pane[] platformsNodes;
     private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle;
@@ -29,7 +29,7 @@ final class CrossPlatformCard extends Card {
     private FlipPanel flipPanel;
     private boolean flipFrontShowing;
 
-    CrossPlatformCard() {
+    public CrossPlatformCard() {
         super("Cross-platform");
     }
 

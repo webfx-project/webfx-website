@@ -3,12 +3,12 @@ package dev.webfx.website.application.cards;
 /**
  * @author Bruno Salmon
  */
-final class WebFXCard extends FlipCard {
+public final class WebFXCard extends FlipCard {
 
     private WebFXCloudAnimationPane webFxCloudAnimationPane;
     private WebFXDevAnimationPane webFxDevAnimationPane;
 
-    WebFXCard() {
+    public WebFXCard() {
         super("WebFX?");
     }
 

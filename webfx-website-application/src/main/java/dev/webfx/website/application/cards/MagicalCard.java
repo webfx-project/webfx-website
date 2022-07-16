@@ -17,14 +17,14 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-final class MagicalCard extends FlipCard {
+public final class MagicalCard extends FlipCard {
 
     private final static Color[] RAINBOW_COLORS = { Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.PURPLE };
 
     private GwtCompilationAnimationPane gwtCompilationAnimationPane;
     private GearsAnimationPane gearsAnimationPane;
 
-    MagicalCard() {
+    public MagicalCard() {
         super("Magical");
     }
 

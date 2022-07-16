@@ -23,14 +23,7 @@ public abstract class Card extends LayoutPane {
     private final static Border CARD_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, new CornerRadii(10), BorderStroke.THIN));
     private static double cardWidth, cardHeight, maxTitleHeight, maxCaptionHeight;
 
-    public static final Card[] cards = {
-            new WebFXCard(),
-            new CrossPlatformCard(),
-            new JavaFullStackCard(),
-            new SustainableCard(),
-            new ResponsiveCard(),
-            new MagicalCard(),
-    };
+    private CardsPane cardsPane;
 
     private final Rectangle clip = new Rectangle();
     private final String title;
@@ -47,6 +40,10 @@ public abstract class Card extends LayoutPane {
         this.title = title;
         setBorder(CARD_BORDER);
         WebSiteShared.setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND, CARD_BORDER.getStrokes().get(0).getRadii());
+    }
+
+    void setCardsPane(CardsPane cardsPane) {
+        this.cardsPane = cardsPane;
     }
 
     public boolean checkInitialized() {
@@ -121,7 +118,7 @@ public abstract class Card extends LayoutPane {
 
     abstract String caption(int step);
 
-    private static void computeMaxTextHeights(double width, double height) {
+    private void computeMaxTextHeights(double width, double height) {
         if (cardWidth == width && cardHeight == height)
             return;
         cardWidth = width; cardHeight = height;
@@ -129,7 +126,7 @@ public abstract class Card extends LayoutPane {
         double titleFontSize   = Math.max(16, width * 0.07);
         double captionFontSize = Math.max(16, Math.sqrt(width * height) * 0.035);
         Font titleFont = null, captionFont = null;
-        for (Card card : cards) {
+        for (Card card : cardsPane.cards) {
             if (!card.initialized)
                 continue;
             if (titleFont == null)

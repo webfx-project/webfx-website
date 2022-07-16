@@ -18,7 +18,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-final class SustainableCard extends FlipCard {
+public final class SustainableCard extends FlipCard {
 
     private FrameworksPane javaFrameworksPane, webFrameworksPane;
     private WebFXCloudAnimationPane webFxCloudAnimationPane;
@@ -27,7 +27,7 @@ final class SustainableCard extends FlipCard {
     private LayoutPane longevityAnimationEnclosingPane;
     private double wallHeight;
 
-    SustainableCard() {
+    public SustainableCard() {
         super("Sustainable");
     }
 

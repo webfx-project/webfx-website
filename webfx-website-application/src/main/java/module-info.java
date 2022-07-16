@@ -24,6 +24,6 @@ module webfx.website.application {
     opens dev.webfx.website.application.images;
 
     // Provided services
-    provides javafx.application.Application with dev.webfx.website.application.WebsiteApplication;
+    provides javafx.application.Application with dev.webfx.website.application.WebFXWebsiteApplication;
 
 }

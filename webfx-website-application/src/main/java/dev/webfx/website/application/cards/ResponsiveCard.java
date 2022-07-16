@@ -21,12 +21,12 @@ import javafx.scene.text.Text;
 /**
  * @author Bruno Salmon
  */
-final class ResponsiveCard extends FlipCard {
+public final class ResponsiveCard extends FlipCard {
 
     private Pane desktopTabletMobilePane;
     private SVGPath thumbUp;
 
-    ResponsiveCard() {
+    public ResponsiveCard() {
         super("Responsive");
     }
 
