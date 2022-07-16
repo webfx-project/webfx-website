@@ -3,12 +3,12 @@ package dev.webfx.website.application.cards;
 /**
  * @author Bruno Salmon
  */
-final class WebFxCard extends FlipCard {
+final class WebFXCard extends FlipCard {
 
-    private WebFxCloudAnimationPane webFxCloudAnimationPane;
-    private WebFxDevAnimationPane webFxDevAnimationPane;
+    private WebFXCloudAnimationPane webFxCloudAnimationPane;
+    private WebFXDevAnimationPane webFxDevAnimationPane;
 
-    WebFxCard() {
+    WebFXCard() {
         super("WebFX?");
     }
 
@@ -34,7 +34,7 @@ final class WebFxCard extends FlipCard {
         switch (step) {
             case 1:
                 if (webFxCloudAnimationPane == null)
-                    webFxCloudAnimationPane = new WebFxCloudAnimationPane();
+                    webFxCloudAnimationPane = new WebFXCloudAnimationPane();
                 flipToNewContent(webFxCloudAnimationPane);
                 webFxCloudAnimationPane.playContractionAnimation(cardTransition);
                 webFxCloudAnimationPane.flipFx();
@@ -45,7 +45,7 @@ final class WebFxCard extends FlipCard {
                 break;
             case 3:
                 if (webFxDevAnimationPane == null)
-                    webFxDevAnimationPane = new WebFxDevAnimationPane();
+                    webFxDevAnimationPane = new WebFXDevAnimationPane();
                 flipToNewContent(webFxDevAnimationPane);
                 webFxDevAnimationPane.hideArcs();
                 webFxDevAnimationPane.showRightArrow(cardTransition);

@@ -26,7 +26,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.createCloud;
 /**
  * @author Bruno Salmon
  */
-final class WebFxCloudAnimationPane extends LayoutPane {
+final class WebFXCloudAnimationPane extends LayoutPane {
 
     private final static long MILLIS_IN_NANO = 1_000_000;
     private final static double SPEED_FACTOR = 0.05;
@@ -59,7 +59,7 @@ final class WebFxCloudAnimationPane extends LayoutPane {
     };
     private boolean playing;
 
-    public WebFxCloudAnimationPane() {
+    public WebFXCloudAnimationPane() {
         getChildren().setAll(canvas, cloudPane, jsLogoPane, arrowUpScalePane, gwtLogoPane, gwtTextPane, fxWreathPane, medalPane);
         fxWreathPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         gwtLogo.setEffect(WebSiteShared.dropShadow);

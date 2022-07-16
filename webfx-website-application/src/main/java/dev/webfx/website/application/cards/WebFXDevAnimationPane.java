@@ -17,7 +17,7 @@ import javafx.scene.text.Text;
 /**
  * @author Bruno Salmon
  */
-final class WebFxDevAnimationPane extends LayoutPane {
+final class WebFXDevAnimationPane extends LayoutPane {
 
     private final SVGPath downArrow = WebSiteShared.createArrowDown(), rightArrow = WebSiteShared.createArrowUp(); // Will be rotated in constructor
     private final ScalePane rightArrowPane = new ScalePane(rightArrow);
@@ -37,7 +37,7 @@ final class WebFxDevAnimationPane extends LayoutPane {
         appCirclePane.setRotate(fullAngle * anglePercentProperty.get());
     }
 
-    public WebFxDevAnimationPane() {
+    public WebFXDevAnimationPane() {
         getChildren().setAll(openJFXCirclePane, openJFXArc, webFXCirclePane, webFXArc, rightArrowPane, appCirclePane);
         downArrow.setOpacity(0);
         rightArrow.setRotate(90);

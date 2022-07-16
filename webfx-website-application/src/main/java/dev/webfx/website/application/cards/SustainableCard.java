@@ -21,7 +21,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 final class SustainableCard extends FlipCard {
 
     private FrameworksPane javaFrameworksPane, webFrameworksPane;
-    private WebFxCloudAnimationPane webFxCloudAnimationPane;
+    private WebFXCloudAnimationPane webFxCloudAnimationPane;
     private RefactoringAnimationPane refactoringAnimationPane;
     private LongevityAnimationPane longevityAnimationPane;
     private LayoutPane longevityAnimationEnclosingPane;
@@ -107,7 +107,7 @@ final class SustainableCard extends FlipCard {
             case 5:
                 if (forwardingStep) {
                     if (webFxCloudAnimationPane == null)
-                        webFxCloudAnimationPane = new WebFxCloudAnimationPane();
+                        webFxCloudAnimationPane = new WebFXCloudAnimationPane();
                     webFxCloudAnimationPane.setOpacity(1);
                     flipToNewContent(webFxCloudAnimationPane);
                 } else {
