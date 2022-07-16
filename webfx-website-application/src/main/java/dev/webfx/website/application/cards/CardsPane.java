@@ -5,6 +5,8 @@ import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.Arrays;
@@ -21,6 +23,7 @@ public class CardsPane extends LayoutPane {
     private boolean sizeChangedDuringScroll;
     private Timeline scrollTimeline;
     private double gap, scrollTimelineEndValue;
+    private final Circle[] dots = {new Circle(), new Circle(), new Circle(), new Circle(), new Circle(), new Circle()};
 
     public CardsPane(Card... cards) {
         super(cards);
@@ -33,6 +36,9 @@ public class CardsPane extends LayoutPane {
         setOnSwipeLeft(   e -> scrollToCard(focusedCardIndex - 1, false));
         setOnSwipeRight(  e -> scrollToCard(focusedCardIndex + 1, false));
         setBackground(null);
+        getChildren().addAll(dots);
+        for (Circle dot : dots)
+            dot.setFill(Color.WHITE);
     }
 
     @Override
@@ -55,6 +61,15 @@ public class CardsPane extends LayoutPane {
         }
         scrollToFocusedCard(false);
         sizeChangedDuringScroll = false;
+        for (int i = 0; i < 6; i++) {
+            Circle dot = dots[i];
+            dot.setRadius(gap / 6);
+            boolean left = i < 3;
+            int farX = left ? i :  (5 - i);
+            //dot.setVisible(left ? leftCardIndex > 0 : leftCardIndex + visibleCardsCount < cards.length);
+            dot.setCenterX(left ? gap / 2 : width - gap / 2);
+            dot.setCenterY(height / 2 -  height / 30 + farX * height / 30);
+        }
     }
 
     private int clickedCardIndex(double clickX) {
@@ -76,7 +91,6 @@ public class CardsPane extends LayoutPane {
 
     private void scrollToFocusedCard(boolean playCard) {
         Timeline timeline = scrollTimeline;
-        setTranslateY(0);
         int leftCardIndex = Math.max(0, Math.min(cards.length - visibleCardsCount, focusedCardIndex - 1));
         if (!cards[Math.min(cards.length - 1, leftCardIndex + visibleCardsCount - 1)].checkInitialized())
             forceLayoutChildren();
@@ -98,6 +112,8 @@ public class CardsPane extends LayoutPane {
                 playCard(playCard);
             });
             scrollTimeline.play();
+            for (Circle dot : dots)
+                dot.setVisible(false);
         }
     }
 
@@ -110,6 +126,12 @@ public class CardsPane extends LayoutPane {
     private void playCard(boolean play) {
         if (play)
             cards[focusedCardIndex].transitionToNextStep();
+        int leftCardIndex = Math.max(0, Math.min(cards.length - visibleCardsCount, focusedCardIndex - 1));
+        for (int i = 0; i < 6; i++) {
+            Circle dot = dots[i];
+            boolean left = i < 3;
+            dot.setVisible(left ? leftCardIndex > 0 : leftCardIndex + visibleCardsCount < cards.length);
+        }
     }
     
 }
