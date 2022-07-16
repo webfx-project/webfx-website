@@ -15,8 +15,8 @@ import javafx.scene.layout.Pane;
 public abstract class LayoutPane extends Pane {
 
     private double lastWidth, lastHeight;
-    private boolean force;
-    private int layoutCount;
+    protected boolean force;
+    private int layoutCount, forceRequestLayoutCount;
 
     public LayoutPane() {
     }
@@ -39,11 +39,12 @@ public abstract class LayoutPane extends Pane {
         double width = getWidth(), height = getHeight();
         if (force || lastWidth != width || lastHeight != height) {
             layoutCount++;
-            //  if (layoutCount > 1) dev.webfx.platform.log.Logger.log("Layout count = " + layoutCount + " for " + getClass() + (lastWidth == width ? "" : ", width: " + lastWidth + " -> " + width) + (lastHeight == height ? "" : ", height: " + lastHeight + " -> " + height) + (!force ? "" : ", force: true"));
+            //  if (layoutCount > 1) dev.webfx.platform.console.Console.log("Layout count = " + layoutCount + " for " + getClass() + (lastWidth == width ? "" : ", width: " + lastWidth + " -> " + width) + (lastHeight == height ? "" : ", height: " + lastHeight + " -> " + height) + (!force ? "" : ", force: true"));
             layoutChildren(width, height);
             lastWidth = width;
             lastHeight = height;
-            force = false;
+            if (layoutCount - forceRequestLayoutCount > 7)
+                force = false;
         }
     }
 
@@ -51,6 +52,7 @@ public abstract class LayoutPane extends Pane {
 
     public void forceLayoutChildren() {
         force = true;
+        forceRequestLayoutCount = layoutCount;
         if (layoutCount >= 1) // Startup optimisation: no need to schedule another layout if the first one is still not yet done
             UiScheduler.scheduleInAnimationFrame(this::layoutChildren, AnimationFramePass.SCENE_PULSE_LAYOUT_PASS);
     }

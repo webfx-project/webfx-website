@@ -32,7 +32,7 @@ final class WebFXCloudAnimationPane extends LayoutPane {
     private final static double SPEED_FACTOR = 0.05;
 
     private final ScalePane cloudPane = new ScalePane(createCloud());
-    private final FxWreathPane fxWreathPane = new FxWreathPane();
+    private final FXWreathPane fxWreathPane = new FXWreathPane();
     private final SVGPath wreath = fxWreathPane.getWreathSVGPath();
     private final ScalePane medalPane = new ScalePane(WebSiteShared.createMedal());
     private final ScalePane jsLogoPane = new ScalePane(WebSiteShared.createJSLogo());

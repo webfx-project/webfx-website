@@ -16,7 +16,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.EASE_OUT_INTERP
  */
 public class CardsPane extends LayoutPane {
 
-    final Card[] cards;
+    public final Card[] cards;
     private int visibleCardsCount, focusedCardIndex = -1;
     private boolean sizeChangedDuringScroll;
     private Timeline scrollTimeline;

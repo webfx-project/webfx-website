@@ -12,7 +12,7 @@ import javafx.scene.shape.SVGPath;
 /**
  * @author Bruno Salmon
  */
-public final class FxWreathPane extends LayoutPane {
+public final class FXWreathPane extends LayoutPane {
 
     private final SVGPath wreathSVGPath;
     private final SVGPath fxLogo = WebSiteShared.createFxLogo();
@@ -20,11 +20,11 @@ public final class FxWreathPane extends LayoutPane {
     private final ScalePane wreathPane;
     private final FlipPanel flipPanel = new FlipPanel();
 
-    public FxWreathPane() {
+    public FXWreathPane() {
         this(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange")));
     }
 
-    public FxWreathPane(SVGPath wreathSVGPath) {
+    public FXWreathPane(SVGPath wreathSVGPath) {
         this.wreathSVGPath = wreathSVGPath;
         wreathPane = new ScalePane(ScalePane.ScaleMode.HEIGHT, wreathSVGPath);
         getChildren().setAll(wreathPane, flipPanel);

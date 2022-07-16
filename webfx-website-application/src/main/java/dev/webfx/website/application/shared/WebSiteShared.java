@@ -2,7 +2,7 @@ package dev.webfx.website.application.shared;
 
 import dev.webfx.extras.webtext.HtmlText;
 import dev.webfx.extras.webtext.SvgText;
-import dev.webfx.website.application.cards.FxWreathPane;
+import dev.webfx.website.application.cards.FXWreathPane;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import javafx.animation.Interpolator;
@@ -43,7 +43,9 @@ public final class WebSiteShared {
     );
     public static final LinearGradient GITHUB_GRADIENT = LinearGradient.valueOf("to right, #B2F4B6, #3BF0E4, #C2A0FD, #EA5DAD, #FF7571, #FFE580");
     private static final List<Stop> GRADIENT_STOPS = GITHUB_GRADIENT.getStops();
-    public static final Color FIRST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(0).getColor(), LAST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(GRADIENT_STOPS.size() - 1).getColor();
+    public static final Color FIRST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(0).getColor(),
+            MIDDLE_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(GRADIENT_STOPS.size() / 2).getColor(),
+            LAST_GITHUB_GRADIENT_COLOR = GRADIENT_STOPS.get(GRADIENT_STOPS.size() - 1).getColor();
 
     public static final DropShadow dropShadow  = new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 10, 0, 8, 8);
     public static final Color javaColor        = Color.rgb(244, 175, 103);
@@ -201,10 +203,10 @@ public final class WebSiteShared {
         return createImageViewLogo("Angular.png");
     }
 
-    public static FxWreathPane createWebFxLogo() {
+    public static FXWreathPane createWebFxLogo() {
         SVGPath cloud = createCloud();
         cloud.setTranslateY(-5);
-        return setLogoId(new FxWreathPane(cloud), "WebFX");
+        return setLogoId(new FXWreathPane(cloud), "WebFX");
     }
 
     public static Pane createJSLogo() {
@@ -259,6 +261,22 @@ public final class WebSiteShared {
 
     public static SVGPath createGithubLogo() {
         SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getGithubLogoPath(), Color.gray(0.2));
+        githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
+        githubSVGPath.setStroke(Color.WHITE);
+        githubSVGPath.setStrokeWidth(1);
+        return githubSVGPath;
+    }
+
+    public static SVGPath createBlogLogo() {
+        SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getBlogPath(), Color.gray(0.2));
+        githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
+        githubSVGPath.setStroke(Color.WHITE);
+        githubSVGPath.setStrokeWidth(1);
+        return githubSVGPath;
+    }
+
+    public static SVGPath createDocLogo() {
+        SVGPath githubSVGPath = createLogoSVGPath(SvgLogoPaths.getDocPath(), Color.gray(0.2));
         githubSVGPath.setEffect(new DropShadow(BlurType.GAUSSIAN, Color.BLACK, 5, 0, 3, 3));
         githubSVGPath.setStroke(Color.WHITE);
         githubSVGPath.setStrokeWidth(1);

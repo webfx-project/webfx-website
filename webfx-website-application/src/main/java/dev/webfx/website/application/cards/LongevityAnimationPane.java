@@ -18,7 +18,7 @@ final class LongevityAnimationPane extends ScalePane {
 
     private final ScalePane longevityScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getLongevityPath(), LinearGradient.valueOf("to right, red, brown, orange, green")));
     private final ScalePane htmlFrameScalePane = new ScalePane(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getHtmlFramePath(), WebSiteShared.html5Color));
-    private final Pane fxWreathPane = new FxWreathPane();
+    private final Pane fxWreathPane = new FXWreathPane();
     private final LayoutPane fixedSizePane;
     private final List<Pane> refactoringAnimationPanes = new ArrayList<>();
 

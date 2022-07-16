@@ -1,6 +1,7 @@
 package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.SvgText;
+import dev.webfx.platform.uischeduler.UiScheduler;
 import dev.webfx.website.application.cards.*;
 import dev.webfx.website.application.demos.DemosThumbnailsPane;
 import dev.webfx.website.application.shared.LayoutPane;
@@ -31,8 +32,6 @@ public final class WebFXWebsiteApplication extends Application {
     private final Text webFxText = createWebFxSvgText();
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
     private final Text startText = setUpText(new SvgText("Start"), 50, true, false, true, true);
-    //private final SVGPath githubLogo = createGithubLogo();
-    //private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
     private DemosThumbnailsPane demosThumbnailsPane; // lazy initialisation
     private final CardsPane webfxCardsPane = new CardsPane(
             new WebFXCard(),
@@ -77,14 +76,14 @@ public final class WebFXWebsiteApplication extends Application {
         runOnMouseClick(demosText, () -> switchShow(true, false, false));
         runOnMouseClick(webFxText, () -> switchShow(false, true, false));
         runOnMouseClick(startText, () -> switchShow(false, false, true));
-        //runOnMouseClick(startText, () -> openUrl("https://github.com/webfx-project/webfx"));
-        //setHostServices(getHostServices()); // Necessary to make openUrl() work
 
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
-        setShapeHoverAnimationColor(startText, LAST_GITHUB_GRADIENT_COLOR.darker());
         setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
+        setShapeHoverAnimationColor(startText, LAST_GITHUB_GRADIENT_COLOR.darker());
+
+        setHostServices(getHostServices()); // Necessary to make openUrl() work
     }
 
     public static void updateTextFontSize(Text text, double fontSize) {
@@ -106,12 +105,19 @@ public final class WebFXWebsiteApplication extends Application {
         if (showStartCards && startCardsPane == null) {
             // Creating the demo pane and adding it to the cards pane
             containerPane.getChildren().add(startCardsPane = new CardsPane(
-                    new SustainableCard(),
-                    new ResponsiveCard()
+                    new DocumentationCard(),
+                    new BlogCard(),
+                    new GitHubCard()
             ));
             startCardsPane.setOpacity(0);
             // Postponing the fade effect after the next layout pass (which may take time to consider the demo pane addition)
             Platform.runLater(() -> switchShow(showDemos, showWebFxCards, showStartCards));
+            long index = 0;
+            for (Card card : startCardsPane.cards) {
+                card.setTranslateY(containerPane.getHeight());
+                Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), new KeyValue(card.translateYProperty(), 0, EASE_OUT_INTERPOLATOR)));
+                UiScheduler.scheduleDelay(200 * index++, timeline::play);
+            }
             return;
         }
         this.showDemos = showDemos;
@@ -124,6 +130,7 @@ public final class WebFXWebsiteApplication extends Application {
             webfxCardsPane.setVisible(true);
         if (showStartCards)
             startCardsPane.setVisible(true);
+        containerPane.forceLayoutChildren();
         Timeline fadeTimeline = new Timeline(new KeyFrame(Duration.millis(500),
                 Stream.of(demosThumbnailsPane, webfxCardsPane, startCardsPane)
                         .filter(Objects::nonNull)

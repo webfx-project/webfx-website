@@ -55,7 +55,7 @@ public final class MagicalCard extends FlipCard {
         switch (step) {
             case 1:
                 Canvas rainbowCanvas = new Canvas();
-                FxWreathPane webFxLogo = WebSiteShared.createWebFxLogo();
+                FXWreathPane webFxLogo = WebSiteShared.createWebFxLogo();
                 webFxLogo.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
                 Region whiteWand = createWand(true), blackWand = createWand(false);
                 Node rainbowStar1 = createStar(Color.BLUE, 0), rainbowStar2 = createStar(Color.PURPLE, 0), star1 = createStar(Color.GREEN,-30), star2 = createStar(Color.RED, -20), star3 = createStar(Color.ORANGE, 20), star4 = createStar(Color.YELLOW, 30);

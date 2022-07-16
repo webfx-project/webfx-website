@@ -35,7 +35,7 @@ public final class CrossPlatformCard extends Card {
 
     @Override
     Node createIllustrationNode() {
-        FxWreathPane fxPane = createWebFxLogo();
+        FXWreathPane fxPane = createWebFxLogo();
         fxPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
         platformsNodes = new Pane[] {
                 html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 2),

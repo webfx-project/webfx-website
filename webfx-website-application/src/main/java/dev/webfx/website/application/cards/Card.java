@@ -54,13 +54,8 @@ public abstract class Card extends LayoutPane {
     }
 
     protected void init() {
-        longestCaption = "";
-        for (int step = 1; caption(step) != null; step++) {
-            String caption = caption(step);
-            if (caption.length() > longestCaption.length())
-                longestCaption = caption;
-        }
-        titleText = WebSiteShared.setUpText(new Text(title + " \u2192"), 30, true, true, false, true);
+        longestCaption = computeLongestCaption();
+        titleText = WebSiteShared.setUpText(new Text(title + (hasSingleStep() ? "" : " \u2192")), 30, true, true, false, true);
         illustrationNode = createIllustrationNode();
         titleText.setMouseTransparent(true);
         captionText1.setMouseTransparent(true);
@@ -70,6 +65,20 @@ public abstract class Card extends LayoutPane {
         setClip(clip);
         initialized = true;
         cardWidth = 0;
+    }
+
+    protected String computeLongestCaption() {
+        longestCaption = "";
+        for (int step = 1; caption(step) != null; step++) {
+            String caption = caption(step);
+            if (caption.length() > longestCaption.length())
+                longestCaption = caption;
+        }
+        return longestCaption;
+    }
+
+    boolean hasSingleStep() {
+        return caption(2) == null;
     }
 
     abstract Node createIllustrationNode();
@@ -119,7 +128,7 @@ public abstract class Card extends LayoutPane {
     abstract String caption(int step);
 
     private void computeMaxTextHeights(double width, double height) {
-        if (cardWidth == width && cardHeight == height)
+        if (cardWidth == width && cardHeight == height && !force)
             return;
         cardWidth = width; cardHeight = height;
         maxTitleHeight = maxCaptionHeight = 0;
@@ -166,7 +175,7 @@ public abstract class Card extends LayoutPane {
         ny -= nh + vGap;
         centerInArea(titleText, hgap, ny, w, nh);
         ny += nh + vGap;
-        nh = ny - 2 * vGap;
+        nh = ny - 2 * vGap - (hasSingleStep() ? 2 * nh : 0);
         ny = vGap;
         layoutInArea(illustrationNode, hgap, ny, w, nh);
     }
