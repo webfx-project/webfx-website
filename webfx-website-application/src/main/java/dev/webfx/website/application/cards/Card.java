@@ -24,9 +24,9 @@ public abstract class Card extends LayoutPane {
     private static double cardWidth, cardHeight, maxTitleHeight, maxCaptionHeight;
 
     public static final Card[] cards = {
-            new WebFxCard(),
-            new JavaFullStackCard(),
+            new WebFXCard(),
             new CrossPlatformCard(),
+            new JavaFullStackCard(),
             new SustainableCard(),
             new ResponsiveCard(),
             new MagicalCard(),
