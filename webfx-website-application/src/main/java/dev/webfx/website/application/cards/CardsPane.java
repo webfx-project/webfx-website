@@ -40,7 +40,7 @@ public class CardsPane extends LayoutPane {
     }
 
     public void onSwipe(boolean left) { // Called by the WebFXWebsiteApplication
-        scrollToCard(focusedCardIndex + (left ? -1 : +1), false);
+        scrollToCard(focusedCardIndex + (left ? +1 : -1), false);
     }
 
     @Override
