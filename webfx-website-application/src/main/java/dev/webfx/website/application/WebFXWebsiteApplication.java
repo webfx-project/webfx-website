@@ -83,8 +83,8 @@ public final class WebFXWebsiteApplication extends Application {
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
-        containerPane.setOnSwipeLeft( e -> onSwipe(true));
-        containerPane.setOnSwipeRight(e -> onSwipe(false));
+        scene.setOnSwipeLeft( e -> onSwipe(true));
+        scene.setOnSwipeRight(e -> onSwipe(false));
 
         setHostServices(getHostServices()); // Necessary to make openUrl() work
     }
