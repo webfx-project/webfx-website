@@ -37,8 +37,8 @@ public final class WebFXWebsiteApplication extends Application {
             new WebFXCard(),
             new CrossPlatformCard(),
             new JavaFullStackCard(),
-            //new SustainableCard(),
-            //new ResponsiveCard(),
+            new SustainableCard(),
+            new ResponsiveCard(),
             new MagicalCard());
     private CardsPane startCardsPane; // lazy initialisation
     private boolean showDemos, showWebFxCards = true, showStartCards;
@@ -73,6 +73,9 @@ public final class WebFXWebsiteApplication extends Application {
         stage.setScene(scene);
         stage.show();
 
+        setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
+        setShapeHoverAnimationColor(startText, LAST_GITHUB_GRADIENT_COLOR.darker());
+
         runOnMouseClick(demosText, () -> switchShow(true, false, false));
         runOnMouseClick(webFxText, () -> switchShow(false, true, false));
         runOnMouseClick(startText, () -> switchShow(false, false, true));
@@ -80,10 +83,16 @@ public final class WebFXWebsiteApplication extends Application {
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
 
-        setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
-        setShapeHoverAnimationColor(startText, LAST_GITHUB_GRADIENT_COLOR.darker());
+        containerPane.setOnSwipeLeft( e -> onSwipe(true));
+        containerPane.setOnSwipeRight(e -> onSwipe(false));
 
         setHostServices(getHostServices()); // Necessary to make openUrl() work
+    }
+
+    private void onSwipe(boolean left) {
+        CardsPane cardsPane = showWebFxCards ? webfxCardsPane : showStartCards ? startCardsPane : null;
+        if (cardsPane != null)
+            cardsPane.onSwipe(left);
     }
 
     public static void updateTextFontSize(Text text, double fontSize) {

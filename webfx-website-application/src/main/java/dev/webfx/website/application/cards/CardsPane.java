@@ -33,12 +33,14 @@ public class CardsPane extends LayoutPane {
             WebSiteShared.runOnMouseClick(card, () -> scrollToCard(Arrays.asList(cards).indexOf(card), true));
         }
         setOnMouseClicked(e -> scrollToCard(clickedCardIndex(e.getX()), false));
-        setOnSwipeLeft(   e -> scrollToCard(focusedCardIndex - 1, false));
-        setOnSwipeRight(  e -> scrollToCard(focusedCardIndex + 1, false));
         setBackground(null);
         getChildren().addAll(dots);
         for (Circle dot : dots)
             dot.setFill(Color.WHITE);
+    }
+
+    public void onSwipe(boolean left) { // Called by the WebFXWebsiteApplication
+        scrollToCard(focusedCardIndex + (left ? -1 : +1), false);
     }
 
     @Override
