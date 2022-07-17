@@ -20,7 +20,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.EASE_OUT_INTERP
 public class CardsPane extends LayoutPane {
 
     public final Card[] cards;
-    private int visibleCardsCount, focusedCardIndex = -1;
+    private int visibleCardsCount, focusedCardIndex;
     private boolean sizeChangedDuringScroll;
     private Timeline scrollTimeline;
     private double gap, scrollTimelineEndValue;
@@ -39,13 +39,13 @@ public class CardsPane extends LayoutPane {
     }
 
     private void onPaneClicked(MouseEvent e) {
-        double x = e.getX();
+        double x = e.getX(); // Note x goes crazy with the SustainableCard TODO: fix bug in WebFX InputEventUtils.recomputeCoordinates() and probably in call to Node.sceneToLocal()
         if (x <= gap)
             scrollToCard(focusedCardIndex - 1, false);
         else {
             int cardIndex = clickedCardIndex(x); // Index of the clicked card
-            if (x >= getWidth() - gap)
-                scrollToCard(cardIndex, false);
+            if (x >= getWidth() - gap && x <= getWidth())
+                scrollToCard(Math.max(cardIndex, focusedCardIndex + 1), false);
             else {
                 if (visibleCardsCount == 1) // Single card displayed => no scroll, just play
                     playCard(cardIndex);
@@ -109,7 +109,9 @@ public class CardsPane extends LayoutPane {
 
     private int clickedCardIndex(double clickX) {
         //int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
-        int cardIndex = getLeftCardIndex() + (int) (clickX * visibleCardsCount / getWidth());
+        int leftCardIndex = getLeftCardIndex();
+        int cardIndex = leftCardIndex + (visibleCardsCount == 1 ? 0 : (int) (clickX * visibleCardsCount / getWidth()));
+        //dev.webfx.platform.console.Console.log("cardIndex = " + cardIndex + ", x = " + clickX + ", leftCardIndex = " + leftCardIndex + ", visibleCardsCount = " + visibleCardsCount);
         return boundedCardIndex(cardIndex);
     }
 

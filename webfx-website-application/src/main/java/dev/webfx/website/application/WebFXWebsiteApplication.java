@@ -37,7 +37,7 @@ public final class WebFXWebsiteApplication extends Application {
             new WebFXCard(),
             new CrossPlatformCard(),
             new JavaFullStackCard(),
-            new SustainableCard(),
+            //new SustainableCard(),
             //new ResponsiveCard(),
             new MagicalCard());
     private CardsPane startCardsPane; // lazy initialisation
