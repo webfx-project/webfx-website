@@ -67,6 +67,9 @@ public final class WebFXWebsiteApplication extends Application {
     @Override
     public void start(Stage stage) {
         containerPane.setBackground(null);
+        containerPane.setOnSwipeLeft( e -> onSwipe(true));
+        containerPane.setOnSwipeRight(e -> onSwipe(false));
+
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(containerPane, screenBounds.getWidth(), screenBounds.getHeight(), BACKGROUND_GRADIENT);
         stage.setTitle("WebFX - JavaFX \u2192 JS transpiler");
@@ -82,9 +85,6 @@ public final class WebFXWebsiteApplication extends Application {
 
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
-
-        scene.setOnSwipeLeft( e -> onSwipe(true));
-        scene.setOnSwipeRight(e -> onSwipe(false));
 
         setHostServices(getHostServices()); // Necessary to make openUrl() work
     }
