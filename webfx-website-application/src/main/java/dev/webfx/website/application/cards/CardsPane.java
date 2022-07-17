@@ -108,9 +108,8 @@ public class CardsPane extends LayoutPane {
     }
 
     private int clickedCardIndex(double clickX) {
-        int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
-        if (cardIndex > focusedCardIndex)
-            cardIndex = Math.min(focusedCardIndex <= 0 ? 2 : focusedCardIndex + 1, cardIndex);
+        //int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
+        int cardIndex = getLeftCardIndex() + (int) (clickX * visibleCardsCount / getWidth());
         return boundedCardIndex(cardIndex);
     }
 
