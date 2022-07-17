@@ -38,7 +38,7 @@ public final class WebFXWebsiteApplication extends Application {
             new CrossPlatformCard(),
             new JavaFullStackCard(),
             new SustainableCard(),
-            new ResponsiveCard(),
+            //new ResponsiveCard(),
             new MagicalCard());
     private CardsPane startCardsPane; // lazy initialisation
     private boolean showDemos, showWebFxCards = true, showStartCards;
@@ -92,7 +92,7 @@ public final class WebFXWebsiteApplication extends Application {
     private void onSwipe(boolean left) {
         CardsPane cardsPane = showWebFxCards ? webfxCardsPane : showStartCards ? startCardsPane : null;
         if (cardsPane != null)
-            cardsPane.onSwipe(left);
+            cardsPane.onPaneSwipe(left);
     }
 
     public static void updateTextFontSize(Text text, double fontSize) {

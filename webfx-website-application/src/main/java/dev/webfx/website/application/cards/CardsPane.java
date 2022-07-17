@@ -30,7 +30,7 @@ public class CardsPane extends LayoutPane {
         this.cards = cards;
         for (Card card : cards) {
             card.setCardsPane(this);
-            WebSiteShared.runOnMouseClick(card, () -> scrollToCard(Arrays.asList(cards).indexOf(card), true));
+            WebSiteShared.runOnMouseClick(card, () -> onCardClicked(card));
         }
         setOnMouseClicked(e -> scrollToCard(clickedCardIndex(e.getX()), false));
         setBackground(null);
@@ -39,7 +39,14 @@ public class CardsPane extends LayoutPane {
             dot.setFill(Color.WHITE);
     }
 
-    public void onSwipe(boolean left) { // Called by the WebFXWebsiteApplication
+    private void onCardClicked(Card card) {
+        if (visibleCardsCount > 1)
+            scrollToCard(Arrays.asList(cards).indexOf(card), true);
+        else
+            playCard(true);
+    }
+
+    public void onPaneSwipe(boolean left) { // Called by the WebFXWebsiteApplication
         scrollToCard(focusedCardIndex + (left ? +1 : -1), false);
     }
 
