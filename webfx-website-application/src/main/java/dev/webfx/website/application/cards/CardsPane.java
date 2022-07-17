@@ -5,6 +5,8 @@ import dev.webfx.website.application.shared.LayoutPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.event.EventTarget;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -39,20 +41,27 @@ public class CardsPane extends LayoutPane {
     }
 
     private void onPaneClicked(MouseEvent e) {
-        double x = e.getX(); // Note x goes crazy with the SustainableCard TODO: fix bug in WebFX InputEventUtils.recomputeCoordinates() and probably in call to Node.sceneToLocal()
-        if (x <= gap)
-            scrollToCard(focusedCardIndex - 1, false);
-        else {
-            int cardIndex = clickedCardIndex(x); // Index of the clicked card
-            if (x >= getWidth() - gap && x <= getWidth())
-                scrollToCard(Math.max(cardIndex, focusedCardIndex + 1), false);
-            else {
-                if (visibleCardsCount == 1) // Single card displayed => no scroll, just play
-                    playCard(cardIndex);
-                else // Several cards displayed => eventually scroll the cards before playing
-                    scrollToCard(cardIndex, true);
-            }
+        double x = e.getX(); // Note x can go crazy with cards having SVG TODO: fix bug in WebFX InputEventUtils.recomputeCoordinates() and probably in call to Node.sceneToLocal()
+        // That's why we rely more on target than x to figure out what card was clicked
+        //int cardIndex = clickedCardIndex(x);
+        int cardIndex = -1;
+        EventTarget target = e.getTarget();
+        if (target instanceof Node) {
+            Node node = (Node) target;
+            while (node != null && !(node instanceof Card))
+                node = node.getParent();
+            if (node != null)
+                cardIndex = Arrays.asList(cards).indexOf((Card) node);
         }
+        if (cardIndex != -1) {
+            if (visibleCardsCount == 1) // Single card displayed => no scroll, just play
+                playCard(cardIndex);
+            else // Several cards displayed => eventually scroll the cards before playing
+                scrollToCard(cardIndex, true);
+        } else if (x <= gap)
+            scrollToCard(focusedCardIndex - 1, false);
+        else if (x >= getWidth() - gap)
+            scrollToCard(Math.max(getRightCardIndex(), focusedCardIndex + 1), false);
     }
 
     public void onPaneSwipe(boolean left) { // Called by the WebFXWebsiteApplication
