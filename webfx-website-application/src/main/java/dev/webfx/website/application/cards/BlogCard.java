@@ -36,11 +36,6 @@ public class BlogCard extends Card {
     }
 
     @Override
-    protected String computeLongestCaption() {
-        return "WebFX is just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
-    }
-
-    @Override
     public void transitionToNextStep() {
         if (currentAnimationStep == 1)
             openUrl("https://blog.webfx.dev");

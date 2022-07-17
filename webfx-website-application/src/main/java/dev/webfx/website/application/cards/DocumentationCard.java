@@ -35,6 +35,11 @@ public class DocumentationCard extends Card {
     }
 
     @Override
+    protected String computeLongestCaption() {
+        return "WebFX is just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
+    }
+
+    @Override
     protected void layoutChildren(double width, double height) {
         documentationLogo.setTranslateX(0.075 * width);
         super.layoutChildren(width, height);
