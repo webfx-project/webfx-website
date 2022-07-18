@@ -52,7 +52,8 @@ final class RefactoringAnimationPane extends Pane {
         BRICK_STROKE_WIDTH = 1;
         startBrickAnimation(onFinished,
                 // Building and falling bricks
-                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 0,  0, 0, MoveType.TRANSLATION_BOTTOM)),
+                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 0,  100, 0, MoveType.TRANSLATION_BOTTOM)), // Dummy brick as a workaround of a positioning issue with the first brick on the web version
+                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 1,  0, 0, MoveType.TRANSLATION_BOTTOM)),
                 new AnimatedBrick(BrickShape.circle,    BRICK_COLOR2, 1, new BrickMove( 1,  1, 0, MoveType.TRANSLATION_BOTTOM)),
                 new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR3, 1, new BrickMove( 2,  1, 1, MoveType.TRANSLATION_BOTTOM)),
                 new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR4, 3, new BrickMove( 3,  2, 0, MoveType.TRANSLATION_BOTTOM)),
@@ -86,7 +87,8 @@ final class RefactoringAnimationPane extends Pane {
         BRICK_STROKE_WIDTH = 1;
         startBrickAnimation(onFinished,
                 // Building bricks
-                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 0,  0,  0, MoveType.TRANSLATION_BOTTOM)),
+                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 0,  50, 0, MoveType.TRANSLATION_BOTTOM)), // Dummy brick as a workaround of a positioning issue with the first brick on the web version
+                new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR1, 3, new BrickMove( 1,  0,  0, MoveType.TRANSLATION_BOTTOM)),
                 new AnimatedBrick(BrickShape.circle,    BRICK_COLOR2, 1, new BrickMove( 1,  1,  0, MoveType.TRANSLATION_BOTTOM), new BrickMove(12,  1, -1, MoveType.TRANSLATION_LEFT),  new BrickMove(13, -10, -1, MoveType.TRANSLATION_BOTTOM)),
                 new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR3, 1, new BrickMove( 2,  1,  1, MoveType.TRANSLATION_BOTTOM), new BrickMove(12,  1,  0, MoveType.TRANSLATION_LEFT)),
                 new AnimatedBrick(BrickShape.rectangle, BRICK_COLOR4, 3, new BrickMove( 3,  2,  0, MoveType.TRANSLATION_BOTTOM)),
@@ -159,9 +161,9 @@ final class RefactoringAnimationPane extends Pane {
     private void startBrickAnimation(Runnable onFinished, AnimatedBrick... animatedBricks) {
         setMaxWidth(MAX_BRICK_WIDTH * BRICK_WIDTH_UNIT_PIXELS);
         setMinHeight(14 * BRICK_HEIGHT_PIXELS + 100);
+        getChildren().addAll(Arrays.stream(animatedBricks).map(ab -> { ab.shape.setVisible(false); return ab.shape;}).collect(Collectors.toList()));
         card.requestLayout();
         card.layout();
-        getChildren().addAll(Arrays.stream(animatedBricks).map(ab -> { ab.shape.setVisible(false); return ab.shape;}).collect(Collectors.toList()));
         playBrickAnimationSequence(animatedBricks, 0, onFinished);
     }
 
