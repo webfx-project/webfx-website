@@ -36,7 +36,7 @@ public class DocumentationCard extends Card {
 
     @Override
     protected String computeLongestCaption() {
-        return "The same language for all your stack. The same UI toolkit for your front & back-office. The same IDE for all your code. The ideal solution for Java-based environments.";
+        return LONGEST_CAPTION; // We align with the same longest caption as the WebFX cards pane, so that the title text has the same vertical position in the StartPane
     }
 
     @Override

@@ -35,7 +35,8 @@ public abstract class Card extends LayoutPane {
     protected int currentAnimationStep = 0;
     protected boolean forwardingStep;
     private CardTransition cardTransition;
-    private String longestCaption;
+    private String longestCaption; // Longest caption of this card (among all steps)
+    protected static String LONGEST_CAPTION; // Longest caption of all cards (among all cards panes)
 
     Card(String title) {
         this.title = title;
@@ -76,6 +77,8 @@ public abstract class Card extends LayoutPane {
             if (caption.length() > longestCaption.length())
                 longestCaption = caption;
         }
+        if (LONGEST_CAPTION == null || longestCaption.length() > LONGEST_CAPTION.length())
+            LONGEST_CAPTION = longestCaption;
         return longestCaption;
     }
 
