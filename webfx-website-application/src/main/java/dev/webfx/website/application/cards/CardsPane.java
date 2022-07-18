@@ -22,7 +22,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.EASE_OUT_INTERP
 public class CardsPane extends LayoutPane {
 
     public final Card[] cards;
-    private int visibleCardsCount, focusedCardIndex;
+    private int leftCardIndex, visibleCardsCount;
     private boolean sizeChangedDuringScroll;
     private Timeline scrollTimeline;
     private double gap, scrollTimelineEndValue;
@@ -38,6 +38,7 @@ public class CardsPane extends LayoutPane {
         getChildren().addAll(dots);
         for (Circle dot : dots)
             dot.setFill(Color.WHITE);
+        updateDotsVisibility(false);
     }
 
     private void onPaneClicked(MouseEvent e) {
@@ -53,19 +54,19 @@ public class CardsPane extends LayoutPane {
             if (node != null)
                 cardIndex = Arrays.asList(cards).indexOf((Card) node);
         }
-        if (cardIndex != -1) {
-            if (visibleCardsCount == 1) // Single card displayed => no scroll, just play
-                playCard(cardIndex);
-            else // Several cards displayed => eventually scroll the cards before playing
-                scrollToCard(cardIndex, true);
-        } else if (x <= gap)
-            scrollToCard(focusedCardIndex - 1, false);
+        if (cardIndex != -1)
+             playCard(cardIndex);
+        else if (x <= gap)
+            scrollOneCardLeft();
         else if (x >= getWidth() - gap)
-            scrollToCard(Math.max(getRightCardIndex(), focusedCardIndex + 1), false);
+            scrollOneCardRight();
     }
 
     public void onPaneSwipe(boolean left) { // Called by the WebFXWebsiteApplication
-        scrollToCard(focusedCardIndex + (left ? +1 : -1), false);
+        if (left)
+            scrollOneCardLeft();
+        else
+            scrollOneCardRight();
     }
 
     @Override
@@ -87,25 +88,29 @@ public class CardsPane extends LayoutPane {
             layoutInArea(card, cx, cy, cw, ch);
             cx += cw + gap;
         }
-        scrollToFocusedCard(false);
+        scrollToCard(leftCardIndex);
         sizeChangedDuringScroll = false;
+        // Positioning the navigation dots
         for (int i = 0; i < 6; i++) {
             Circle dot = dots[i];
             dot.setRadius(gap / 6);
             boolean left = i < 3;
             int farX = left ? i :  (5 - i);
-            //dot.setVisible(left ? leftCardIndex > 0 : leftCardIndex + visibleCardsCount < cards.length);
             dot.setCenterX(left ? gap / 2 : width - gap / 2);
             dot.setCenterY(height / 2 -  height / 30 + farX * height / 30);
         }
     }
 
     private int boundedCardIndex(int cardIndex) {
-        return Math.max(0, Math.min(cardIndex, cards.length - 1));
+        return boundedCardIndex(cardIndex, cards.length - 1);
+    }
+
+    private int boundedCardIndex(int cardIndex, int maxValue) {
+        return Math.max(0, Math.min(cardIndex, maxValue));
     }
 
     private int getLeftCardIndex() {
-        return boundedCardIndex(Math.min(cards.length - visibleCardsCount, focusedCardIndex + (visibleCardsCount == 1 ? 0 : -1)));
+        return leftCardIndex;
     }
 
     private int getRightCardIndex() {
@@ -116,33 +121,21 @@ public class CardsPane extends LayoutPane {
         return boundedCardIndex(leftCardIndex + visibleCardsCount - 1);
     }
 
-    private int clickedCardIndex(double clickX) {
-        //int cardIndex = (int) ((clickX - cards[0].getTranslateX()) / (cards[0].getWidth() + gap));
-        int leftCardIndex = getLeftCardIndex();
-        int cardIndex = leftCardIndex + (visibleCardsCount == 1 ? 0 : (int) (clickX * visibleCardsCount / getWidth()));
-        //dev.webfx.platform.console.Console.log("cardIndex = " + cardIndex + ", x = " + clickX + ", leftCardIndex = " + leftCardIndex + ", visibleCardsCount = " + visibleCardsCount);
-        return boundedCardIndex(cardIndex);
+    private void scrollOneCardLeft() {
+        scrollToCard(getLeftCardIndex() - 1);
     }
 
-    private void scrollToCard(int cardIndex, boolean playCard) {
-        scrollHorizontallyToCard(cardIndex, playCard);
+    private void scrollOneCardRight() {
+        scrollToCard(getLeftCardIndex() + 1);
     }
 
-    private void scrollHorizontallyToCard(int cardIndex, boolean playCard) {
-        cardIndex = Math.min(cardIndex, cards.length - 1);
-        focusedCardIndex = cardIndex;
-        scrollToFocusedCard(playCard);
-    }
-
-    private void scrollToFocusedCard(boolean playCard) {
+    private void scrollToCard(int leftCardIndex) {
+        this.leftCardIndex = leftCardIndex = boundedCardIndex(leftCardIndex, cards.length - visibleCardsCount);
         Timeline timeline = scrollTimeline;
-        int leftCardIndex = getLeftCardIndex();
         int rightCardIndex = getRightCardIndex(leftCardIndex);
         checkCardInitialized(rightCardIndex);
         double translateX = -leftCardIndex * (getWidth() - gap) / visibleCardsCount;
-        if (cards[0].getTranslateX() == translateX)
-            playFocusedCard(playCard);
-        else if (scrollTimeline == null || translateX != scrollTimelineEndValue) {
+        if (cards[0].getTranslateX() != translateX && (scrollTimeline == null || translateX != scrollTimelineEndValue)) {
             stopScrollTimeline();
             scrollTimelineEndValue = translateX;
             scrollTimeline = new Timeline(new KeyFrame(Duration.millis(500),
@@ -154,11 +147,21 @@ public class CardsPane extends LayoutPane {
                 scrollTimeline = null;
                 if (sizeChangedDuringScroll)
                     forceLayoutChildren();
-                playFocusedCard(playCard);
+                // Updating navigation dots visibility
+                updateDotsVisibility(false);
             });
             scrollTimeline.play();
-            for (Circle dot : dots)
-                dot.setVisible(false);
+            // Hiding navigation dots during the cards scroll animation
+            updateDotsVisibility(true);
+        }
+    }
+
+    private void updateDotsVisibility(boolean forceInvisible) {
+        int leftCardIndex = getLeftCardIndex();
+        for (int i = 0; i < 6; i++) {
+            Circle dot = dots[i];
+            boolean left = i < 3;
+            dot.setVisible(!forceInvisible && (left ? leftCardIndex > 0 : leftCardIndex + visibleCardsCount < cards.length));
         }
     }
 
@@ -175,29 +178,16 @@ public class CardsPane extends LayoutPane {
 
     private void playCard(int cardIndex) {
         checkCardInitialized(cardIndex);
-        focusedCardIndex = cardIndex;
-        playFocusedCard(true);
-    }
-
-    private void playFocusedCard(boolean play) {
-        if (play) {
-            Card card = cards[focusedCardIndex];
-            card.transitionToNextStep();
-            if (!card.hasSingleStep() && card.currentAnimationStep == 1) { // Card animation finished and went back to first step
-                int rightCardIndex = getRightCardIndex();
-                // If this was the last card on the right of the screen, we transit to the next card (if any)
-                if (focusedCardIndex == rightCardIndex)
-                    UiScheduler.scheduleDelay(2000, () -> { // We wait 2s before transiting
-                        if (card.currentAnimationStep == 1) // If the user played again on that card, we finally don't transit to the next
-                            scrollToCard(rightCardIndex + 1, false);
-                    });
-            }
-        }
-        int leftCardIndex = getLeftCardIndex();
-        for (int i = 0; i < 6; i++) {
-            Circle dot = dots[i];
-            boolean left = i < 3;
-            dot.setVisible(left ? leftCardIndex > 0 : leftCardIndex + visibleCardsCount < cards.length);
+        Card card = cards[cardIndex];
+        card.transitionToNextStep();
+        if (!card.hasSingleStep() && card.currentAnimationStep == 1) { // Card animation finished and went back to first step
+            int rightCardIndex = getRightCardIndex();
+            // If this was the last card on the right of the screen, we transit to the next card (if any)
+            if (cardIndex == rightCardIndex)
+                UiScheduler.scheduleDelay(1000, () -> { // We wait 1s before transiting
+                    if (card.currentAnimationStep == 1) // If the user played again on that card, we finally don't transit to the next
+                        scrollOneCardRight();
+                });
         }
     }
     
