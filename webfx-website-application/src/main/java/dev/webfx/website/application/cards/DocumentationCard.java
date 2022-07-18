@@ -36,7 +36,7 @@ public class DocumentationCard extends Card {
 
     @Override
     protected String computeLongestCaption() {
-        return "WebFX is new and doesn't yet cover all JavaFX features, but it has a lot of potential and may quickly receive support from the JavaFX & GWT communities.";
+        return "The same language for all your stack. The same UI toolkit for your front & back-office. The same IDE for all your code. The ideal solution for Java-based environments.";
     }
 
     @Override
