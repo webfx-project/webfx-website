@@ -20,10 +20,10 @@ public final class WebFXCard extends FlipCard {
             case 3: return "WebFX patches the higher layer of OpenJFX to make it GWT compatible, and replaces the lower layer with a JavaFX scene graph \u2192 browser DOM mapper.";
             case 4: return "You don't need to transpile each code change, you can use the OpenJFX runtime to develop, test and debug your application as usual in your Java IDE,";
             case 5: return "and transpile it only from time to time to check your web version is working as expected.";
-            case 6: return "WebFX is just starting and doesn't cover all JavaFX features yet, but it has a big potential and shall quickly receive support from the JavaFX & GWT communities.";
+            case 6: return "WebFX is new and doesn't yet cover all JavaFX features, but it has a lot of potential and may quickly receive support from the JavaFX & GWT communities.";
             // Removed this step as it may be controversial (advise from Dukke and Ivan)
             //case 7: return "With WebFX, JavaFX shall become the first major desktop toolkit that can be transpiled to the web!";
-            case 7: return "WebFX will soon be ready for testing.<br/> We hope you will love it.";
+            case 7: return "WebFX is now ready for testing.<br/> We hope you will love it.";
             default : return null;
         }
     }
