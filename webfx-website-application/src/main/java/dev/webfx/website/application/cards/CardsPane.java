@@ -64,9 +64,9 @@ public class CardsPane extends LayoutPane {
 
     public void onPaneSwipe(boolean left) { // Called by the WebFXWebsiteApplication
         if (left)
-            scrollOneCardLeft();
-        else
             scrollOneCardRight();
+        else
+            scrollOneCardLeft();
     }
 
     @Override
