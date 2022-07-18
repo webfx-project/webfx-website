@@ -5,6 +5,7 @@ import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyValue;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -39,6 +40,7 @@ public abstract class Card extends LayoutPane {
     Card(String title) {
         this.title = title;
         setBorder(CARD_BORDER);
+        setCursor(Cursor.HAND);
         WebSiteShared.setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND, CARD_BORDER.getStrokes().get(0).getRadii());
     }
 
