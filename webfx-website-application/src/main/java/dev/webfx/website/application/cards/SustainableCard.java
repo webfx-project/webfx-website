@@ -28,21 +28,21 @@ public final class SustainableCard extends FlipCard {
     private double wallHeight;
 
     public SustainableCard() {
-        super("Sustainable");
+        super("Long-term");
     }
 
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX will give your web applications a longer lifespan potential.";
-            case 2: return "The lifespan potential of your web application firstly depends on the lifespan of its UI toolkit, which makes JavaFX a very interesting choice.";
-            case 3: return "As the Java desktop ecosystem has become hyper stable with no more competitor to come, JavaFX can safely enjoy a long life with many good days ahead.";
-            case 4: return "While in the divided and highly competitive Web ecosystem, the lifespan of a web framework is very uncertain.";
-            case 5: return "Your WebFX application will therefore inherit from JavaFX a lifespan potential that is likely longer than any web framework.";
-            case 6: return "Another requirement for your web application to grow successfully is a good refactoring support.";
-            case 7: return "And one big advantage of a strict language like Java is to excel in refactoring.";
-            case 8: return "A lasting UI toolkit and a good refactoring support are the two fundamental requirements for your application longevity, and Java & JavaFX fulfil them perfectly!";
-            case 9: return "This is what has motivated us to build WebFX: make these sustainable technologies available for the web as an alternative to the short-lived web technologies.";
+            case 1: return "WebFX provides your applications with longevity.";
+            case 2: return "The lifespan of your web application is affected by the lifespan of its UI toolkit.";
+            case 3: return "As the Java desktop ecosystem is hyper stable, we can safely assume that JavaFX is here to stay.";
+            case 4: return "In the divided and highly competitive Web ecosystem, the lifespan of a web framework is very uncertain.";
+            case 5: return "WebFX injects a measure of certainty by inheriting the long lifespan characteristics of JavaFX.";
+            case 6: return "Another requirement for your web application to flourish is a good refactoring support.";
+            case 7: return "And Java, being a strictly-typed language, excels in refactoring.";
+            case 8: return "A lasting UI toolkit and good refactoring support are important requirements for application longevity, and are comprehensively fulfilled by Java & JavaFX.";
+            case 9: return "This is what has motivated us to build WebFX: to make these sustainable, long-term technologies available for the Web.";
             default: return null;
         }
     }
@@ -70,7 +70,7 @@ public final class SustainableCard extends FlipCard {
                 HBox javaFxLogo = createJavaFxLogo();
                 SVGPath years12 = createLogoSVGPath(SvgLogoPaths.get12YearsPath(), WebSiteShared.createVerticalGithubGradiant(200, 0));
                 VBox.setMargin(years12, new Insets(50));
-                HtmlText htmlText = createHtmlText("JavaFX has a great quality: it lasts!<br/>And is still relevant today!");
+                HtmlText htmlText = createHtmlText("JavaFX is a long-term, high-quality client platform that is still relevant today!");
                 VBox vBox = new VBox(10,
                         javaFxLogo,
                         years12,

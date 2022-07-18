@@ -31,11 +31,11 @@ public final class MagicalCard extends FlipCard {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX can generate fast and quite thin web apps despite the big JavaFX size. How possible?";
-            case 2: return "The JS code only needs to create a DOM rendered by the browser, so it doesn't include the big JavaFX rendering layer, as opposed to the desktop version.";
-            case 3: return "And GWT removes all dead code! Making your JS code much thinner, with only the JavaFX classes required by your application (you won't use them all!).";
-            case 4: return "GWT is known to produce a compact and optimized JS code, that is likely faster than a hand-written JS code.";
-            case 5: return "And JavaFX itself is fast, because it's not a framework but &ldquo;just&rdquo; a UI toolkit, with no processing running in the background, so giving you full speed.";
+            case 1: return "WebFX generates fast and lightweight web apps despite the heave JavaFX footprint. How is this possible?";
+            case 2: return "The resultant JS code only needs to create a DOM rendered by the browser, and doesn't include the big JavaFX rendering layer, as opposed to the desktop version.";
+            case 3: return "And GWT removes all dead code! This makes your JS code much thinner, incorporating only the JavaFX classes required by your application.";
+            case 4: return "GWT is known to produce compact and highly optimized JS code, that potentially runs faster than hand-rolled JS.";
+            case 5: return "And JavaFX itself is fast, because it's not a framework but &ldquo;just&rdquo; a UI toolkit. No unwanted processing slowing things down.";
             case 6: return "Here is the Lighthouse performance score for this website. Isn't WebFX magical?";
             default: return null;
         }

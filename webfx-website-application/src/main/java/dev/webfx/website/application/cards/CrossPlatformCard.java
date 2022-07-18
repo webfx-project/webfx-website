@@ -104,11 +104,11 @@ public final class CrossPlatformCard extends Card {
     String caption(int step) {
         switch (step) {
             case 1: return "Your WebFX applications will also run natively on desktops, mobiles & embeds.";
-            case 2: return "Like for any JavaFX application, the JDK toolchain can generate the desktop executables (powered by an optimized JVM) of your WebFX application.";
-            case 3: return "In addition, the Gluon toolchain can generate the native executables (no JVM - all your application compiled into native by GraalVM) for the desktop,";
-            case 4: return "but also for Android & iOS. Ideal for your front-ends (front-office and/or back-office).";
-            case 5: return "Gluon can even make your application run on Raspberry Pi with its JavaFX runtime for embeds (more devices to come).";
-            case 6: return "And WebFX adds the Web platform to the collection. Perfect for your front-office, but also to afford a web back-office with minimal effort from your desktop.";
+            case 2: return "As with any JavaFX application, the JDK toolchain will generate your WebFX application desktop executables (powered by an optimized JVM).";
+            case 3: return "In addition, the Gluon toolchain will generate native executables for the desktop (no JVM - your application compiled into native by GraalVM),";
+            case 4: return "and also for Android & iOS. Ideal for your front-end development.";
+            case 5: return "Gluon can even build your application for Raspberry Pi, with its JavaFX runtime for embeds (more devices to come).";
+            case 6: return "And finally, WebFX compiles your application for the Web platform. Perfect for your front-end development";
             case 7: return "7 platforms from a single code base! (check-out the demos for a Github workflow example)";
             default: return null;
         }
