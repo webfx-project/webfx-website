@@ -14,6 +14,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -32,6 +33,7 @@ public final class WebFXWebsiteApplication extends Application {
     private final Text webFxText = createWebFxSvgText();
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
     private final Text startText = setUpText(new SvgText("Start"), 50, true, false, true, true);
+    private final Text animateCardsText = setUpText(new SvgText("Click on cards to animate them"), 50, true, false, true, true);
     private DemosThumbnailsPane demosThumbnailsPane; // lazy initialisation
     private final CardsPane webfxCardsPane = new CardsPane(
             new WebFXCard(),
@@ -43,7 +45,7 @@ public final class WebFXWebsiteApplication extends Application {
     private CardsPane startCardsPane; // lazy initialisation
     private boolean showDemos, showWebFxCards = true, showStartCards;
     private AnimationTimer webFxFillAnimationTimer;
-    private final LayoutPane containerPane = new LayoutPane(demosText, webFxText, startText, webfxCardsPane) {
+    private final LayoutPane containerPane = new LayoutPane(demosText, webFxText, startText, webfxCardsPane, animateCardsText) {
         @Override
         protected void layoutChildren(double width, double height) {
             double w = width, h = height, vh;
@@ -51,10 +53,12 @@ public final class WebFXWebsiteApplication extends Application {
             updateTextFontSize(webFxText, fontSize);
             updateTextFontSize(demosText, fontSize);
             updateTextFontSize(startText, fontSize);
+            updateTextFontSize(animateCardsText, 0.75 * fontSize);
             vh = webFxText.prefHeight(w);
             centerInArea(webFxText, 0, 0, w, vh);
             centerInArea(demosText, 0, 0, w/3, vh);
             centerInArea(startText, w - w/3, 0, w/3, vh);
+            centerInArea(animateCardsText, 0, 0, w, h);
             if (showDemos && demosThumbnailsPane != null)
                 layoutInArea(demosThumbnailsPane, 0, vh, w, h - vh);
             if (showWebFxCards)
@@ -69,6 +73,10 @@ public final class WebFXWebsiteApplication extends Application {
         containerPane.setBackground(null);
         containerPane.setOnSwipeLeft( e -> onSwipe(true));
         containerPane.setOnSwipeRight(e -> onSwipe(false));
+        animateCardsText.setMouseTransparent(true);
+        animateCardsText.setOpacity(0);
+        animateCardsText.setFill(Color.WHITE);
+        animateCardsText.setStroke(GITHUB_GRADIENT);
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
         Scene scene = new Scene(containerPane, screenBounds.getWidth(), screenBounds.getHeight(), BACKGROUND_GRADIENT);
@@ -85,6 +93,8 @@ public final class WebFXWebsiteApplication extends Application {
 
         webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
         webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
+        fadeAnimateCardsText(true);
+        containerPane.setOnMouseClicked(e -> fadeAnimateCardsText(false));
 
         setHostServices(getHostServices()); // Necessary to make openUrl() work
     }
@@ -157,6 +167,7 @@ public final class WebFXWebsiteApplication extends Application {
                 startCardsPane.setVisible(showStartCards);
         });
         fadeTimeline.play();
+        containerPane.getChildren().remove(animateCardsText);
     }
 
     private void startWebFxFillAnimation() {
@@ -176,5 +187,12 @@ public final class WebFXWebsiteApplication extends Application {
             webFxFillAnimationTimer = null;
         }
         webFxText.setFill(GITHUB_GRADIENT);
+    }
+
+    private void fadeAnimateCardsText(boolean fadeIn) {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), new KeyValue(animateCardsText.opacityProperty(), fadeIn ? 1 : 0)));
+        if (fadeIn)
+            timeline.setOnFinished(e -> UiScheduler.scheduleDelay(3000, () -> fadeAnimateCardsText(false)));
+        timeline.play();
     }
 }
