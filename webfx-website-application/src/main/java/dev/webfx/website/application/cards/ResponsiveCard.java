@@ -61,7 +61,7 @@ public final class ResponsiveCard extends FlipCard {
     String caption(int step) {
         switch (step) {
             case 1: return "The JavaFX layout system makes responsive web design easy and powerful.";
-            case 2: return "JavaFX can callback your code during the layout pass to ask you to position nodes.";
+            case 2: return "JavaFX can callback your Java code during the layout pass, giving you full control to position nodes.";
             case 3: return "Your layout code has access to the application context, giving you full visibility whilst writing your responsive design.";
             case 4: return "While the number of CSS rules and functions are limited, you are empowered with all the possibilities of a programmatic language in your layout code.";
             case 5: return "Your layout code is not limited to top level nodes, but will work at all levels in the scene graph.";
