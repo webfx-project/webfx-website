@@ -18,7 +18,7 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 /**
  * @author Bruno Salmon
  */
-public final class SustainableCard extends FlipCard {
+public final class LongTermCard extends FlipCard {
 
     private FrameworksPane javaFrameworksPane, webFrameworksPane;
     private WebFXCloudAnimationPane webFxCloudAnimationPane;
@@ -27,7 +27,7 @@ public final class SustainableCard extends FlipCard {
     private LayoutPane longevityAnimationEnclosingPane;
     private double wallHeight;
 
-    public SustainableCard() {
+    public LongTermCard() {
         super("Long-term");
     }
 
@@ -42,7 +42,7 @@ public final class SustainableCard extends FlipCard {
             case 6: return "Another requirement for your web application to flourish is a good refactoring support.";
             case 7: return "And Java, being a strictly-typed language, excels in refactoring.";
             case 8: return "A lasting UI toolkit and good refactoring support are important requirements for application longevity, and are comprehensively fulfilled by Java & JavaFX.";
-            case 9: return "This is what has motivated us to build WebFX: to make these sustainable, long-term technologies available for the Web.";
+            case 9: return "This is also what has motivated us to build WebFX: to make these sustainable, long-term technologies available for the Web.";
             default: return null;
         }
     }

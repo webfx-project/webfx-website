@@ -39,7 +39,7 @@ public final class WebFXWebsiteApplication extends Application {
             new WebFXCard(),
             new CrossPlatformCard(),
             new JavaFullStackCard(),
-            new SustainableCard(),
+            new LongTermCard(),
             new ResponsiveCard(),
             new MagicalCard());
     private CardsPane startCardsPane; // lazy initialisation
@@ -190,7 +190,7 @@ public final class WebFXWebsiteApplication extends Application {
     }
 
     private void fadeAnimateCardsText(boolean fadeIn) {
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1500), new KeyValue(animateCardsText.opacityProperty(), fadeIn ? 1 : 0)));
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(fadeIn ? 1500 : 500), new KeyValue(animateCardsText.opacityProperty(), fadeIn ? 1 : 0)));
         if (fadeIn)
             timeline.setOnFinished(e -> UiScheduler.scheduleDelay(3000, () -> fadeAnimateCardsText(false)));
         timeline.play();
