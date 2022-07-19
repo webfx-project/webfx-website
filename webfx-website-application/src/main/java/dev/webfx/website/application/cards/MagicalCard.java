@@ -31,7 +31,7 @@ public final class MagicalCard extends FlipCard {
     @Override
     String caption(int step) {
         switch (step) {
-            case 1: return "WebFX generates fast and lightweight web apps despite the heave JavaFX footprint. How is this possible?";
+            case 1: return "WebFX generates fast and lightweight web apps despite the heavy JavaFX footprint. How is this possible?";
             case 2: return "The resultant JS code only needs to create a DOM rendered by the browser, and doesn't include the big JavaFX rendering layer, as opposed to the desktop version.";
             case 3: return "And GWT removes all dead code! This makes your JS code much thinner, incorporating only the JavaFX classes required by your application.";
             case 4: return "GWT is known to produce compact and highly optimized JS code, that potentially runs faster than hand-rolled JS.";
