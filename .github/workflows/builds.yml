@@ -32,7 +32,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        app: [{name: 'WebFXWebsite', module-token: 'webfx-website', gwt-token: 'webfx_website', web-push-branch: 'preview', ios-bundle-id: 'dev.webfx.website', version: '0.1.0-SNAPSHOT'}]
+        app: [{name: 'WebFXWebsite', module-token: 'webfx-website', gwt-token: 'webfx_website', web-push-branch: 'main', ios-bundle-id: 'dev.webfx.website', version: '0.1.0-SNAPSHOT'}]
         os-config:  [1]
         include:
           - os-config: 1 # Generates builds 1) 2) 3) 4) & 5)
