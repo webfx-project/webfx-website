@@ -1,10 +1,10 @@
 # The WebFX website
 
-It presents the technology through a series of animated cards. It's a WebFX application itself, so it's a web app written in Java & JavaFX and transpiled into JS by WebFX. Here is the [source code][webfx-website-code] of the JavaFX application class.
-
 <p align="center">
   <img src="https://blog.webfx.dev/2022/07/22/website-launch/webfx-website.png" />
 </p>
+
+It presents the technology through a series of animated cards. It's a WebFX application itself, so it's a web app written in Java & JavaFX and transpiled into JS by WebFX. Here is the [source code][webfx-website-code] of the JavaFX application class.
 
 It is automatically deployed through the GitHub and Netlify CI/CD pipeline. On each push on the main branch, the [GitHub workflow][webfx-website-workflow] triggers the GWT compilation and push the generated web app to Netlify which updates the website.
 
