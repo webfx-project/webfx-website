@@ -1,10 +1,10 @@
 package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.webtext.HtmlText;
-import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.KeyValue;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -123,11 +123,17 @@ public final class ResponsiveCard extends FlipCard {
                 });
                 break;
             case 4:
+                HtmlText demoText;
                 VBox vBox = new VBox(
-                        WebSiteShared.setHtmlText(new HtmlText(), "See how the EnzoClocks demo calculates the optimal positions of the clocks using a circle packing algorithm."),
+                        WebSiteShared.setHtmlText(new HtmlText(), "See how the Enzo Clocks demo calculates the optimal positions of the clocks using a circle packing algorithm."),
                         new ScalePane(ImageLoader.loadImage("EnzoClocks.png")),
-                        WebSiteShared.setHtmlText(new HtmlText(), "Something impossible to achieve with CSS.")
+                        demoText = WebSiteShared.setHtmlText(new HtmlText(), "Something impossible to achieve with CSS.<br/><small>(also illustrated by the <u>Led Packing demo</u>)</small>")
                 );
+                demoText.setMouseTransparent(false);
+                WebSiteShared.runOnMouseClick(demoText, e -> {
+                    WebSiteShared.openUrl("https://ledpacking.webfx.dev");
+                    e.consume();
+                });
                 vBox.setAlignment(Pos.CENTER);
                 vBox.setSpacing(0.05 * flipPanel.getHeight());
                 flipToNewContent(vBox);
