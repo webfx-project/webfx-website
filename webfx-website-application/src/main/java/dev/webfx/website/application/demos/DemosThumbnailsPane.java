@@ -20,14 +20,14 @@ public final class DemosThumbnailsPane extends Pane {
 
     public DemosThumbnailsPane() {
         super(
-                new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true),
+                new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true, "https://colorfulcircles.webfx.dev", "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
                 //new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
-                new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false),
-                new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false),
+                new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false, "https://tallycounter.webfx.dev/", "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
+                new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false, "https://moderngauge.webfx.dev/", "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
                 new DemoThumbnail("Enzo clocks",      CUSTOM_CONTROL, "EnzoClocks.png",      true),
                 new DemoThumbnail("FX2048",           GAME,           "FX2048.png",          false),
                 new DemoThumbnail("SpaceFX",          GAME,           "SpaceFX.png",         false),
-                new DemoThumbnail("DemoFX",           ANIMATION,      "DemoFX.png",          true),
+                new DemoThumbnail("DemoFX",           ANIMATION,      "DemoFX.png",          true, "https://demofx.webfx.dev/", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
                 new DemoThumbnail("Ray tracer",       WEB_WORKER,     "RayTracer.png",       true),
                 new DemoThumbnail("Mandelbrot",       WEBASSEMBLY,    "Mandelbrot.png",      true)
         );
