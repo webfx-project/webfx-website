@@ -21,12 +21,13 @@ public final class DemosThumbnailsPane extends Pane {
     public DemosThumbnailsPane() {
         super(
                 new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true),
-                new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
+                //new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
                 new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false),
                 new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false),
                 new DemoThumbnail("Enzo clocks",      CUSTOM_CONTROL, "EnzoClocks.png",      true),
                 new DemoThumbnail("FX2048",           GAME,           "FX2048.png",          false),
                 new DemoThumbnail("SpaceFX",          GAME,           "SpaceFX.png",         false),
+                new DemoThumbnail("DemoFX",           ANIMATION,      "DemoFX.png",          true),
                 new DemoThumbnail("Ray tracer",       WEB_WORKER,     "RayTracer.png",       true),
                 new DemoThumbnail("Mandelbrot",       WEBASSEMBLY,    "Mandelbrot.png",      true)
         );

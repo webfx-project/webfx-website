@@ -27,6 +27,7 @@ final class DemoThumbnail extends Pane {
         BASIC ("Basic", Color.GREEN),
         CUSTOM_CONTROL ("Custom control", Color.BLUE),
         GAME ("Game", Color.DEEPPINK.darker()),
+        ANIMATION ("Animation", Color.DEEPPINK.darker()),
         WEB_WORKER ("Web worker", Color.SADDLEBROWN),
         WEBASSEMBLY ("WebAssembly", Color.RED);
 
