@@ -27,7 +27,7 @@ final class PerformanceAnimationPane extends LayoutPane {
     private static final Color strokeCircleColor = Color.web("#54C583"); // Stronger green
 
     private final Text performanceText = new Text("Performance");
-    private final HtmlText noteText = WebSiteShared.setHtmlText(new HtmlText(), "Score obtained on a MacBook Pro 2019 with Chrome.<br/>You can check the <a style='color:inherit;' href='#'>screenshots</a>.");
+    private final HtmlText noteText = WebSiteShared.setHtmlText(new HtmlText(), "Score obtained on an iMac 2014 with Chrome.<br/>You can check the <a style='color:inherit;' href='#'>screenshots</a>.");
     private final Canvas canvas = new Canvas();
     private Font scoreFont = Font.font("Monospace");
     private final DoubleProperty scoreProperty = new SimpleDoubleProperty() {
@@ -42,7 +42,7 @@ final class PerformanceAnimationPane extends LayoutPane {
         performanceText.setFill(strokeCircleColor);
         noteText.setFill(backgroundCircleColor);
         noteText.setMouseTransparent(false);
-        WebSiteShared.runOnMouseClick(noteText, () -> WebSiteShared.openUrl(ImageLoader.toImageUrl("Performance.png")));
+        WebSiteShared.runOnMouseClick(noteText, () -> WebSiteShared.openUrl(ImageLoader.toImageUrl("Lighthouse.png")));
     }
 
     @Override
