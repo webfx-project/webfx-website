@@ -1,6 +1,6 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.extras.scalepane.ScalePane;
 import javafx.scene.Node;
 import javafx.scene.shape.SVGPath;
 

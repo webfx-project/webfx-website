@@ -1,5 +1,6 @@
 package dev.webfx.website.application.shared;
 
+import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.extras.webtext.HtmlText;
 import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.cards.FXWreathPane;

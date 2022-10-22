@@ -1,7 +1,7 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.shared.LayoutPane;
-import dev.webfx.website.application.shared.ScalePane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

@@ -1,6 +1,6 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;

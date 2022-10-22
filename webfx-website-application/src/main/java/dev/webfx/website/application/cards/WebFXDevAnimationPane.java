@@ -3,7 +3,7 @@ package dev.webfx.website.application.cards;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
-import dev.webfx.website.application.shared.ScalePane;
+import dev.webfx.extras.scalepane.ScalePane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

@@ -1,11 +1,11 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
-import dev.webfx.website.application.shared.ScalePane;
 import eu.hansolo.enzo.flippanel.FlipPanel;
 import javafx.animation.KeyValue;
 import javafx.scene.Node;

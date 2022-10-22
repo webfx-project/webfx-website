@@ -75,6 +75,8 @@
     <inherits name="com.google.gwt.user.User"/>
     <!--=================================< java-nio-emul >==================================-->
     <inherits name="org.gwtproject.nio.GwtNioSupport"/>
+    <!--=============================< webfx-extras-scalepane >=============================-->
+    <source path="dev/webfx/extras/scalepane"/>
     <!--==============================< webfx-extras-webtext >==============================-->
     <source path="dev/webfx/extras/webtext"/>
     <!--========================< webfx-extras-webtext-peers-base >=========================-->
