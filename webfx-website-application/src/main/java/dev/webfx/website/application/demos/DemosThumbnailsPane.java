@@ -1,5 +1,6 @@
 package dev.webfx.website.application.demos;
 
+import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -20,16 +21,16 @@ public final class DemosThumbnailsPane extends Pane {
 
     public DemosThumbnailsPane() {
         super(
-                new DemoThumbnail("Colorful circles", BASIC,          "ColorfulCircles.png", true, "https://colorfulcircles.webfx.dev", "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
+                new DemoThumbnail("Colorful Circles", BASIC, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
                 //new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
-                new DemoThumbnail("Tally counter",    CUSTOM_CONTROL, "TallyCounter.png",    false, "https://tallycounter.webfx.dev", "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
-                new DemoThumbnail("Modern gauge",     CUSTOM_CONTROL, "ModernGauge.png",     false, "https://moderngauge.webfx.dev", "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
-                new DemoThumbnail("Enzo clocks",      CUSTOM_CONTROL, "EnzoClocks.png",      true),
-                new DemoThumbnail("FX2048",           GAME,           "FX2048.png",          false),
-                new DemoThumbnail("SpaceFX",          GAME,           "SpaceFX.png",         false),
-                new DemoThumbnail("DemoFX",           ANIMATION,      "DemoFX.png",          true, "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
-                new DemoThumbnail("Ray tracer",       WEB_WORKER,     "RayTracer.png",       true),
-                new DemoThumbnail("Mandelbrot",       WEBASSEMBLY,    "Mandelbrot.png",      true)
+                new DemoThumbnail("Tally Counter",    CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
+                new DemoThumbnail("Modern Gauge",     CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
+                new DemoThumbnail("Enzo Clocks",      CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "EnzoClocks.png"),
+                new DemoThumbnail("FX2048",           GAME, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "FX2048.png"),
+                new DemoThumbnail("SpaceFX",          GAME, ScalePane.ScaleMode.HEIGHT), // "SpaceFX.png"),
+                new DemoThumbnail("DemoFX",           ANIMATION, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
+                new DemoThumbnail("Ray Tracer",       WEB_WORKER, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "RayTracer.png"),
+                new DemoThumbnail("Mandelbrot",       WEBASSEMBLY, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT) // "Mandelbrot.png")
         );
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));

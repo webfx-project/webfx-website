@@ -2,10 +2,14 @@ package dev.webfx.website.application.demos;
 
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -31,8 +35,8 @@ final class DemoThumbnail extends Pane {
         WEB_WORKER ("Web worker", Color.SADDLEBROWN),
         WEBASSEMBLY ("WebAssembly", Color.RED);
 
-        String name;
-        Color color;
+        final String name;
+        final Color color;
 
         DemoCategory(String name, Color color) {
             this.name = name;
@@ -47,21 +51,28 @@ final class DemoThumbnail extends Pane {
     private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop) {
-        this(demoName, demoCategory, imageName, crop, imageName.substring(0, imageName.indexOf('.')).toLowerCase());
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop) {
+        this(demoName, demoCategory, crop, demoName.replace(" ", "") + ".png");
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String token) {
-        this(demoName, demoCategory, imageName, crop, "https://" + token + ".webfx.dev", "https://github.com/webfx-demos/webfx-demo-" + token);
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName) {
+        this(demoName, demoCategory, crop, imageName, imageName.substring(0, imageName.indexOf('.')));
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, String imageName, boolean crop, String demoLink, String repositoryLink) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName, String token) {
+        this(demoName, demoCategory, crop, imageName, "https://" + token.toLowerCase() + ".webfx.dev", "https://github.com/webfx-demos/webfx-demo-" + token.toLowerCase(), "https://webfx-demos.github.io/webfx-demos-videos/" + token + ".mp4");
+    }
+
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName, String demoLink, String repositoryLink, String videoUrl) {
         this.demoLink = demoLink;
         setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
         setRegionBackground(categoryFullBackgroundRegion, demoCategory.color);
         setRegionBackground(categoryFadingBackgroundRegion, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.TRANSPARENT), new Stop(1, demoCategory.color)));
-        demoImageScalePane = new ScalePane(crop ? ScalePane.ScaleMode.MAX_WIDTH_HEIGHT : ScalePane.ScaleMode.MIN_WIDTH_HEIGHT, ImageLoader.loadImage(imageName));
+        MediaPlayer mediaPlayer = videoUrl != null ? new MediaPlayer(new Media(videoUrl)) : null;
+        if (mediaPlayer != null)
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        demoImageScalePane = new ScalePane(crop, mediaPlayer != null ? new MediaView(mediaPlayer) : ImageLoader.loadImage(imageName));
         demoImageScalePane.setCanGrow(false);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
@@ -71,6 +82,9 @@ final class DemoThumbnail extends Pane {
         githubLogo.setVisible(false);
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
         getChildren().setAll(demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
+        if (mediaPlayer != null)
+            Platform.runLater(mediaPlayer::play);
+            //mediaPlayer.play();
     }
 
     String getDemoLink() {
@@ -84,8 +98,8 @@ final class DemoThumbnail extends Pane {
         setFont(demoCategoryText, Math.max(16, width * 0.05), false, true);
         layoutInArea(demoImageScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
         layoutInArea(demoNameText, 0, 0, width, height, 0 , HPos.CENTER, VPos.BOTTOM);
-        double githubHeight = demoNameText.prefHeight(width);
-        layoutInArea(githubLogoPane, width - githubHeight - 5, height - githubHeight - 5, githubHeight, githubHeight, 0 , HPos.LEFT, VPos.BOTTOM);
+        double githubSize = demoNameText.prefHeight(width);
+        layoutInArea(githubLogoPane, width - githubSize - 5, height - githubSize - 5, githubSize, githubSize, 0 , HPos.LEFT, VPos.BOTTOM);
         double rightCategoryMargin = 5;
         layoutInArea(demoCategoryText, 0, 0, width - rightCategoryMargin, height, 0 , HPos.RIGHT, VPos.TOP);
         double categoryHeight = demoCategoryText.prefHeight(width - rightCategoryMargin);
