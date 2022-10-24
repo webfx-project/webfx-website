@@ -73,7 +73,7 @@ final class DemoThumbnail extends Pane {
         if (mediaPlayer != null)
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         demoImageScalePane = new ScalePane(crop, mediaPlayer != null ? new MediaView(mediaPlayer) : ImageLoader.loadImage(imageName));
-        demoImageScalePane.setCanGrow(false);
+        //demoImageScalePane.setCanGrow(false);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
         setShapeHoverAnimationColor(githubLogo, LAST_GITHUB_GRADIENT_COLOR.darker());

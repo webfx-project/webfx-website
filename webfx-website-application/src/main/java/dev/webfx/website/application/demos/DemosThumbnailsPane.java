@@ -18,20 +18,20 @@ import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
  */
 public final class DemosThumbnailsPane extends Pane {
 
+    private final static DemoThumbnail
+            colorfulCircles = new DemoThumbnail("Colorful Circles", BASIC, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
+            tallyCounter    = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
+            modernGauge     = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
+            enzoClocks      = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "EnzoClocks.png"),
+            fx2048          = new DemoThumbnail("FX2048", GAME, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "FX2048.png"),
+            spaceFX         = new DemoThumbnail("SpaceFX", GAME, ScalePane.ScaleMode.HEIGHT), // "SpaceFX.png"),
+            demoFX          = new DemoThumbnail("DemoFX", ANIMATION, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
+            rayTracer       = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "RayTracer.png"),
+            mandelbrot      = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT); // "Mandelbrot.png")
+
 
     public DemosThumbnailsPane() {
-        super(
-                new DemoThumbnail("Colorful Circles", BASIC, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
-                //new DemoThumbnail("Particles",        BASIC,          "Particles.png",       true),
-                new DemoThumbnail("Tally Counter",    CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
-                new DemoThumbnail("Modern Gauge",     CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
-                new DemoThumbnail("Enzo Clocks",      CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "EnzoClocks.png"),
-                new DemoThumbnail("FX2048",           GAME, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "FX2048.png"),
-                new DemoThumbnail("SpaceFX",          GAME, ScalePane.ScaleMode.HEIGHT), // "SpaceFX.png"),
-                new DemoThumbnail("DemoFX",           ANIMATION, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
-                new DemoThumbnail("Ray Tracer",       WEB_WORKER, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "RayTracer.png"),
-                new DemoThumbnail("Mandelbrot",       WEBASSEMBLY, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT) // "Mandelbrot.png")
-        );
+        super(colorfulCircles, tallyCounter, spaceFX, enzoClocks, modernGauge, fx2048, demoFX, rayTracer, mandelbrot); // 9 featured demos
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));
     }
@@ -39,25 +39,29 @@ public final class DemosThumbnailsPane extends Pane {
     @Override
     protected void layoutChildren() {
         double width = getWidth(), height = getHeight();
-        int n = getChildren().size();
-        int p = (int) Math.sqrt(n);
-        int q = n / p;
-        if (p * q < n) {
-            if (width > height)
-                p++;
-            else
-                q++;
-        }
+        ObservableList<Node> children = getChildren();
+        int n = children.size(); // 9
+        int p = 3; // number of columns
+        int q = 3; // number of rows
         double gap = 0.01 * width;
         Insets margin = new Insets(0, 0, gap, gap);
         double wp = (width - margin.getLeft() - margin.getRight()) / p;
-        double hp = (height ) / q;
-        ObservableList<Node> children = getChildren();
+        double hp = (height) / q;
         for (int i = 0; i < n; i++) {
-            Node child = children.get(i);
+            Node demoThumbnail = children.get(i);
             int col = i % p, row = i / p;
-            layoutInArea(child, col * wp, row * hp, wp, hp, 0, margin, HPos.LEFT, VPos.TOP);
-            child.setClip(new Rectangle(0, 0, ((Region) child).getWidth(), ((Region) child).getHeight()));
+            double x = col * wp, y = row * hp, w = wp, h = hp;
+            // Managing the exceptions
+            if (demoThumbnail == spaceFX) // Making SpaceFX twice taller
+                h = 2 * hp;
+            else if (demoThumbnail == modernGauge) // Making Modern Gauge twice smaller
+                w = wp / 2;
+            else if (demoThumbnail == fx2048) { // Making FX2048 twice smaller
+                w = wp / 2;
+                x = 1.5 * wp; // also correcting the position
+            }
+            layoutInArea(demoThumbnail, x, y, w, h, 0, margin, HPos.LEFT, VPos.TOP);
+            demoThumbnail.setClip(new Rectangle(0, 0, ((Region) demoThumbnail).getWidth(), ((Region) demoThumbnail).getHeight()));
         }
     }
 }
