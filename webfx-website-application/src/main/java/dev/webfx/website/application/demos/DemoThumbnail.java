@@ -86,6 +86,7 @@ final class DemoThumbnail extends Pane {
         if (mediaPlayer != null) {
             // Removing the demo image when the video starts playing
             mediaPlayer.setOnPlaying(() -> getChildren().remove(demoImageScalePane));
+            mediaPlayer.setMute(true); // Videos have no sound, but we explicitly mute them, otherwise iPads will refuse to play more than 2 videos
             mediaPlayer.play();
         }
     }
