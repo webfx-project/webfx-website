@@ -44,7 +44,7 @@ final class DemoThumbnail extends Pane {
     }
 
     private final String demoLink;
-    private final ScalePane demoImageScalePane;
+    private final ScalePane demoVideoScalePane, demoImageScalePane;
     private final Text demoNameText, demoCategoryText;
     private final Region categoryFullBackgroundRegion = new Region(), categoryFadingBackgroundRegion = new Region();
     private final SVGPath githubLogo = createGithubLogo();
@@ -62,7 +62,7 @@ final class DemoThumbnail extends Pane {
         this(demoName, demoCategory, crop, imageName, "https://" + token.toLowerCase() + ".webfx.dev", "https://github.com/webfx-demos/webfx-demo-" + token.toLowerCase(), "https://webfx-demos.github.io/webfx-demos-videos/" + token + ".mp4");
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName, String demoLink, String repositoryLink, String videoUrl) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl) {
         this.demoLink = demoLink;
         setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
@@ -71,7 +71,8 @@ final class DemoThumbnail extends Pane {
         MediaPlayer mediaPlayer = videoUrl != null ? new MediaPlayer(new Media(videoUrl)) : null;
         if (mediaPlayer != null)
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        demoImageScalePane = new ScalePane(crop, mediaPlayer != null ? new MediaView(mediaPlayer) : ImageLoader.loadImage(imageName));
+        demoImageScalePane = new ScalePane(scaleMode, ImageLoader.loadImage(imageName));
+        demoVideoScalePane = new ScalePane(scaleMode, new MediaView(mediaPlayer));
         //demoImageScalePane.setCanGrow(false);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
@@ -80,9 +81,13 @@ final class DemoThumbnail extends Pane {
         setOnMouseExited( e -> githubLogo.setVisible(false));
         githubLogo.setVisible(false);
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
-        getChildren().setAll(demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
-        if (mediaPlayer != null)
+        // The demo image is displayed on top of the video (and is hiding it)
+        getChildren().setAll(demoVideoScalePane, demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
+        if (mediaPlayer != null) {
+            // Removing the demo image when the video is starting playing
+            mediaPlayer.setOnPlaying(() -> getChildren().remove(demoImageScalePane));
             mediaPlayer.play();
+        }
     }
 
     String getDemoLink() {
@@ -94,6 +99,7 @@ final class DemoThumbnail extends Pane {
         double width = getWidth(), height = getHeight();
         setFont(demoNameText, Math.max(16, width * 0.07), true, false);
         setFont(demoCategoryText, Math.max(16, width * 0.05), false, true);
+        layoutInArea(demoVideoScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
         layoutInArea(demoImageScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
         layoutInArea(demoNameText, 0, 0, width, height, 0 , HPos.CENTER, VPos.BOTTOM);
         double githubSize = demoNameText.prefHeight(width);
