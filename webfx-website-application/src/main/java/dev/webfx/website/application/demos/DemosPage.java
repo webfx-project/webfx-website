@@ -16,7 +16,7 @@ import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
 /**
  * @author Bruno Salmon
  */
-public final class DemosThumbnailsPane extends Pane {
+public final class DemosPage extends Pane {
 
     private final static DemoThumbnail
             colorfulCircles = new DemoThumbnail("Colorful Circles", BASIC, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
@@ -30,7 +30,7 @@ public final class DemosThumbnailsPane extends Pane {
             mandelbrot      = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT); // "Mandelbrot.png")
 
 
-    public DemosThumbnailsPane() {
+    public DemosPage() {
         super(colorfulCircles, tallyCounter, spaceFX, enzoClocks, modernGauge, fx2048, demoFX, rayTracer, mandelbrot); // 9 featured demos
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));

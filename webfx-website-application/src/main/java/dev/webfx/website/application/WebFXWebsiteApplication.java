@@ -2,8 +2,9 @@ package dev.webfx.website.application;
 
 import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.platform.uischeduler.UiScheduler;
+import dev.webfx.platform.windowlocation.WindowLocation;
 import dev.webfx.website.application.cards.*;
-import dev.webfx.website.application.demos.DemosThumbnailsPane;
+import dev.webfx.website.application.demos.DemosPage;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.AnimationTimer;
@@ -32,18 +33,18 @@ public final class WebFXWebsiteApplication extends Application {
     private final Text webFxText = createWebFxSvgText();
     private final Text demosText = setUpText(new SvgText("Demos"), 50, true, false, true, true);
     private final Text startText = setUpText(new SvgText("Start"), 50, true, false, true, true);
-    private DemosThumbnailsPane demosThumbnailsPane; // lazy initialisation
-    private final CardsPane webfxCardsPane = new CardsPane(
+    private DemosPage demosPage; // lazy initialisation
+    private final CardsPane webFXPage = new CardsPane(
             new WebFXCard(),
             new CrossPlatformCard(),
             new JavaFullStackCard(),
             new LongTermCard(),
             new ResponsiveCard(),
             new MagicalCard());
-    private CardsPane startCardsPane; // lazy initialisation
-    private boolean showDemos, showWebFxCards = true, showStartCards;
+    private CardsPane startPage; // lazy initialisation
+    private boolean showDemosPage, showWebFXPage = true, showStartPage;
     private AnimationTimer webFxFillAnimationTimer;
-    private final LayoutPane containerPane = new LayoutPane(demosText, webFxText, startText, webfxCardsPane) {
+    private final LayoutPane containerPane = new LayoutPane(demosText, webFxText, startText, webFXPage) {
         @Override
         protected void layoutChildren(double width, double height) {
             double w = width, h = height, vh;
@@ -55,12 +56,12 @@ public final class WebFXWebsiteApplication extends Application {
             centerInArea(webFxText, 0, 0, w, vh);
             centerInArea(demosText, 0, 0, w/3, vh);
             centerInArea(startText, w - w/3, 0, w/3, vh);
-            if (showDemos && demosThumbnailsPane != null)
-                layoutInArea(demosThumbnailsPane, 0, vh, w, h - vh);
-            if (showWebFxCards)
-                layoutInArea(webfxCardsPane, 0, vh, w, h - vh);
-            if (showStartCards && startCardsPane != null)
-                layoutInArea(startCardsPane, 0, vh, w, h - vh);
+            if (showDemosPage && demosPage != null)
+                layoutInArea(demosPage, 0, vh, w, h - vh);
+            if (showWebFXPage)
+                layoutInArea(webFXPage, 0, vh, w, h - vh);
+            if (showStartPage && startPage != null)
+                layoutInArea(startPage, 0, vh, w, h - vh);
         }
     };
 
@@ -79,20 +80,25 @@ public final class WebFXWebsiteApplication extends Application {
         setShapeHoverAnimationColor(demosText, FIRST_GITHUB_GRADIENT_COLOR.darker());
         setShapeHoverAnimationColor(startText, LAST_GITHUB_GRADIENT_COLOR.darker());
 
-        runOnMouseClick(demosText, () -> switchShow(true, false, false));
-        runOnMouseClick(webFxText, () -> switchShow(false, true, false));
-        runOnMouseClick(startText, () -> switchShow(false, false, true));
+        runOnMouseClick(demosText, () -> showPage(true, false, false));
+        runOnMouseClick(webFxText, () -> showPage(false, true, false));
+        runOnMouseClick(startText, () -> showPage(false, false, true));
 
-        webFxText.setOnMouseEntered(e -> startWebFxFillAnimation());
-        webFxText.setOnMouseExited( e -> stopWebFxFillAnimation());
+        webFxText.setOnMouseEntered(e -> startWebFXFillAnimation());
+        webFxText.setOnMouseExited( e -> stopWebFXFillAnimation());
 
-        setHostServices(getHostServices()); // Necessary to make openUrl() work
+        // Initial UI rooting in case the window location ends with #/demos or #/start
+        String href = WindowLocation.getHref();
+        if (href.endsWith("#/demos"))
+            showPage(true, false, false);
+        else if (href.endsWith("#/start"))
+            showPage(false, false, true);
     }
 
     private void onSwipe(boolean left) {
-        CardsPane cardsPane = showWebFxCards ? webfxCardsPane : showStartCards ? startCardsPane : null;
-        if (cardsPane != null)
-            cardsPane.onPaneSwipe(left);
+        CardsPane page = showWebFXPage ? webFXPage : showStartPage ? startPage : null;
+        if (page != null)
+            page.onPaneSwipe(left);
     }
 
     public static void updateTextFontSize(Text text, double fontSize) {
@@ -100,67 +106,77 @@ public final class WebFXWebsiteApplication extends Application {
         text.setStrokeWidth(fontSize >= 70 ? 2 : 1);
     }
 
-    private void switchShow(boolean showDemos, boolean showWebFxCards, boolean showStartCards) {
-        if (this.showDemos == showDemos && this.showWebFxCards == showWebFxCards && this.showStartCards == showStartCards)
+    private void showPage(boolean showDemosPage, boolean showWebFXPage, boolean showStartPage) {
+        if (this.showDemosPage == showDemosPage && this.showWebFXPage == showWebFXPage && this.showStartPage == showStartPage)
             return;
-        if (showDemos && demosThumbnailsPane == null) {
+        if (showDemosPage && demosPage == null) {
             // Creating the demo pane and adding it to the cards pane
-            containerPane.getChildren().add(demosThumbnailsPane = new DemosThumbnailsPane());
-            demosThumbnailsPane.setOpacity(0);
+            containerPane.getChildren().add(demosPage = new DemosPage());
+            demosPage.setOpacity(0);
             // Postponing the fade effect after the next layout pass (which may take time to consider the demo pane addition)
-            Platform.runLater(() -> switchShow(showDemos, showWebFxCards, showStartCards));
+            Platform.runLater(() -> showPage(true, showWebFXPage, showStartPage));
             return;
         }
-        if (showStartCards && startCardsPane == null) {
+        if (showStartPage && startPage == null) {
             // Creating the demo pane and adding it to the cards pane
-            containerPane.getChildren().add(startCardsPane = new CardsPane(
+            containerPane.getChildren().add(startPage = new CardsPane(
                     new DocumentationCard(),
                     new BlogCard(),
                     new GitHubCard()
             ));
-            startCardsPane.setOpacity(0);
+            startPage.setOpacity(0);
             // Postponing the fade effect after the next layout pass (which may take time to consider the demo pane addition)
-            Platform.runLater(() -> switchShow(showDemos, showWebFxCards, showStartCards));
+            Platform.runLater(() -> showPage(showDemosPage, showWebFXPage, true));
             long index = 0;
-            for (Card card : startCardsPane.cards) {
+            for (Card card : startPage.cards) {
                 card.setTranslateY(containerPane.getHeight());
                 Timeline timeline = new Timeline(new KeyFrame(Duration.millis(800), new KeyValue(card.translateYProperty(), 0, EASE_OUT_INTERPOLATOR)));
                 UiScheduler.scheduleDelay(200 * index++, timeline::play);
             }
             return;
         }
-        this.showDemos = showDemos;
-        this.showWebFxCards = showWebFxCards;
-        this.showStartCards = showStartCards;
-        stopWebFxFillAnimation();
-        if (showDemos)
-            demosThumbnailsPane.setVisible(true);
-        if (showWebFxCards)
-            webfxCardsPane.setVisible(true);
-        if (showStartCards)
-            startCardsPane.setVisible(true);
+        this.showDemosPage = showDemosPage;
+        this.showWebFXPage = showWebFXPage;
+        this.showStartPage = showStartPage;
+        stopWebFXFillAnimation();
+        // Replacing the window location with the hashtag matching the request page, and make this page visible
+        String href = WindowLocation.getHref();
+        if (href.contains("#")) // Removing the existing hashtag
+            href = href.substring(0, href.indexOf('#'));
+        if (showDemosPage) {
+            href += "#/demos";
+            demosPage.setVisible(true);
+        } else if (showWebFXPage) {
+            href += "#";
+            webFXPage.setVisible(true);
+        } else if (showStartPage) {
+            href += "#/start";
+            startPage.setVisible(true);
+        }
+        // Actual replacement of the window location
+        WindowLocation.replaceHref(href);
         containerPane.forceLayoutChildren();
         Timeline fadeTimeline = new Timeline(new KeyFrame(Duration.millis(500),
-                Stream.of(demosThumbnailsPane, webfxCardsPane, startCardsPane)
+                Stream.of(demosPage, webFXPage, startPage)
                         .filter(Objects::nonNull)
                         .map(node -> new KeyValue(node.opacityProperty(),
-                                node == demosThumbnailsPane ? (showDemos ? 1 : 0) :
-                                        node == webfxCardsPane ? (showWebFxCards ? 1 : 0) :
-                                                showStartCards ? 1 : 0))
+                                node == demosPage ? (showDemosPage ? 1 : 0) :
+                                        node == webFXPage ? (showWebFXPage ? 1 : 0) :
+                                                showStartPage ? 1 : 0))
                         .toArray(KeyValue[]::new))
         );
         fadeTimeline.setOnFinished(e -> {
-            if (demosThumbnailsPane != null)
-                demosThumbnailsPane.setVisible(showDemos);
-            webfxCardsPane.setVisible(showWebFxCards);
-            if (startCardsPane != null)
-                startCardsPane.setVisible(showStartCards);
+            if (demosPage != null)
+                demosPage.setVisible(showDemosPage);
+            webFXPage.setVisible(showWebFXPage);
+            if (startPage != null)
+                startPage.setVisible(showStartPage);
         });
         fadeTimeline.play();
     }
 
-    private void startWebFxFillAnimation() {
-        stopWebFxFillAnimation();
+    private void startWebFXFillAnimation() {
+        stopWebFXFillAnimation();
         webFxFillAnimationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -170,7 +186,7 @@ public final class WebFXWebsiteApplication extends Application {
         webFxFillAnimationTimer.start();
     }
 
-    private void stopWebFxFillAnimation() {
+    private void stopWebFXFillAnimation() {
         if (webFxFillAnimationTimer != null) {
             webFxFillAnimationTimer.stop();
             webFxFillAnimationTimer = null;

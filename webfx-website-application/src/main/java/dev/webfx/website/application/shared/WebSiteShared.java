@@ -3,6 +3,7 @@ package dev.webfx.website.application.shared;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.extras.webtext.HtmlText;
 import dev.webfx.extras.webtext.SvgText;
+import dev.webfx.platform.windowlocation.WindowLocation;
 import dev.webfx.website.application.cards.FXWreathPane;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
@@ -10,7 +11,6 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.application.HostServices;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -142,15 +142,17 @@ public final class WebSiteShared {
         return node;
     }
 
-    private static HostServices hostServices;
-
     public static void openUrl(String url) {
-        hostServices.showDocument(url);
+        WindowLocation.assignHref(url);
+        //hostServices.showDocument(url);
     }
 
+/*
+    private static HostServices hostServices;
     public static void setHostServices(HostServices hostServices) {
         WebSiteShared.hostServices = hostServices;
     }
+*/
 
     public static void runOnMouseClick(Node node, Runnable runnable) {
         runOnMouseClick(node, e -> runnable.run());

@@ -173,6 +173,13 @@
     <source path="dev/webfx/platform/util/serviceloader"/>
     <source path="dev/webfx/platform/util/tuples"/>
     <source path="dev/webfx/platform/util/uuid"/>
+    <!--=========================< webfx-platform-windowlocation >==========================-->
+    <source path="dev/webfx/platform/windowlocation"/>
+    <source path="dev/webfx/platform/windowlocation/spi"/>
+    <source path="dev/webfx/platform/windowlocation/spi/impl"/>
+    <!--=======================< webfx-platform-windowlocation-gwt >========================-->
+    <source path="dev/webfx/platform/windowlocation/spi/impl/gwt"/>
+    <source path="dev/webfx/platform/windowlocation/spi/impl/gwt/jsinterop"/>
     <!--===========================< webfx-website-application >============================-->
     <source path="dev/webfx/website/application"/>
     <source path="dev/webfx/website/application/cards"/>

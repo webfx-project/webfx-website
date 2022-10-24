@@ -81,10 +81,10 @@ final class DemoThumbnail extends Pane {
         setOnMouseExited( e -> githubLogo.setVisible(false));
         githubLogo.setVisible(false);
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
-        // The demo image is displayed on top of the video (and is hiding it)
+        // The demo image is initially displayed on top of the video (and is hiding it)
         getChildren().setAll(demoVideoScalePane, demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
         if (mediaPlayer != null) {
-            // Removing the demo image when the video is starting playing
+            // Removing the demo image when the video starts playing
             mediaPlayer.setOnPlaying(() -> getChildren().remove(demoImageScalePane));
             mediaPlayer.play();
         }

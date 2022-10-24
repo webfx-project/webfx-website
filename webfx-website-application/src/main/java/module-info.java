@@ -14,6 +14,7 @@ module webfx.website.application {
     requires webfx.lib.enzo;
     requires webfx.platform.resource;
     requires webfx.platform.uischeduler;
+    requires webfx.platform.windowlocation;
 
     // Exported packages
     exports dev.webfx.website.application;
