@@ -49,16 +49,29 @@ public final class DemosThumbnailsPane extends Pane {
         double hp = (height) / q;
         for (int i = 0; i < n; i++) {
             Node demoThumbnail = children.get(i);
+            // General rule: the demo thumbnail is on a 3 x 3 grid
             int col = i % p, row = i / p;
             double x = col * wp, y = row * hp, w = wp, h = hp;
-            // Managing the exceptions
+            // Managing exceptions:
             if (demoThumbnail == spaceFX) // Making SpaceFX twice taller
                 h = 2 * hp;
-            else if (demoThumbnail == modernGauge) // Making Modern Gauge twice smaller
-                w = wp / 2;
-            else if (demoThumbnail == fx2048) { // Making FX2048 twice smaller
-                w = wp / 2;
-                x = 1.5 * wp; // also correcting the position
+            else if (w > h) { // When width is bigger than height
+                if (demoThumbnail == modernGauge) // Making Modern Gauge twice smaller in width
+                    w = wp / 2;
+                else if (demoThumbnail == fx2048) { // Making FX2048 twice smaller in width
+                    w = wp / 2;
+                    x = 1.5 * wp; // also correcting position so it just after Modern Gauge
+                }
+            } else { // when height is bigger than width
+                if (demoThumbnail == tallyCounter) // Making Tally Counter twice shorter
+                    h = hp / 2;
+                else if (demoThumbnail == enzoClocks) { // Making Enzo Clocks twice shorter
+                    y = h = hp / 2;
+                    x = wp; // also correcting position so it is just under Tally Counter
+                } else if (demoThumbnail == modernGauge) // Moving Moder Gauge to the left
+                    x = 0;
+                else if (demoThumbnail == fx2048) // Moving FX2048 to the middle
+                    x = wp;
             }
             layoutInArea(demoThumbnail, x, y, w, h, 0, margin, HPos.LEFT, VPos.TOP);
             demoThumbnail.setClip(new Rectangle(0, 0, ((Region) demoThumbnail).getWidth(), ((Region) demoThumbnail).getHeight()));

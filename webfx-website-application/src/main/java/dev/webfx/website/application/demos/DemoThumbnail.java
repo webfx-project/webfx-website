@@ -2,7 +2,6 @@ package dev.webfx.website.application.demos;
 
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
-import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;
@@ -83,8 +82,7 @@ final class DemoThumbnail extends Pane {
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
         getChildren().setAll(demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
         if (mediaPlayer != null)
-            Platform.runLater(mediaPlayer::play);
-            //mediaPlayer.play();
+            mediaPlayer.play();
     }
 
     String getDemoLink() {
