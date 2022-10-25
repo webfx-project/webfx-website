@@ -1,5 +1,6 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.platform.uischeduler.UiScheduler;
 import dev.webfx.website.application.shared.WebSiteShared;
@@ -61,7 +62,7 @@ final class WebFXCloudAnimationPane extends LayoutPane {
 
     public WebFXCloudAnimationPane() {
         getChildren().setAll(canvas, cloudPane, jsLogoPane, arrowUpScalePane, gwtLogoPane, gwtTextPane, fxWreathPane, medalPane);
-        fxWreathPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
+        fxWreathPane.setScaleMode(ScaleMode.BEST_FIT);
         gwtLogo.setEffect(WebSiteShared.dropShadow);
         gwtText.setEffect(WebSiteShared.dropShadow);
         updateVisibilities();

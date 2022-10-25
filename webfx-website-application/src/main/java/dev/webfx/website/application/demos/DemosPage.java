@@ -1,6 +1,6 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.extras.scalepane.ScalePane;
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -19,15 +19,15 @@ import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
 public final class DemosPage extends Pane {
 
     private final static DemoThumbnail
-            colorfulCircles = new DemoThumbnail("Colorful Circles", BASIC, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
-            tallyCounter    = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
-            modernGauge     = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
-            enzoClocks      = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "EnzoClocks.png"),
-            fx2048          = new DemoThumbnail("FX2048", GAME, ScalePane.ScaleMode.MIN_WIDTH_HEIGHT), // "FX2048.png"),
-            spaceFX         = new DemoThumbnail("SpaceFX", GAME, ScalePane.ScaleMode.HEIGHT), // "SpaceFX.png"),
-            demoFX          = new DemoThumbnail("DemoFX", ANIMATION, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
-            rayTracer       = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT), // "RayTracer.png"),
-            mandelbrot      = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScalePane.ScaleMode.MAX_WIDTH_HEIGHT); // "Mandelbrot.png")
+            colorfulCircles = new DemoThumbnail("Colorful Circles", BASIC, ScaleMode.BEST_ZOOM), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
+            tallyCounter    = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
+            modernGauge     = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
+            enzoClocks      = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "EnzoClocks.png"),
+            fx2048          = new DemoThumbnail("FX2048", GAME, ScaleMode.BEST_FIT), // "FX2048.png"),
+            spaceFX         = new DemoThumbnail("SpaceFX", GAME, ScaleMode.FIT_HEIGHT), // "SpaceFX.png"),
+            demoFX          = new DemoThumbnail("DemoFX", ANIMATION, ScaleMode.BEST_ZOOM), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
+            rayTracer       = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScaleMode.BEST_ZOOM), // "RayTracer.png"),
+            mandelbrot      = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScaleMode.BEST_ZOOM); // "Mandelbrot.png")
 
 
     public DemosPage() {

@@ -1,5 +1,6 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
@@ -26,7 +27,7 @@ public final class FXWreathPane extends LayoutPane {
 
     public FXWreathPane(SVGPath wreathSVGPath) {
         this.wreathSVGPath = wreathSVGPath;
-        wreathPane = new ScalePane(ScalePane.ScaleMode.HEIGHT, wreathSVGPath);
+        wreathPane = new ScalePane(ScaleMode.FIT_HEIGHT, wreathSVGPath);
         getChildren().setAll(wreathPane, flipPanel);
         flipPanel.getFront().getChildren().setAll(new ScalePane(fxLogo));
         flipPanel.getBack().getChildren().setAll(thumbUp);
@@ -40,7 +41,7 @@ public final class FXWreathPane extends LayoutPane {
         return wreathPane;
     }
 
-    void setScaleMode(ScalePane.ScaleMode scaleMode) {
+    void setScaleMode(ScaleMode scaleMode) {
         wreathPane.setScaleMode(scaleMode);
     }
 

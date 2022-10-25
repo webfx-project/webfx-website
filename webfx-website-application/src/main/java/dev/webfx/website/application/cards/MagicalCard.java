@@ -1,5 +1,6 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
@@ -56,7 +57,7 @@ public final class MagicalCard extends FlipCard {
             case 1:
                 Canvas rainbowCanvas = new Canvas();
                 FXWreathPane webFxLogo = WebSiteShared.createWebFxLogo();
-                webFxLogo.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
+                webFxLogo.setScaleMode(ScaleMode.BEST_FIT);
                 Region whiteWand = createWand(true), blackWand = createWand(false);
                 Node rainbowStar1 = createStar(Color.BLUE, 0), rainbowStar2 = createStar(Color.PURPLE, 0), star1 = createStar(Color.GREEN,-30), star2 = createStar(Color.RED, -20), star3 = createStar(Color.ORANGE, 20), star4 = createStar(Color.YELLOW, 30);
                 flipToNewContent(new LayoutPane(rainbowCanvas, rainbowStar1, rainbowStar2, webFxLogo, whiteWand, blackWand, star1, star2, star3, star4) {

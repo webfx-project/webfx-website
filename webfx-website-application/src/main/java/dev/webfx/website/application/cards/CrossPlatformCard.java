@@ -1,5 +1,6 @@
 package dev.webfx.website.application.cards;
 
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.extras.webtext.SvgText;
 import dev.webfx.website.application.shared.WebSiteShared;
@@ -36,7 +37,7 @@ public final class CrossPlatformCard extends Card {
     @Override
     Node createIllustrationNode() {
         FXWreathPane fxPane = createWebFxLogo();
-        fxPane.setScaleMode(ScalePane.ScaleMode.MIN_WIDTH_HEIGHT);
+        fxPane.setScaleMode(ScaleMode.BEST_FIT);
         platformsNodes = new Pane[] {
                 html5Circle       = createSVGCircle(SvgLogoPaths.getHtml5LogoPath(), html5Color, 0, 2),
                 raspberryPiCircle = createSVGCircle(SvgLogoPaths.getRaspberryPiLogoPath(), raspberryPiColor, 0, 2),

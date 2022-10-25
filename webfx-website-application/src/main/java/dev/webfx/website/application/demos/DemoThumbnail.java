@@ -1,5 +1,6 @@
 package dev.webfx.website.application.demos;
 
+import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
 import javafx.geometry.HPos;
@@ -50,19 +51,19 @@ final class DemoThumbnail extends Pane {
     private final SVGPath githubLogo = createGithubLogo();
     private final ScalePane githubLogoPane =  new ScalePane(githubLogo);
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode crop) {
         this(demoName, demoCategory, crop, demoName.replace(" ", "") + ".png");
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode crop, String imageName) {
         this(demoName, demoCategory, crop, imageName, imageName.substring(0, imageName.indexOf('.')));
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode crop, String imageName, String token) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode crop, String imageName, String token) {
         this(demoName, demoCategory, crop, imageName, "https://" + token.toLowerCase() + ".webfx.dev", "https://github.com/webfx-demos/webfx-demo-" + token.toLowerCase(), "https://webfx-demos.github.io/webfx-demos-videos/" + token + ".mp4");
     }
 
-    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScalePane.ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl) {
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl) {
         this.demoLink = demoLink;
         setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
