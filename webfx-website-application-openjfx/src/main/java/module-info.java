@@ -15,4 +15,7 @@ module webfx.website.application.openjfx {
     requires webfx.platform.windowlocation.java;
     requires webfx.website.application;
 
+    // Meta Resource package
+    opens dev.webfx.platform.meta.exe;
+
 }
