@@ -2,7 +2,6 @@ package dev.webfx.website.application.cards;
 
 import dev.webfx.extras.scalepane.ScaleMode;
 import dev.webfx.extras.scalepane.ScalePane;
-import dev.webfx.platform.uischeduler.UiScheduler;
 import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.shared.LayoutPane;
 import javafx.animation.AnimationTimer;
@@ -98,7 +97,7 @@ final class WebFXCloudAnimationPane extends LayoutPane {
         if (playing || medalPane.getOpacity() > 0) {
             canvas.setWidth(w);
             canvas.setHeight(h);
-            long animationTimeMillis = animationTimeMillis(UiScheduler.nanoTime());
+            long animationTimeMillis = animationTimeMillis(System.nanoTime());
             paintCanvas(animationTimeMillis);
             updateGithubGradients(animationTimeMillis);
         }
