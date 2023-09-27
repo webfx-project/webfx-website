@@ -10,8 +10,7 @@
             <groupId>dev.webfx</groupId>
             <version>0.1.0-SNAPSHOT</version>
             <webfx-library name="webfx"/>
-            <webfx-library name="webfx-extras"/> <!-- for ScalePane -->
-            <webfx-library name="webfx-extras-private"/> <!-- for WebText -->
+            <webfx-library name="webfx-extras"/> <!-- for ScalePane & WebText -->
             <webfx-library name="webfx-lib-enzo"/> <!-- for FlipPanel -->
         </group>
     </required-libraries>

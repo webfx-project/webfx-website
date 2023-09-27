@@ -23,7 +23,7 @@ public final class DemosPage extends Pane {
             tallyCounter    = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
             modernGauge     = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
             enzoClocks      = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "EnzoClocks.png"),
-            fx2048          = new DemoThumbnail("FX2048", GAME, ScaleMode.BEST_FIT), // "FX2048.png"),
+            tetris          = new DemoThumbnail("Tetris", GAME, ScaleMode.BEST_FIT), // "Tetris.png"),
             spaceFX         = new DemoThumbnail("SpaceFX", GAME, ScaleMode.FIT_HEIGHT), // "SpaceFX.png"),
             demoFX          = new DemoThumbnail("DemoFX", ANIMATION, ScaleMode.BEST_ZOOM), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
             rayTracer       = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScaleMode.BEST_ZOOM), // "RayTracer.png"),
@@ -31,7 +31,7 @@ public final class DemosPage extends Pane {
 
 
     public DemosPage() {
-        super(colorfulCircles, tallyCounter, spaceFX, enzoClocks, modernGauge, fx2048, demoFX, rayTracer, mandelbrot); // 9 featured demos
+        super(colorfulCircles, tallyCounter, spaceFX, enzoClocks, modernGauge, tetris, demoFX, rayTracer, mandelbrot); // 9 featured demos
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));
     }
@@ -58,7 +58,7 @@ public final class DemosPage extends Pane {
             else if (w > h) { // When width is bigger than height
                 if (demoThumbnail == modernGauge) // Making Modern Gauge twice smaller in width
                     w = wp / 2;
-                else if (demoThumbnail == fx2048) { // Making FX2048 twice smaller in width
+                else if (demoThumbnail == tetris) { // Making FX2048 twice smaller in width
                     w = wp / 2;
                     x = 1.5 * wp; // also correcting position so it just after Modern Gauge
                 }
@@ -70,7 +70,7 @@ public final class DemosPage extends Pane {
                     x = wp; // also correcting position so it is just under Tally Counter
                 } else if (demoThumbnail == modernGauge) // Moving Moder Gauge to the left
                     x = 0;
-                else if (demoThumbnail == fx2048) // Moving FX2048 to the middle
+                else if (demoThumbnail == tetris) // Moving Tetris to the middle
                     x = wp;
             }
             layoutInArea(demoThumbnail, x, y, w, h, 0, margin, HPos.LEFT, VPos.TOP);
