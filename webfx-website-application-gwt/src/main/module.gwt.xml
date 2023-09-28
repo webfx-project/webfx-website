@@ -83,8 +83,14 @@
     <inherits name="com.google.gwt.user.User"/>
     <!--=================================< java-nio-emul >==================================-->
     <inherits name="org.gwtproject.nio.GwtNioSupport"/>
+    <!--=============================< webfx-extras-flippane >==============================-->
+    <source path="dev/webfx/extras/flippane"/>
     <!--=============================< webfx-extras-scalepane >=============================-->
     <source path="dev/webfx/extras/scalepane"/>
+    <!--==========================< webfx-extras-util-animation >===========================-->
+    <source path="dev/webfx/extras/util/animation"/>
+    <!--=============================< webfx-extras-util-pane >=============================-->
+    <source path="dev/webfx/extras/util/pane"/>
     <!--==============================< webfx-extras-webtext >==============================-->
     <source path="dev/webfx/extras/webtext"/>
     <!--========================< webfx-extras-webtext-peers-base >=========================-->
@@ -127,13 +133,6 @@
     <!--=================================< webfx-kit-util >=================================-->
     <source path="dev/webfx/kit/util/properties"/>
     <source path="dev/webfx/kit/util/properties/conversion"/>
-    <!--=================================< webfx-lib-enzo >=================================-->
-    <source path="eu/hansolo/enzo/clock"/>
-    <source path="eu/hansolo/enzo/clock/skin"/>
-    <source path="eu/hansolo/enzo/flippanel"/>
-    <source path="eu/hansolo/enzo/fonts"/>
-    <resource path="eu/hansolo/enzo/clock"/>
-    <public includes="eu/hansolo/enzo/clock/" path=""/>
     <!--==============================< webfx-platform-boot >===============================-->
     <source path="dev/webfx/platform/boot"/>
     <source path="dev/webfx/platform/boot/spi"/>
@@ -178,14 +177,6 @@
     <source path="dev/webfx/platform/util"/>
     <source path="dev/webfx/platform/util/collection"/>
     <source path="dev/webfx/platform/util/function"/>
-    <source path="dev/webfx/platform/util/keyobject"/>
-    <source path="dev/webfx/platform/util/keyobject/formatter"/>
-    <source path="dev/webfx/platform/util/keyobject/formatter/spi"/>
-    <source path="dev/webfx/platform/util/keyobject/impl"/>
-    <source path="dev/webfx/platform/util/keyobject/impl/listmap"/>
-    <source path="dev/webfx/platform/util/keyobject/parser"/>
-    <source path="dev/webfx/platform/util/keyobject/parser/spi"/>
-    <source path="dev/webfx/platform/util/keyobject/parser/spi/impl/properties"/>
     <source path="dev/webfx/platform/util/serviceloader"/>
     <source path="dev/webfx/platform/util/tuples"/>
     <source path="dev/webfx/platform/util/uuid"/>

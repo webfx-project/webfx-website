@@ -3,7 +3,7 @@ package dev.webfx.website.application.cards;
 import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
-import eu.hansolo.enzo.flippanel.FlipPanel;
+import dev.webfx.extras.flippane.FlipPane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 
 import static dev.webfx.website.application.shared.WebSiteShared.*;
 
@@ -21,7 +22,7 @@ public final class JavaFullStackCard extends Card {
 
     private LayoutPane pane;
     private Node[] stepToolkitLogos, stepLanguageLogos;
-    private FlipPanel[] toolkitFlipPanels, languageFlipPanels;
+    private FlipPane[] toolkitFlipPanes, languageFlipPanes;
     private Node[] puzzles;
     private DoubleProperty expansionProperty;
 
@@ -63,22 +64,22 @@ public final class JavaFullStackCard extends Card {
                 // Step 7 - Front-office, back-office, server
                 createNoLogo(), createNoLogo(), createNoLogo()
         };
-        toolkitFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For front-office toolkit
-                new FlipPanel()  // For back-office toolkit
+        toolkitFlipPanes = new FlipPane[] {
+                new FlipPane(), // For front-office toolkit
+                new FlipPane()  // For back-office toolkit
         };
-        languageFlipPanels = new FlipPanel[] {
-                new FlipPanel(), // For front-office language
-                new FlipPanel(), // For back-office language
-                new FlipPanel()  // For server language
+        languageFlipPanes = new FlipPane[] {
+                new FlipPane(), // For front-office language
+                new FlipPane(), // For back-office language
+                new FlipPane()  // For server language
         };
-        CirclePane frontOfficeCirclePane = new CirclePane("Front-office", -150, Color.rgb(98, 0, 173), toolkitFlipPanels[0], languageFlipPanels[0]);
-        CirclePane backOfficeCirclePane  = new CirclePane("Back-office",   -30, raspberryPiColor, toolkitFlipPanels[1], languageFlipPanels[1]);
-        CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanels[2], null);
+        CirclePane frontOfficeCirclePane = new CirclePane("Front-office", -150, Color.rgb(98, 0, 173), toolkitFlipPanes[0], languageFlipPanes[0]);
+        CirclePane backOfficeCirclePane  = new CirclePane("Back-office",   -30, raspberryPiColor, toolkitFlipPanes[1], languageFlipPanes[1]);
+        CirclePane serverCirclePane   = new CirclePane("Server",      90, fxColor, languageFlipPanes[2], null);
         // Note: HTML & JavaFX implementation differs, so the rendering is different
         frontOfficeCirclePane.setBlendMode(BlendMode.SCREEN);
         backOfficeCirclePane .setBlendMode(BlendMode.SCREEN);
-        serverCirclePane  .setBlendMode(BlendMode.SCREEN);
+        serverCirclePane     .setBlendMode(BlendMode.SCREEN);
         pane = new LayoutPane(frontOfficeCirclePane, backOfficeCirclePane, serverCirclePane) {
             @Override
             protected void layoutChildren(double width, double height) {
@@ -147,8 +148,8 @@ public final class JavaFullStackCard extends Card {
     void prepareCardTransition(int step, CardTransition cardTransition) {
         super.prepareCardTransition(step, cardTransition);
         if (step > 1 || puzzles != null) {
-            updateFlipPanels(toolkitFlipPanels,  stepToolkitLogos,  step, cardTransition);
-            updateFlipPanels(languageFlipPanels, stepLanguageLogos, step, cardTransition);
+            updateFlipPanes(toolkitFlipPanes,  stepToolkitLogos,  step, cardTransition);
+            updateFlipPanes(languageFlipPanes, stepLanguageLogos, step, cardTransition);
             cardTransition.addKeyValue(new KeyValue(expansionProperty, step == 1 || step >= 6 ? 0 : 1));
             if (puzzles == null)
                 pane.getChildren().addAll(puzzles = new Node[] {
@@ -163,10 +164,10 @@ public final class JavaFullStackCard extends Card {
         }
     }
 
-    private void updateFlipPanels(FlipPanel[] flipPanels, Node[] logos, int step, CardTransition cardTransition) {
-        int n = flipPanels.length;
+    private void updateFlipPanes(FlipPane[] flipPanes, Node[] logos, int step, CardTransition cardTransition) {
+        int n = flipPanes.length;
         for (int i = 0; i < n; i++) {
-            FlipPanel flipPanel = flipPanels[i];
+            FlipPane flipPanel = flipPanes[i];
             cardTransition.addKeyValue(new KeyValue(flipPanel.opacityProperty(), step >= 2 && step <= 5 ? 1 : 0));
             Node stepLogo = logos[(step - 1) * n + i];
             getChildren().remove(stepLogo); // Removing them from the card if inserted by preloadImages()
@@ -175,9 +176,12 @@ public final class JavaFullStackCard extends Card {
             boolean logoChanged = !getLogoId(stepLogo).equals(getLogoId(previousStepLogo));
             boolean mustBeFront = step == 1 || step == 6;
             if (logoChanged || mustBeFront) {
-                boolean backVisible = flipPanel.isBackVisible();
-                (backVisible || mustBeFront ? flipPanel.getFront() : flipPanel.getBack()).getChildren().setAll(stepLogo);
-                flipPanel.setFlipTime(mustBeFront ? 0 : 700);
+                boolean backVisible = flipPanel.isShowingBack();
+                if (backVisible || mustBeFront)
+                    flipPanel.setFront(stepLogo);
+                else
+                    flipPanel.setBack(stepLogo);
+                flipPanel.setFlipDuration(Duration.millis(mustBeFront ? 0 : 700));
                 if (mustBeFront)
                     flipPanel.flipToFront();
                 else if (step == 2 && forwardingStep)
@@ -188,11 +192,8 @@ public final class JavaFullStackCard extends Card {
         }
     }
 
-    private void flip(FlipPanel flipPanel) {
-        flipPanel.getParent().requestLayout(); // Hack for the web version, otherwise the flipPanel may be incorrectly sized after a windows resize
-        if (flipPanel.isBackVisible())
-            flipPanel.flipToFront();
-        else
-            flipPanel.flipToBack();
+    private void flip(FlipPane flipPane) {
+        flipPane.getParent().requestLayout(); // Hack for the web version, otherwise the flipPane may be incorrectly sized after a windows resize
+        flipPane.flip();
     }
 }

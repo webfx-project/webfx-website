@@ -1,16 +1,18 @@
 package dev.webfx.website.application.cards;
 
-import eu.hansolo.enzo.flippanel.FlipPanel;
+import dev.webfx.extras.flippane.FlipPane;
 import javafx.animation.KeyValue;
-import javafx.collections.ObservableList;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
 /**
  * @author Bruno Salmon
  */
 abstract class FlipCard extends Card {
 
-    protected FlipPanel flipPanel;
+    protected FlipPane flipPane;
     private boolean flipShowingFront;
 
     FlipCard(String title) {
@@ -20,22 +22,28 @@ abstract class FlipCard extends Card {
     @Override
     Node createIllustrationNode() {
         flipShowingFront = true;
-        return flipPanel = new FlipPanel();
+        return flipPane = new FlipPane();
+    }
+
+    private ObjectProperty<Node> getFlipNodeProperty(boolean front) {
+        return front ? flipPane.frontProperty() : flipPane.backProperty();
     }
 
     void performFadingTransition(Node enteringNode, CardTransition cardTransition, boolean parallel) {
-        ObservableList<Node> containerChildren = getFlipChildren(flipShowingFront);
-        Node leavingNode = containerChildren.get(0);
+        ObjectProperty<Node> flipNodeProperty = getFlipNodeProperty(flipShowingFront);
+        Node leavingNode = flipNodeProperty.get();
         enteringNode.setOpacity(0);
         cardTransition.addKeyValue(
                 new KeyValue(leavingNode .opacityProperty(), 0)
         );
-        if (parallel)
+        if (parallel) {
+            flipNodeProperty.set(new StackPane(leavingNode, enteringNode));
             cardTransition.addKeyValue(
                     new KeyValue(enteringNode.opacityProperty(), 1)
             );
+        }
         cardTransition.addOnFinished(() -> {
-            containerChildren.remove(leavingNode);
+            flipNodeProperty.set(enteringNode);
             if (!parallel) {
                 cardTransition.addKeyValue(
                         new KeyValue(enteringNode.opacityProperty(), 1)
@@ -43,29 +51,23 @@ abstract class FlipCard extends Card {
                 cardTransition.run(true);
             }
         });
-        containerChildren.add(enteringNode);
-    }
-
-    ObservableList<Node> getFlipChildren(boolean front) {
-        return (front ? flipPanel.getFront() : flipPanel.getBack()).getChildren();
     }
 
     void flipToNewContent(Node newContent) {
-        ObservableList<Node> children = getFlipChildren(flipShowingFront);
-        int size = children.size();
-        boolean changed = size != 1 || children.get(0) != newContent;
+        ObjectProperty<Node> flipNodeProperty = getFlipNodeProperty(flipShowingFront);
+        boolean changed = flipNodeProperty.get() != newContent;
         if (changed) {
             flipShowingFront = !flipShowingFront;
             changeFlipContent(newContent);
-            flipPanel.setFlipTime(size == 0 ? 0 : 700);
+            flipPane.setFlipDuration(Duration.millis(flipNodeProperty.get() == null ? 0 : 700));
             if (flipShowingFront)
-                flipPanel.flipToFront();
+                flipPane.flipToFront();
             else
-                flipPanel.flipToBack();
+                flipPane.flipToBack();
         }
     }
 
     void changeFlipContent(Node newContent) {
-        getFlipChildren(flipShowingFront).setAll(newContent);
+        getFlipNodeProperty(flipShowingFront).set(newContent);
     }
 }

@@ -135,7 +135,7 @@ public final class ResponsiveCard extends FlipCard {
                     e.consume();
                 });
                 vBox.setAlignment(Pos.CENTER);
-                vBox.setSpacing(0.05 * flipPanel.getHeight());
+                vBox.setSpacing(0.05 * flipPane.getHeight());
                 flipToNewContent(vBox);
                 break;
             case 5:

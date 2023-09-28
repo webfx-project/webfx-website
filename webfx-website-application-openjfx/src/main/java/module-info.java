@@ -11,7 +11,6 @@ module webfx.website.application.openjfx {
     requires webfx.platform.resource.java;
     requires webfx.platform.scheduler.java;
     requires webfx.platform.shutdown.java;
-    requires webfx.platform.substitution.var;
     requires webfx.platform.windowlocation.java;
     requires webfx.website.application;
 

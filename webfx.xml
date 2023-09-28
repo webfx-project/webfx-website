@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
 
+    <parent name="webfx-parent"/>
+
     <modules>
         <subdirectories-modules/>
     </modules>
@@ -10,8 +12,8 @@
             <groupId>dev.webfx</groupId>
             <version>0.1.0-SNAPSHOT</version>
             <webfx-library name="webfx"/>
-            <webfx-library name="webfx-extras"/> <!-- for ScalePane & WebText -->
-            <webfx-library name="webfx-lib-enzo"/> <!-- for FlipPanel -->
+            <webfx-library name="webfx-extras"/> <!-- for ScalePane & FlipPane -->
+            <webfx-library name="webfx-extras-private"/> <!-- for WebText -->
         </group>
     </required-libraries>
 

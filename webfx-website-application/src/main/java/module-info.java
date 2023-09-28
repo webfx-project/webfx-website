@@ -8,10 +8,10 @@ module webfx.website.application {
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.media;
+    requires webfx.extras.flippane;
     requires webfx.extras.scalepane;
     requires webfx.extras.webtext;
     requires webfx.kit.launcher;
-    requires webfx.lib.enzo;
     requires webfx.platform.resource;
     requires webfx.platform.uischeduler;
     requires webfx.platform.windowlocation;

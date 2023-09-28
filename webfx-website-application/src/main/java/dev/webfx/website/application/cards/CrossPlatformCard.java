@@ -7,7 +7,7 @@ import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
-import eu.hansolo.enzo.flippanel.FlipPanel;
+import dev.webfx.extras.flippane.FlipPane;
 import javafx.animation.KeyValue;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
@@ -27,7 +27,7 @@ public final class CrossPlatformCard extends Card {
     private Pane platformsPane, html5Circle, androidCircle, macOSCircle, raspberryPiCircle, linuxCircle, iOSCircle, windowsCircle;
     private ImageView jdkImageView, gluonImageView;
     private SvgText webFxText;
-    private FlipPanel flipPanel;
+    private FlipPane flipPane;
     private boolean flipFrontShowing;
 
     public CrossPlatformCard() {
@@ -60,9 +60,9 @@ public final class CrossPlatformCard extends Card {
         jdkImageView   = createImageView("JDK.png");
         gluonImageView = createImageView("Gluon.png");
         webFxText = createWebFxSvgText();
-        flipPanel = new FlipPanel();
+        flipPane = new FlipPane();
         ScalePane platformScalePane = new ScalePane(setFixedSize(new StackPane(platformsPane), 2 * (osr + cr))); // The StackPane is to isolate scale and rotate transforms, because mixing them doesn't work in the web version due to a transform-origin problem
-        ScalePane flipPanelScalePane = new ScalePane(flipPanel);
+        ScalePane flipPanelScalePane = new ScalePane(flipPane);
         LayoutPane pane = new LayoutPane(platformScalePane, flipPanelScalePane) {
             @Override
             protected void layoutChildren(double width, double height) {
@@ -141,16 +141,16 @@ public final class CrossPlatformCard extends Card {
                 new KeyValue(androidCircle.opacityProperty(), step == 1 || step == 4 || step == 7 ? 1 : 0),
                 new KeyValue(iOSCircle.opacityProperty(), step == 1 || step == 4 || step == 7 ? 1 : 0),
                 new KeyValue(raspberryPiCircle.opacityProperty(), step == 1 || step == 5 || step == 7 ? 1 : 0),
-                new KeyValue(flipPanel.opacityProperty(), step >= 2 && step <= 6 ? 1 : 0)
+                new KeyValue(flipPane.opacityProperty(), step >= 2 && step <= 6 ? 1 : 0)
         );
-        flipPanel.getFront().getChildren().setAll(step <= 3 ? jdkImageView : webFxText);
-        flipPanel.getBack().getChildren().setAll(step == 2 || step == 7 ? new ImageView() : gluonImageView);
+        flipPane.setFront(step <= 3 ? jdkImageView : webFxText);
+        flipPane.setBack(step == 2 || step == 7 ? new ImageView() : gluonImageView);
         boolean showFlipFront = step == 2 || step == 6;
         if (showFlipFront != flipFrontShowing) {
             if (showFlipFront)
-                flipPanel.flipToFront();
+                flipPane.flipToFront();
             else
-                flipPanel.flipToBack();
+                flipPane.flipToBack();
             flipFrontShowing = showFlipFront;
         }
     }

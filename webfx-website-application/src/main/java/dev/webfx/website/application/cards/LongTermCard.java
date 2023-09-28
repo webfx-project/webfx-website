@@ -126,7 +126,7 @@ public final class LongTermCard extends FlipCard {
                 htmlText.setOpacity(0);
                 refactoringAnimationPane = new RefactoringAnimationPane(this);
                 performFadingTransition(new StackPane(refactoringAnimationPane, htmlText), cardTransition, true);
-                refactoringAnimationPane.startBadRefactoringBrickAnimation(wallHeight = (flipPanel.getHeight() - htmlText.getLayoutY() - htmlText.getHeight()) * 0.7 , () -> {
+                refactoringAnimationPane.startBadRefactoringBrickAnimation(wallHeight = (flipPane.getHeight() - htmlText.getLayoutY() - htmlText.getHeight()) * 0.7 , () -> {
                     cardTransition.addKeyValue(new KeyValue(htmlText.opacityProperty(), 1));
                     cardTransition.run(true);
                 });

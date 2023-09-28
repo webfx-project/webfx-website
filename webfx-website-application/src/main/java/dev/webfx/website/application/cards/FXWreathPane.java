@@ -5,7 +5,7 @@ import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
 import dev.webfx.extras.scalepane.ScalePane;
-import eu.hansolo.enzo.flippanel.FlipPanel;
+import dev.webfx.extras.flippane.FlipPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.shape.SVGPath;
@@ -19,7 +19,7 @@ public final class FXWreathPane extends LayoutPane {
     private final SVGPath fxLogo = WebSiteShared.createFxLogo();
     private final SVGPath thumbUp = WebSiteShared.createThumbUp();
     private final ScalePane wreathPane;
-    private final FlipPanel flipPanel = new FlipPanel();
+    private final FlipPane flipPane = new FlipPane();
 
     public FXWreathPane() {
         this(WebSiteShared.createLogoSVGPath(SvgLogoPaths.getWreathPath(), LinearGradient.valueOf("to right, brown, orange")));
@@ -28,9 +28,9 @@ public final class FXWreathPane extends LayoutPane {
     public FXWreathPane(SVGPath wreathSVGPath) {
         this.wreathSVGPath = wreathSVGPath;
         wreathPane = new ScalePane(ScaleMode.FIT_HEIGHT, wreathSVGPath);
-        getChildren().setAll(wreathPane, flipPanel);
-        flipPanel.getFront().getChildren().setAll(new ScalePane(fxLogo));
-        flipPanel.getBack().getChildren().setAll(thumbUp);
+        getChildren().setAll(wreathPane, flipPane);
+        flipPane.setFront(new ScalePane(fxLogo));
+        flipPane.setBack(thumbUp);
     }
 
     SVGPath getWreathSVGPath() {
@@ -50,18 +50,18 @@ public final class FXWreathPane extends LayoutPane {
         double w = width, h = height, s = Math.min(w, h);
         centerInArea(wreathPane,(w - s) / 2, (h - s) / 2, s, s);
         s *= 0.4;
-        centerInArea(flipPanel,    (w - s) / 2, (h - s) / 2, s, s);
+        centerInArea(flipPane,    (w - s) / 2, (h - s) / 2, s, s);
         thumbUp.setScaleX(fxLogo.getScaleX() * 1.25);
         thumbUp.setScaleY(fxLogo.getScaleY() * 1.25);
     }
 
     void flipThumbUp() {
         fxLogo.setFill(Color.TRANSPARENT);
-        flipPanel.flipToBack();
+        flipPane.flipToBack();
     }
 
     void flipFx() {
         fxLogo.setFill(WebSiteShared.fxColor);
-        flipPanel.flipToFront();
+        flipPane.flipToFront();
     }
 }
