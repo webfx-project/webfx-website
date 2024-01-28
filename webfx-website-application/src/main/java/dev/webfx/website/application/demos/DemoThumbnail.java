@@ -10,10 +10,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
+import javafx.scene.paint.*;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -28,12 +25,12 @@ import static dev.webfx.website.application.shared.WebSiteShared.*;
 final class DemoThumbnail extends Pane {
 
     enum DemoCategory {
-        BASIC ("Basic", Color.GREEN),
         CUSTOM_CONTROL ("Custom control", Color.BLUE),
         GAME ("Game", Color.DEEPPINK.darker()),
         ANIMATION ("Animation", Color.DEEPPINK.darker()),
-        WEB_WORKER ("Web worker", Color.SADDLEBROWN),
-        WEBASSEMBLY ("WebAssembly", Color.RED);
+        WEB_WORKER ("Web worker", Color.RED),
+        WEBASSEMBLY ("WebAssembly", Color.RED),
+        WEBGL("WebGL", Color.RED);
 
         final String name;
         final Color color;
@@ -64,8 +61,12 @@ final class DemoThumbnail extends Pane {
     }
 
     public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl) {
+        this(demoName, demoCategory, scaleMode, imageName, demoLink, repositoryLink, videoUrl, CARD_TRANSLUCENT_BACKGROUND);
+    }
+
+    public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl, Paint background) {
         this.demoLink = demoLink;
-        setRegionBackground(this, CARD_TRANSLUCENT_BACKGROUND);
+        setRegionBackground(this, background);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
         setRegionBackground(categoryFullBackgroundRegion, demoCategory.color);
         setRegionBackground(categoryFadingBackgroundRegion, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.TRANSPARENT), new Stop(1, demoCategory.color)));

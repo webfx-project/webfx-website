@@ -9,6 +9,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
@@ -19,19 +20,19 @@ import static dev.webfx.website.application.demos.DemoThumbnail.DemoCategory.*;
 public final class DemosPage extends Pane {
 
     private final static DemoThumbnail
-            colorfulCircles = new DemoThumbnail("Colorful Circles", BASIC, ScaleMode.BEST_ZOOM), // "ColorfulCircles.png"), // "https://colorfulcircles.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-colorfulcircles/blob/main/webfx-demo-colorfulcircles-application/src/main/java/dev/webfx/demo/colorfulcircles/ColorfulCircles.java"),
-            tallyCounter    = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
-            modernGauge     = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
-            enzoClocks      = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "EnzoClocks.png"),
-            tetris          = new DemoThumbnail("Tetris", GAME, ScaleMode.BEST_FIT), // "Tetris.png"),
-            spaceFX         = new DemoThumbnail("SpaceFX", GAME, ScaleMode.FIT_HEIGHT), // "SpaceFX.png"),
-            demoFX          = new DemoThumbnail("DemoFX", ANIMATION, ScaleMode.BEST_ZOOM), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
-            rayTracer       = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScaleMode.BEST_ZOOM), // "RayTracer.png"),
-            mandelbrot      = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScaleMode.BEST_ZOOM); // "Mandelbrot.png")
+            tallyCounter = new DemoThumbnail("Tally Counter", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "TallyCounter.png"), // "https://tallycounter.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-tallycounter/blob/main/webfx-demo-tallycounter-application/src/main/java/dev/webfx/demo/tallycounter/TallyCounterApplication.java"),
+            modernGauge  = new DemoThumbnail("Modern Gauge", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "ModernGauge.png"), // "https://moderngauge.webfx.dev"), "https://github.com/webfx-demos/webfx-demo-moderngauge/blob/main/webfx-demo-moderngauge-application/src/main/java/dev/webfx/demo/moderngauge/ModernGaugeApplication.java"),
+            enzoClocks   = new DemoThumbnail("Enzo Clocks", CUSTOM_CONTROL, ScaleMode.BEST_FIT), // "EnzoClocks.png"),
+            tetris       = new DemoThumbnail("Tetris", GAME, ScaleMode.BEST_FIT), // "Tetris.png"),
+            spaceFX      = new DemoThumbnail("SpaceFX", GAME, ScaleMode.FIT_HEIGHT), // "SpaceFX.png"),
+            demoFX       = new DemoThumbnail("DemoFX", ANIMATION, ScaleMode.BEST_ZOOM), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
+            rayTracer    = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScaleMode.BEST_ZOOM), // "RayTracer.png"),
+            mandelbrot   = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScaleMode.BEST_ZOOM), // "Mandelbrot.png")
+            webgl        = new DemoThumbnail("WebGL", WEBGL, ScaleMode.BEST_FIT, "WebGL.png", "https://webgl.webfx.dev", "https://github.com/webfx-demos/webfx-demo-webgl/blob/main/webfx-demo-webgl-application/src/main/java/dev/webfx/demo/webgl/WebGLDemo.java", "https://webfx-demos.github.io/webfx-demos-videos/WebGL.mp4", Color.web("#310E68"));
 
 
     public DemosPage() {
-        super(colorfulCircles, tallyCounter, spaceFX, enzoClocks, modernGauge, tetris, demoFX, rayTracer, mandelbrot); // 9 featured demos
+        super(tallyCounter, spaceFX, enzoClocks, modernGauge, tetris, demoFX, rayTracer, mandelbrot, webgl); // 9 featured demos
         for (Node child : getChildren())
             WebSiteShared.runOnMouseClick(child, () -> WebSiteShared.openUrl(((DemoThumbnail) child).getDemoLink()));
     }
@@ -58,20 +59,22 @@ public final class DemosPage extends Pane {
             else if (w > h) { // When width is bigger than height
                 if (demoThumbnail == modernGauge) // Making Modern Gauge twice smaller in width
                     w = wp / 2;
-                else if (demoThumbnail == tetris) { // Making FX2048 twice smaller in width
+                else if (demoThumbnail == tetris) { // Making Tetris twice smaller in width
                     w = wp / 2;
-                    x = 1.5 * wp; // also correcting position so it just after Modern Gauge
+                    x = 0.5 * wp; // also correcting position so it just after Modern Gauge
                 }
             } else { // when height is bigger than width
                 if (demoThumbnail == tallyCounter) // Making Tally Counter twice shorter
                     h = hp / 2;
                 else if (demoThumbnail == enzoClocks) { // Making Enzo Clocks twice shorter
                     y = h = hp / 2;
-                    x = wp; // also correcting position so it is just under Tally Counter
+                    x = 0; // also correcting position so it is just under Tally Counter
                 } else if (demoThumbnail == modernGauge) // Moving Moder Gauge to the left
                     x = 0;
-                else if (demoThumbnail == tetris) // Moving Tetris to the middle
-                    x = wp;
+                else if (demoThumbnail == tetris) { // Moving Tetris to the right
+                    y = 0;
+                    x = 2 * wp;
+                }
             }
             layoutInArea(demoThumbnail, x, y, w, h, 0, margin, HPos.LEFT, VPos.TOP);
             demoThumbnail.setClip(new Rectangle(0, 0, ((Region) demoThumbnail).getWidth(), ((Region) demoThumbnail).getHeight()));
