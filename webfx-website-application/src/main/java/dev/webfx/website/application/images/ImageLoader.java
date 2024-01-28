@@ -14,7 +14,7 @@ public final class ImageLoader {
     }
 
     public static String toImageUrl(String resourcePath) {
-        if (WebFxKitLauncher.supportsWebP())
+        if (WebFxKitLauncher.supportsWebPImageFormat())
             resourcePath = resourcePath.replace(".png", ".webp");
         return Resource.toUrl(resourcePath, ImageLoader.class);
     }
