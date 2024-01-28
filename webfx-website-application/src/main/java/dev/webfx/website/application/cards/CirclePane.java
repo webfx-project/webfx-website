@@ -6,12 +6,12 @@ import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 
 import java.util.Arrays;
 
@@ -109,7 +109,8 @@ final class CirclePane extends LayoutPane {
         Text letter = new Text(text);
         letter.setFill(Color.WHITE);
         letter.setMouseTransparent(true);
-        letter.setTextAlignment(TextAlignment.CENTER);
+        //letter.setTextAlignment(TextAlignment.CENTER);
+        letter.setTextOrigin(VPos.TOP);
         letter.setManaged(false); // Workaround to avoid an async infinite loop in layoutChildren() (Web version only)
         return letter;
     }
