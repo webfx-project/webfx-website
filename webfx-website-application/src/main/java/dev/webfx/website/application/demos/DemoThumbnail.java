@@ -41,7 +41,7 @@ final class DemoThumbnail extends Pane {
         }
     }
 
-    private final String demoLink;
+    private final String demoLink, videoUrl;
     private final ScalePane demoVideoScalePane, demoImageScalePane;
     private final Text demoNameText, demoCategoryText;
     private final Region categoryFullBackgroundRegion = new Region(), categoryFadingBackgroundRegion = new Region();
@@ -66,16 +66,13 @@ final class DemoThumbnail extends Pane {
 
     public DemoThumbnail(String demoName, DemoCategory demoCategory, ScaleMode scaleMode, String imageName, String demoLink, String repositoryLink, String videoUrl, Paint background) {
         this.demoLink = demoLink;
+        this.videoUrl = videoUrl;
         setRegionBackground(this, background);
         demoCategoryText = setUpText(new Text(demoCategory.name), 20, false, true, false, false);
         setRegionBackground(categoryFullBackgroundRegion, demoCategory.color);
         setRegionBackground(categoryFadingBackgroundRegion, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.TRANSPARENT), new Stop(1, demoCategory.color)));
-        MediaPlayer mediaPlayer = videoUrl != null ? new MediaPlayer(new Media(videoUrl)) : null;
-        if (mediaPlayer != null)
-            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         demoImageScalePane = new ScalePane(scaleMode, ImageLoader.loadImage(imageName));
-        demoVideoScalePane = new ScalePane(scaleMode, new MediaView(mediaPlayer));
-        //demoImageScalePane.setCanGrow(false);
+        demoVideoScalePane = new ScalePane(scaleMode);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
         setShapeHoverAnimationColor(githubLogo, LAST_GITHUB_GRADIENT_COLOR.darker());
@@ -85,7 +82,13 @@ final class DemoThumbnail extends Pane {
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
         // The demo image is initially displayed on top of the video (and is hiding it)
         getChildren().setAll(demoVideoScalePane, demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
-        if (mediaPlayer != null) {
+    }
+
+    void startVideo() {
+        if (videoUrl != null && demoVideoScalePane.getContent() == null) {
+            MediaPlayer mediaPlayer = new MediaPlayer(new Media(videoUrl));
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            demoVideoScalePane.setContent(new MediaView(mediaPlayer));
             // Removing the demo image when the video starts playing
             mediaPlayer.setOnPlaying(() -> getChildren().remove(demoImageScalePane));
             mediaPlayer.setMute(true); // Videos have no sound, but we explicitly mute them, otherwise iPads will refuse to play more than 2 videos

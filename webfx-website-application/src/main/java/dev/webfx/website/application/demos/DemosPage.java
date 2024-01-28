@@ -80,4 +80,9 @@ public final class DemosPage extends Pane {
             demoThumbnail.setClip(new Rectangle(0, 0, ((Region) demoThumbnail).getWidth(), ((Region) demoThumbnail).getHeight()));
         }
     }
+
+    public void startVideos() {
+        for (Node child : getChildren())
+            ((DemoThumbnail) child).startVideo();
+    }
 }

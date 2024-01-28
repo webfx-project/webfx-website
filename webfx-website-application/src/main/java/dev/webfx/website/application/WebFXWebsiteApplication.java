@@ -166,8 +166,11 @@ public final class WebFXWebsiteApplication extends Application {
                         .toArray(KeyValue[]::new))
         );
         fadeTimeline.setOnFinished(e -> {
-            if (demosPage != null)
+            if (demosPage != null) {
                 demosPage.setVisible(showDemosPage);
+                if (showDemosPage)
+                    demosPage.startVideos();
+            }
             webFXPage.setVisible(showWebFXPage);
             if (startPage != null)
                 startPage.setVisible(showStartPage);
