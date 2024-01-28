@@ -42,7 +42,8 @@ final class DemoThumbnail extends Pane {
     }
 
     private final String demoLink, videoUrl;
-    private final ScalePane demoVideoScalePane, demoImageScalePane;
+    private final ScalePane demoImageScalePane;
+    private ScalePane demoVideoScalePane;
     private final Text demoNameText, demoCategoryText;
     private final Region categoryFullBackgroundRegion = new Region(), categoryFadingBackgroundRegion = new Region();
     private final SVGPath githubLogo = createGithubLogo();
@@ -72,7 +73,6 @@ final class DemoThumbnail extends Pane {
         setRegionBackground(categoryFullBackgroundRegion, demoCategory.color);
         setRegionBackground(categoryFadingBackgroundRegion, new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, new Stop(0, Color.TRANSPARENT), new Stop(1, demoCategory.color)));
         demoImageScalePane = new ScalePane(scaleMode, ImageLoader.loadImage(imageName));
-        demoVideoScalePane = new ScalePane(scaleMode);
         demoNameText = setUpText(new Text(demoName), 40, true, true, false, true);
         demoNameText.setFill(Color.IVORY);
         setShapeHoverAnimationColor(githubLogo, LAST_GITHUB_GRADIENT_COLOR.darker());
@@ -80,15 +80,16 @@ final class DemoThumbnail extends Pane {
         setOnMouseExited( e -> githubLogo.setVisible(false));
         githubLogo.setVisible(false);
         runOnMouseClick(githubLogo, () -> openUrl(repositoryLink));
-        // The demo image is initially displayed on top of the video (and is hiding it)
-        getChildren().setAll(demoVideoScalePane, demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
+        getChildren().setAll(demoImageScalePane, demoNameText, categoryFadingBackgroundRegion, categoryFullBackgroundRegion, demoCategoryText, githubLogoPane);
     }
 
     void startVideo() {
-        if (videoUrl != null && demoVideoScalePane.getContent() == null) {
+        if (videoUrl != null && demoVideoScalePane == null) {
             MediaPlayer mediaPlayer = new MediaPlayer(new Media(videoUrl));
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-            demoVideoScalePane.setContent(new MediaView(mediaPlayer));
+            demoVideoScalePane = new ScalePane(demoImageScalePane.getScaleMode(), new MediaView(mediaPlayer));
+            // The demo video is initially displayed on behind the image (which is hiding it)
+            getChildren().add(0, demoVideoScalePane);
             // Removing the demo image when the video starts playing
             mediaPlayer.setOnPlaying(() -> getChildren().remove(demoImageScalePane));
             mediaPlayer.setMute(true); // Videos have no sound, but we explicitly mute them, otherwise iPads will refuse to play more than 2 videos
@@ -105,8 +106,9 @@ final class DemoThumbnail extends Pane {
         double width = getWidth(), height = getHeight();
         setFont(demoNameText, Math.max(16, width * 0.07), true, false);
         setFont(demoCategoryText, Math.max(16, width * 0.05), false, true);
-        layoutInArea(demoVideoScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
         layoutInArea(demoImageScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
+        if (demoVideoScalePane != null)
+            layoutInArea(demoVideoScalePane, 0, 0, width, height, 0 , HPos.CENTER, VPos.CENTER);
         layoutInArea(demoNameText, 0, 0, width, height, 0 , HPos.CENTER, VPos.BOTTOM);
         double githubSize = demoNameText.prefHeight(width);
         layoutInArea(githubLogoPane, width - githubSize - 5, height - githubSize - 5, githubSize, githubSize, 0 , HPos.LEFT, VPos.BOTTOM);
