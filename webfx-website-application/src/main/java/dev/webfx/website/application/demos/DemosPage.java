@@ -28,7 +28,7 @@ public final class DemosPage extends Pane {
             demoFX       = new DemoThumbnail("DemoFX", ANIMATION, ScaleMode.BEST_ZOOM), // "DemoFX.png"), // "https://demofx.webfx.dev", "https://github.com/webfx-demos/webfx-demo-demofx/blob/main/webfx-demo-demofx-application/src/main/java/dev/webfx/demo/demofx/DemoFXApplication.java"),
             rayTracer    = new DemoThumbnail("Ray Tracer", WEB_WORKER, ScaleMode.BEST_ZOOM), // "RayTracer.png"),
             mandelbrot   = new DemoThumbnail("Mandelbrot", WEBASSEMBLY, ScaleMode.BEST_ZOOM), // "Mandelbrot.png")
-            webgl        = new DemoThumbnail("WebGL", WEBGL, ScaleMode.BEST_FIT, "WebGL.png", "https://webgl.webfx.dev", "https://github.com/webfx-demos/webfx-demo-webgl/blob/main/webfx-demo-webgl-application/src/main/java/dev/webfx/demo/webgl/WebGLDemo.java", "https://webfx-demos.github.io/webfx-demos-videos/WebGL.mp4", Color.web("#310E68"));
+            webgl        = new DemoThumbnail("Cube", WEBGL, ScaleMode.BEST_FIT, "Cube.png", "https://cube.webfx.dev", "https://github.com/webfx-demos/webfx-demo-cube/blob/main/webfx-demo-cube-application/src/main/java/dev/webfx/demo/cube/CubeApplication.java", "https://webfx-demos.github.io/webfx-demos-videos/Cube.mp4", Color.web("#310E68"));
 
 
     public DemosPage() {
