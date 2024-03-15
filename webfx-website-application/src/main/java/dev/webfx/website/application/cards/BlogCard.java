@@ -1,11 +1,10 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScalePane;
+import dev.webfx.extras.panes.ScalePane;
 import javafx.scene.Node;
 import javafx.scene.shape.SVGPath;
 
 import static dev.webfx.website.application.shared.WebSiteShared.*;
-import static dev.webfx.website.application.shared.WebSiteShared.setShapeHoverAnimationColor;
 
 /**
  * @author Bruno Salmon

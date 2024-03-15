@@ -35,6 +35,7 @@
     <modules>
         <module>webfx-website-application</module>
         <module>webfx-website-application-gwt</module>
+        <module>webfx-website-application-j2cl</module>
         <module>webfx-website-application-openjfx</module>
     </modules>
 

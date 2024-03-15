@@ -1,8 +1,8 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScalePane;
-import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.extras.panes.ScalePane;
+import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
@@ -78,14 +78,14 @@ final class GwtCompilationAnimationPane extends LayoutPane {
             fillRegion(redCross2, Color.RED, Color.TRANSPARENT, get(), false);
         }
     };
-    private final ObjectProperty<Paint> nonDeadCodeFillProperty = new SimpleObjectProperty<>(WebSiteShared.raspberryPiColor) {
+    private final ObjectProperty<Paint> nonDeadCodeFillProperty = new SimpleObjectProperty<Paint>(WebSiteShared.raspberryPiColor) {
         @Override
         protected void invalidated() {
             for (int i : nonDeadIndexes)
                 WebSiteShared.setRegionBackground(javaFxClasses[i], get());
         }
     };
-    private final ObjectProperty<Paint> deadCodeFillProperty = new SimpleObjectProperty<>(WebSiteShared.raspberryPiColor) {
+    private final ObjectProperty<Paint> deadCodeFillProperty = new SimpleObjectProperty<Paint>(WebSiteShared.raspberryPiColor) {
         @Override
         protected void invalidated() {
             for (int i = 0, j = 0; i < javaFxClasses.length; i++)

@@ -1,7 +1,7 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.extras.panes.ScalePane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -26,7 +26,7 @@ final class CirclePane extends LayoutPane {
     private final Text[] circleLetters;
     private Paint stroke = Color.WHITE;
     private final ScalePane topScalePane, bottomScalePane;
-    private final ObjectProperty<Paint> fillProperty = new SimpleObjectProperty<>() {
+    private final ObjectProperty<Paint> fillProperty = new SimpleObjectProperty<Paint>() {
         @Override
         protected void invalidated() {
             updateBackground(false);
@@ -58,7 +58,7 @@ final class CirclePane extends LayoutPane {
         ScalePane scalePane = null;
         if (node != null) {
             scalePane = new ScalePane(node);
-            scalePane.setAlwaysTry(true);
+            scalePane.setScaleRegion(true);
         }
         return scalePane;
     }
@@ -102,7 +102,13 @@ final class CirclePane extends LayoutPane {
     }
 
     private Text[] createLetters(String text) {
-        return text.chars().mapToObj(c -> createLetter("" + (char) c)).toArray(Text[]::new);
+        //return text.chars().mapToObj(c -> createLetter("" + (char) c)).toArray(Text[]::new);
+        Text[] letters = new Text[text.length()];
+        for (int i = 0; i < letters.length; i++) {
+            letters[i] = createLetter("" + text.charAt(i));
+        }
+        return letters;
+
     }
 
     private Text createLetter(String text) {
@@ -132,7 +138,7 @@ final class CirclePane extends LayoutPane {
     }
 
 
-        @Override
+    @Override
     protected void layoutChildren(double width, double height) {
         double size = Math.min(width, height);
         if (circleLetters != null) {

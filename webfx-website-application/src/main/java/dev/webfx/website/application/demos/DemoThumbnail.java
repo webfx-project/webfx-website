@@ -1,8 +1,8 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.extras.scalepane.ScaleMode;
-import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.ImageLoader;
+import dev.webfx.extras.panes.ScaleMode;
+import dev.webfx.extras.panes.ScalePane;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.Pane;

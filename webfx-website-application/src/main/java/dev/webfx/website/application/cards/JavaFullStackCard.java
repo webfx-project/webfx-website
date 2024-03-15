@@ -1,9 +1,9 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.SvgLogoPaths;
+import dev.webfx.website.application.shared.FlipPane;
 import dev.webfx.website.application.shared.LayoutPane;
-import dev.webfx.extras.flippane.FlipPane;
+import dev.webfx.extras.panes.ScalePane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

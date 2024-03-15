@@ -30,6 +30,8 @@ final class RefactoringAnimationPane extends Pane {
     private final static Color BRICK_COLOR3 = Color.rgb(242, 178, 93);
     private final static Color BRICK_COLOR4 = Color.rgb(240, 190, 118);
 
+    private static double LAST_HEIGHT;
+
     private int MAX_BRICK_WIDTH, STARTING_ROW, ENDING_ROW;
     private double BRICK_WIDTH_UNIT_PIXELS;
     private double BRICK_HEIGHT_PIXELS;
@@ -226,6 +228,12 @@ final class RefactoringAnimationPane extends Pane {
             if (brickMove != null && brickMove.row < ENDING_ROW) {
                 shape.setVisible(true);
                 double h = getHeight(), w = getWidth(); // Of RefactoringAnimatedPane
+                // Sometimes, the second refactoring animation has height = 0 on start (not sure why)
+                // in that case, we rather take the last height (very unlikely it changed) to get correct computations
+                if (h == 0)
+                    h = LAST_HEIGHT;
+                else
+                    LAST_HEIGHT = h;
                 double endX = width < -MAX_BRICK_WIDTH ? 0 : width > MAX_BRICK_WIDTH ? w : brickMove.column * BRICK_WIDTH_UNIT_PIXELS;
                 double endY = brickMove.row < -5 ? shape.getTranslateY() + card.getHeight() : h - BRICK_HEIGHT_PIXELS * (brickMove.row + 1);
                 boolean vertical = brickMove.moveType == MoveType.TRANSLATION_BOTTOM;

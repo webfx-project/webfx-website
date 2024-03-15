@@ -12,8 +12,7 @@
             <groupId>dev.webfx</groupId>
             <version>0.1.0-SNAPSHOT</version>
             <webfx-library name="webfx"/>
-            <webfx-library name="webfx-extras"/> <!-- for ScalePane & FlipPane -->
-            <webfx-library name="webfx-extras-private"/> <!-- for WebText -->
+            <webfx-library name="webfx-extras"/> <!-- for ScalePane & FlipPane & WebText -->
         </group>
     </required-libraries>
 

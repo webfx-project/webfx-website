@@ -1,9 +1,9 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScaleMode;
-import dev.webfx.extras.scalepane.ScalePane;
 import dev.webfx.website.application.images.SvgLogoPaths;
 import dev.webfx.website.application.shared.LayoutPane;
+import dev.webfx.extras.panes.ScaleMode;
+import dev.webfx.extras.panes.ScalePane;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;

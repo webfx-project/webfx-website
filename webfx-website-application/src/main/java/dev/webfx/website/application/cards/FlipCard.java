@@ -1,6 +1,6 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.flippane.FlipPane;
+import dev.webfx.website.application.shared.FlipPane;
 import javafx.animation.KeyValue;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;

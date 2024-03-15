@@ -1,6 +1,6 @@
 package dev.webfx.website.application.demos;
 
-import dev.webfx.extras.scalepane.ScaleMode;
+import dev.webfx.extras.panes.ScaleMode;
 import dev.webfx.website.application.shared.WebSiteShared;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;

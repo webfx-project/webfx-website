@@ -1,13 +1,11 @@
 package dev.webfx.website.application.cards;
 
-import dev.webfx.extras.scalepane.ScaleMode;
-import dev.webfx.extras.scalepane.ScalePane;
+import dev.webfx.extras.panes.ScaleMode;
+import dev.webfx.extras.panes.ScalePane;
 import dev.webfx.extras.webtext.SvgText;
-import dev.webfx.website.application.shared.WebSiteShared;
 import dev.webfx.website.application.images.ImageLoader;
 import dev.webfx.website.application.images.SvgLogoPaths;
-import dev.webfx.website.application.shared.LayoutPane;
-import dev.webfx.extras.flippane.FlipPane;
+import dev.webfx.website.application.shared.*;
 import javafx.animation.KeyValue;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
