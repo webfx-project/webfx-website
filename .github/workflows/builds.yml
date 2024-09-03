@@ -501,7 +501,7 @@ jobs:
       # Note: each asset will be a folder containing the artifacts
       - if: env.API_GITHUB_TOKEN != ''
         name: Download artifacts into staging directory
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4.1.7
         with:
           path: download
 
