@@ -30,25 +30,31 @@
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-extras-webtext-peers-gwt-j2cl</artifactId>
+            <artifactId>webfx-extras-webtext-peers-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-kit-javafxcontrols-registry-gwt-j2cl</artifactId>
+            <artifactId>webfx-kit-javafxcontrols-registry-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-kit-javafxmedia-peers-gwt-j2cl</artifactId>
+            <artifactId>webfx-kit-javafxmedia-peers-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-kit-javafxmedia-registry-gwt-j2cl</artifactId>
+            <artifactId>webfx-kit-javafxmedia-registry-elemental2</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-kit-perfectscrollbar-elemental2-gwt-j2cl</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
@@ -66,7 +72,7 @@
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-console-gwt-j2cl</artifactId>
+            <artifactId>webfx-platform-console-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
@@ -84,31 +90,43 @@
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-resource-j2cl</artifactId>
+            <artifactId>webfx-platform-os-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-shutdown-gwt-j2cl</artifactId>
+            <artifactId>webfx-platform-resource-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-uischeduler-gwt-j2cl</artifactId>
+            <artifactId>webfx-platform-resource-web</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-useragent-gwt-j2cl</artifactId>
+            <artifactId>webfx-platform-shutdown-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>dev.webfx</groupId>
-            <artifactId>webfx-platform-windowlocation-gwt-j2cl</artifactId>
+            <artifactId>webfx-platform-uischeduler-elemental2</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-useragent-elemental2</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>dev.webfx</groupId>
+            <artifactId>webfx-platform-windowlocation-elemental2</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
@@ -150,9 +168,9 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>dev.webfx</groupId>
-                                            <artifactId>webfx-kit-javafxcontrols-emul</artifactId>
+                                            <artifactId>webfx-kit-perfectscrollbar-elemental2-gwt-j2cl</artifactId>
                                             <version>0.1.0-SNAPSHOT</version>
-                                            <includes>javafx/scene/control/skin/checkbox/</includes>
+                                            <includes>dev/webfx/kit/perfectscrollbar/</includes>
                                         </artifactItem>
                                     </artifactItems>
                                     <excludes>**/*.java,**/*.class</excludes>
